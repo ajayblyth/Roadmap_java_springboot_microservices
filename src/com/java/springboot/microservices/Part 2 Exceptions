@@ -1,0 +1,401 @@
+Java Notes by RoadMap part 2
+
+1. Java Exceptions and handling
+
+2. Spring Boot Exceptions with Handling
+
+
+
+===========================================================================
+                      JAVA EXCEPTIONS - COMPLETE CONCEPT GUIDE
+===========================================================================
+
+1. WHAT IS AN EXCEPTION IN JAVA?
+--------------------------------
+- An event disrupting normal program flow.
+- Happens during runtime (runtime errors).
+- Allows graceful error handling without crashing.
+
+-------------------------------------------------------------------------------
+2. JAVA EXCEPTION HIERARCHY
+-------------------------------------------------------------------------------
+     java.lang.Object
+                         |
+                 java.lang.Throwable
+                /                   \
+        java.lang.Error         java.lang.Exception
+          (e.g., OutOfMemoryError)   (e.g., IOException, RuntimeException)
+
+
+
+java.lang.Throwable
+  |-- java.lang.Error           (Severe system errors, not handled by app)
+  |-- java.lang.Exception
+         |-- java.lang.RuntimeException  (Unchecked exceptions)
+         |-- Other checked exceptions
+
+-------------------------------------------------------------------------------
+3. TYPES OF EXCEPTIONS
+-------------------------------------------------------------------------------
+1. Checked Exceptions
+   - Subclass of Exception but NOT RuntimeException
+   - Checked at compile time by compiler
+   - Must be handled or declared with throws
+   - Examples: IOException, SQLException
+
+2. Unchecked Exceptions (Runtime Exceptions)
+   - Subclass of RuntimeException
+   - Not checked at compile time
+   - Usually programmer errors
+   - Examples: NullPointerException, ArithmeticException, IndexOutOfBoundsException
+
+3. Errors
+   - Subclass of Error
+   - JVM errors, not handled by application
+   - Examples: StackOverflowError, OutOfMemoryError
+
+-------------------------------------------------------------------------------
+4. KEY TERMS: throw vs throws
+-------------------------------------------------------------------------------
+
+- throw:
+  * Used **inside a method** to actually throw an exception object.
+  * Syntax: throw new ExceptionType("message");
+  * Stops method execution immediately when thrown.
+
+- throws:
+  * Used in method signature to declare that the method **may throw** specified exceptions.
+  * Forces caller to handle or declare those exceptions.
+  * Syntax: returnType methodName() throws ExceptionType1, ExceptionType2
+
+-------------------------------------------------------------------------------
+Example demonstrating both throw and throws
+-------------------------------------------------------------------------------
+import java.lang.Exception;
+class Test {
+    // Method declares it throws an Exception
+    static void checkNumber(int num) throws Exception {
+        if (num < 0) {
+            // Throwing an Exception explicitly
+            throw new Exception("Negative number not allowed");
+        } else {
+            System.out.println("Number is " + num);
+        }
+    }
+
+    public static void main(String[] args) {
+        try {
+            checkNumber(-5);
+        } catch (Exception e) {
+            System.out.println("Caught Exception: " + e.getMessage());
+        }
+    }
+}
+
+}
+
+-------------------------------------------------------------------------------
+Explanation:
+- `throws IOException` in method signature says "this method might throw IOException".
+- `throw new IOException(...)` inside method actually throws the exception when condition is met.
+- Caller (`main`) must catch or re-declare the exception because IOException is checked.
+-------------------------------------------------------------------------------
+
+-------------------------------------------------------------------------------
+5. TRY - CATCH - FINALLY BLOCK
+-------------------------------------------------------------------------------
+- try: code that may throw exception
+- catch: handles specific exceptions thrown by try block
+- finally: optional, executes always (even if exception occurs or return happens)
+- Used for cleanup (closing streams, releasing resources)
+
+Example:
+try {
+    int result = 10 / 0;  // Throws ArithmeticException
+} catch (ArithmeticException ex) {
+    System.out.println("Cannot divide by zero");
+} finally {
+    System.out.println("Cleanup done");
+}
+
+-------------------------------------------------------------------------------
+6. MULTIPLE CATCH & TRY-WITH-RESOURCES
+-------------------------------------------------------------------------------
+- Multiple catch blocks for different exception types
+- Try-with-resources for automatic resource management (AutoCloseable)
+
+Example:
+try (BufferedReader br = new BufferedReader(new FileReader("file.txt"))) {
+    String line = br.readLine();
+} catch (IOException ex) {
+    ex.printStackTrace();
+}
+
+-------------------------------------------------------------------------------
+7. COMMON EXCEPTIONS INTERVIEWERS ASK
+-------------------------------------------------------------------------------
+Exception Name                 | One-Liner Description
+------------------------------|-------------------------------------------------
+NullPointerException          | Thrown when accessing a method or field on a null object.
+ArrayIndexOutOfBoundsException| Thrown when accessing an invalid index in an array.
+ClassCastException            | Thrown when trying to cast an object to an incompatible type.
+IllegalArgumentException      | Thrown when a method receives an illegal or inappropriate argument.
+IOException                   | Thrown for general input/output failures (e.g., file read/write).
+SQLException                  | Thrown when database access or query execution fails.
+NumberFormatException         | Thrown when trying to convert a string to a number but the format is invalid.
+ArithmeticException           | Thrown for illegal arithmetic operations like divide by zero.
+FileNotFoundException         | Thrown when a file with the specified pathname does not exist.
+InterruptedException          | Thrown when a thread is interrupted while waiting or sleeping.
+
+
+-------------------------------------------------------------------------------
+8. BEST PRACTICES
+-------------------------------------------------------------------------------
+- Catch specific exceptions, not generic Exception
+- Use finally or try-with-resources for resource cleanup
+- Don’t suppress exceptions silently
+- Use custom exceptions for domain-specific errors
+- Log exceptions with stack trace // used in development for debugging
+- Don’t use exceptions for normal flow control
+
+-------------------------------------------------------------------------------
+9. INTERVIEW TRICKY QUESTIONS
+-------------------------------------------------------------------------------
+Q1. Can try block be used without catch?
+Yes, try can be used without catch if it has a finally block.
+
+Q2. Can catch block be used without try?
+No, catch must always follow a try block.
+
+Q3. What happens if exception is not caught?
+The JVM terminates the program and prints the exception stack trace.
+
+Q4. Difference between throw and throws?
+throw actually throws an exception instance; throws declares exceptions a method might throw.
+
+Q5. What is finally block? Will it execute if return is in try?
+Finally block always executes after try/catch, even if there is a return in try.
+
+Q6. Can multiple exceptions be caught in a single catch?
+Yes, since Java 7, multiple exceptions can be caught using multi-catch syntax.
+
+Q7. Difference between checked and unchecked exceptions?
+Checked exceptions must be declared or handled; unchecked exceptions (RuntimeExceptions) need not be.
+
+Q8. How to create custom checked and unchecked exceptions?
+Extend Exception for checked, and extend RuntimeException for unchecked exceptions.
+
+Q9. What is the order of catch blocks?
+Catch child (subclass) exceptions first, then parent (superclass) exceptions.
+
+Q10. Can you rethrow an exception inside catch?
+Yes, you can rethrow the caught exception using throw inside catch.
+
+Q11. What is suppressed exception?
+An exception thrown during try-with-resources close that is suppressed to preserve the original exception.
+
+Q12. Difference between Error and Exception?
+Errors are serious problems from which recovery is usually impossible; Exceptions are conditions your program can catch and handle.
+
+Q13. What is stack trace? How to print it?
+Stack trace shows the call sequence leading to an exception; print it using e.printStackTrace().
+
+Q14. Why is Throwable superclass of both Exception and Error?
+Because both represent throwable problems in Java; Throwable is the root of all errors and exceptions.
+
+
+
+-------------------------------------------------------------------------------
+10. SUMMARY (NOTEPAD FORMAT)
+-------------------------------------------------------------------------------
+JAVA EXCEPTION HIERARCHY:
+------------------------
+Throwable
+  |-- Error (Serious system problems)
+  |-- Exception
+       |-- Checked Exceptions (must handle/declare)
+       |-- RuntimeException (Unchecked exceptions)
+
+KEYWORDS:
+---------
+- throw: to throw exception explicitly
+- throws: declare exceptions in method signature
+
+TRY-CATCH-FINALLY:
+------------------
+try {
+    // risky code
+} catch (ExceptionType ex) {
+    // handle exception
+} finally {
+    // always executed
+}
+
+CUSTOM EXCEPTION:
+-----------------
+public class MyException extends Exception {  // checked
+    public MyException(String msg) { super(msg); }
+}
+
+public class MyRuntimeException extends RuntimeException {  // unchecked
+    public MyRuntimeException(String msg) { super(msg); }
+}
+
+INTERVIEW TIPS:
+---------------
+- Always know difference checked vs unchecked
+- Explain try-catch-finally flow clearly
+- Know multi-catch and try-with-resources
+- Use real-life examples
+- Practice writing custom exceptions
+
+===========================================================================
+
+
+
+
+===========================================================================
+            SPRING BOOT EXCEPTION HANDLING - COMPLETE CONCEPT GUIDE
+===========================================================================
+
+1. WHAT IS EXCEPTION HANDLING?
+------------------------------
+- Mechanism to handle runtime errors gracefully.
+- Prevents application crash.
+- Provides meaningful error messages to client.
+- Improves API usability and debugging.
+
+-------------------------------------------------------------------------------
+2. KEY CONCEPTS IN SPRING BOOT EXCEPTION HANDLING
+-------------------------------------------------------------------------------
+- @ControllerAdvice / @RestControllerAdvice:
+  * Special Spring stereotype to handle exceptions globally.
+  * @RestControllerAdvice = @ControllerAdvice + @ResponseBody
+  * Applies to all controllers in the application.
+
+- @ExceptionHandler:
+  * Annotation on methods that handle specific exception types.
+  * Allows writing methods to handle exceptions and customize response.
+
+- Custom Exception:
+  * User-defined exception class extending RuntimeException or Exception.
+  * Used to represent domain-specific errors (e.g., ResourceNotFoundException).
+
+- ErrorResponse DTO:
+  * Plain Java class to structure error info sent to clients.
+  * Common fields: message, status, timestamp, path, error code, etc.
+
+-------------------------------------------------------------------------------
+3. HOW TO STRUCTURE EXCEPTION HANDLING IN SPRING BOOT
+-------------------------------------------------------------------------------
+Step 1: Create Custom Exception Class
+-------------------------------------
+Example:
+public class ResourceNotFoundException extends RuntimeException {
+    public ResourceNotFoundException(String message) {
+        super(message);
+    }
+}
+
+Step 2: Create ErrorResponse DTO
+--------------------------------
+Example:
+public class ErrorResponse {
+    private String message;
+    private int status;
+    private String path;
+    private LocalDateTime timestamp;
+
+    // Constructor, Getters, Setters
+}
+
+Step 3: Create Global Exception Handler Class
+---------------------------------------------
+- Annotate with @RestControllerAdvice
+- Create methods annotated with @ExceptionHandler(ExceptionType.class)
+- Return ResponseEntity<ErrorResponse> with proper HTTP status
+
+Example:
+@RestControllerAdvice
+public class GlobalExceptionHandler {
+
+    @ExceptionHandler(ResourceNotFoundException.class)
+    public ResponseEntity<ErrorResponse> handleResourceNotFound(ResourceNotFoundException ex,
+                                                               HttpServletRequest request) {
+        ErrorResponse error = new ErrorResponse(
+            ex.getMessage(),
+            HttpStatus.NOT_FOUND.value(),
+            request.getRequestURI(),
+            LocalDateTime.now());
+        return new ResponseEntity<>(error, HttpStatus.NOT_FOUND);
+    }
+
+    @ExceptionHandler(Exception.class)
+    public ResponseEntity<ErrorResponse> handleAllExceptions(Exception ex,
+                                                             HttpServletRequest request) {
+        ErrorResponse error = new ErrorResponse(
+            "Internal Server Error",
+            HttpStatus.INTERNAL_SERVER_ERROR.value(),
+            request.getRequestURI(),
+            LocalDateTime.now());
+        return new ResponseEntity<>(error, HttpStatus.INTERNAL_SERVER_ERROR);
+    }
+}
+
+-------------------------------------------------------------------------------
+4. WHY USE THIS STRUCTURE?
+-------------------------------------------------------------------------------
+- Centralized error handling: no need to repeat try-catch in every controller.
+- Custom exceptions help express specific errors.
+- Consistent JSON response structure helps client-side error handling.
+- Better control over HTTP status codes.
+- Improves maintainability and readability.
+
+-------------------------------------------------------------------------------
+5. IMPORTANT ADDITIONAL POINTS
+-------------------------------------------------------------------------------
+- Use @Valid and @Validated for request validation. Handle
+  MethodArgumentNotValidException for validation errors.
+- You can handle multiple exceptions with one method by listing
+  multiple exception classes in @ExceptionHandler.
+- Always log exceptions for debugging (consider using SLF4J or Logback).
+- Use meaningful messages in exceptions.
+- For security-related exceptions, handle AccessDeniedException, AuthenticationException.
+- For database errors handle DataIntegrityViolationException.
+- Use ResponseStatusException for quick exceptions with status.
+- Global handler methods can access HttpServletRequest to get path info.
+
+-------------------------------------------------------------------------------
+6. INTERVIEW QUESTIONS - MOST ASKED ON EXCEPTION HANDLING
+-------------------------------------------------------------------------------
+Q1. What is exception handling? Why is it important?
+Q2. What is the difference between checked and unchecked exceptions in Java?
+Q3. How does Spring Boot handle exceptions by default?
+Q4. What is @ControllerAdvice and how does it work?
+Q5. How is @RestControllerAdvice different from @ControllerAdvice?
+Q6. How do you create and use custom exceptions?
+Q7. What is @ExceptionHandler and how to use it?
+Q8. How can you handle validation errors globally in Spring Boot?
+Q9. How do you send custom HTTP status codes with exception handling?
+Q10. What is the role of ErrorResponse or similar DTO in exception handling?
+Q11. What is the difference between throwing and catching exceptions?
+Q12. How can you handle exceptions thrown from service layer in controller layer?
+Q13. How do you handle multiple exceptions in one handler method?
+Q14. What are some best practices for exception handling in production?
+Q15. How to log exceptions and stack traces properly in Spring Boot?
+
+-------------------------------------------------------------------------------
+7. SUMMARY
+-------------------------------------------------------------------------------
+- Always create domain-specific custom exceptions.
+- Use @RestControllerAdvice + @ExceptionHandler for global handling.
+- Structure error response with DTO for clarity.
+- Handle common exceptions like validation, resource not found, DB errors.
+- Keep fallback handler for unexpected exceptions.
+- Validate inputs and handle validation exceptions.
+- Log errors properly for troubleshooting.
+- Design error messages meaningful for clients and developers.
+
+===========================================================================
+
+
