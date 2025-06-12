@@ -299,14 +299,24 @@ public class ResourceNotFoundException extends RuntimeException {
 
 Step 2: Create ErrorResponse DTO
 --------------------------------
-Example:
+package com.example.demo.dto;
+
+import java.time.LocalDateTime;
+
 public class ErrorResponse {
     private String message;
-    private int status;
     private String path;
     private LocalDateTime timestamp;
+    private int status;
 
-    // Constructor, Getters, Setters
+    public ErrorResponse(String message, String path, int status) {
+        this.message = message;
+        this.path = path;
+        this.status = status;
+        this.timestamp = LocalDateTime.now();
+    }
+
+    // Getters and Setters
 }
 
 Step 3: Create Global Exception Handler Class

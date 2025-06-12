@@ -1,0 +1,40 @@
+@RestController
+@RequestMapping("api/v1/user")
+public class UserContoller{
+
+@Autowired
+private Userservice userService;
+
+@Requestmapping("/getById")
+public ResponseEnity<String> getUser(@RequestParam Long Id){
+Optional<> byId = userService.findById(Id);
+if (byId.isPresent){
+return new ResponseEntity<> (byId, HttpStatus.OK)
+}
+else{
+throw new ResourceNotFound ("user does not exist")
+
+}
+}
+
+
+}
+
+// making custom exception
+
+public class ResourceNotFound  extends RuntimeException{
+public ResourceNotFound(String message){
+super(message);
+}
+
+}
+
+//making custom exception dto
+
+public class ErrorResponse{
+LocalDateTime timeStamp;
+String message
+
+
+}
+

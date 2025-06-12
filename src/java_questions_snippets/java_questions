@@ -1,0 +1,369 @@
+=====================================================================
+#        50 MOST ASKED JAVA INTERVIEW QUESTIONS (With Snippets)     #
+=====================================================================
+
+1. What is the difference between JDK, JRE, and JVM?
+   - JDK: Dev kit. JRE + dev tools.
+   - JRE: Runtime env. JVM + libs.
+   - JVM: Runs .class files.
+
+2. What is a Class and Object?
+   class Car {
+       String model;
+       void drive() { System.out.println("Driving..."); }
+   }
+
+   Car c = new Car(); // object
+
+3. What are constructors in Java?
+   class Demo {
+       Demo() { System.out.println("Constructor called"); }
+   }
+
+4. Constructor vs Method?
+   - Constructor: No return type, name = class.
+   - Method: Has return type.
+
+5. Can a class have multiple constructors?
+   class Demo {
+       Demo() {}
+       Demo(int x) {}
+   }
+
+6. What is constructor overloading?
+   - Multiple constructors with different parameters.
+
+7. Can a constructor be private?
+   - Yes, in Singleton pattern.
+   class Singleton {
+       private Singleton() {}
+   }
+
+8. What is the static keyword?
+   - Belongs to class, not object.
+   static int count = 0;
+
+9. Static block usage?
+   static {
+       System.out.println("Runs before main()");
+   }
+
+10. What is 'final' keyword?
+    - final class, method, variable (cannot change/inherit/override).
+
+11. Difference between '==' and '.equals()'?
+    String a = new String("test");
+    String b = new String("test");
+    a == b → false, a.equals(b) → true
+
+12. What is a String in Java?
+    - Immutable object of characters.
+
+13. StringBuffer vs StringBuilder?
+    - StringBuffer is thread-safe, Builder is faster.
+
+14. What is method overloading?
+    void show(int a) {}
+    void show(String b) {}
+
+15. What is method overriding?
+    class A { void display() {} }
+    class B extends A { void display() {} }
+
+16. What is abstraction?
+    - Hiding implementation, showing functionality.
+    abstract class Shape { abstract void draw(); }
+
+17. Interface vs Abstract class?
+    interface A { void run(); }
+    abstract class B { abstract void run(); }
+
+18. Can interface have concrete methods?
+    - Yes, default/static/private from Java 8+.
+
+19. What is encapsulation?
+    - Wrapping data with code using private fields + public getters/setters.
+
+20. What is inheritance?
+    class A {}
+    class B extends A {}
+
+21. Multiple inheritance in Java?
+    - Not allowed with classes, allowed via interfaces.
+
+22. What is polymorphism?
+    - Compile-time (overloading), Run-time (overriding)
+
+23. What is instanceof?
+    Animal a = new Dog();
+    if (a instanceof Dog) {}
+
+24. What is Exception Handling?
+    try { int x = 5 / 0; } catch (ArithmeticException e) {}
+
+25. Difference between Checked and Unchecked exceptions?
+    - Checked: IOException, SQLException (compile-time)
+    - Unchecked: NullPointerException, ArithmeticException (runtime)
+
+26. Custom Exception example?
+    class MyException extends Exception {
+        MyException(String msg) { super(msg); }
+    }
+
+27. What is 'finally' block?
+    - Always executes
+    try {} catch() {} finally {}
+
+28. What is try-with-resources?
+    try (FileReader fr = new FileReader("file.txt")) {}
+
+29. What is Collection framework?
+    - Interfaces: List, Set, Map etc.
+    - Classes: ArrayList, HashSet, HashMap etc.
+
+30. ArrayList vs LinkedList?
+    - ArrayList: faster for access.
+    - LinkedList: better for insert/delete.
+
+31. HashMap vs Hashtable?
+    - HashMap: not thread-safe.
+    - Hashtable: thread-safe, slower.
+
+32. Set vs List?
+    - List allows duplicates, Set does not.
+
+33. What is HashSet?
+    Set<String> set = new HashSet<>();
+
+34. TreeSet vs HashSet?
+    - TreeSet: sorted.
+    - HashSet: unordered.
+
+35. What is Map interface?
+    Map<Integer, String> map = new HashMap<>();
+
+36. How to iterate Map?
+    for (Map.Entry<Integer, String> e : map.entrySet()) {
+        System.out.println(e.getKey() + " " + e.getValue());
+    }
+
+37. Fail-fast vs Fail-safe?
+    - Fail-fast: throws ConcurrentModificationException
+    - Fail-safe: uses copy
+
+38. What is Comparable?
+    class Student implements Comparable<Student> {
+        public int compareTo(Student s) { return this.id - s.id; }
+    }
+
+39. What is Comparator?
+    Collections.sort(list, (a, b) -> a.name.compareTo(b.name));
+
+40. What is multithreading?
+    class MyThread extends Thread {
+        public void run() { System.out.println("Running..."); }
+    }
+
+41. Difference between Thread and Runnable?
+    Thread → extends Thread
+    Runnable → implements Runnable
+
+42. Synchronized method?
+    synchronized void print() { ... }
+
+43. Volatile keyword?
+    - Tells JVM to read from main memory
+
+44. What is deadlock?
+    - Two threads holding lock, waiting for each other
+
+45. What is Stream API?
+    list.stream().filter(x -> x > 10).collect(Collectors.toList());
+
+46. Optional usage?
+    Optional.ofNullable(obj).orElse("default");
+
+47. Lambda expression?
+    (a, b) -> a + b;
+
+48. Functional interface?
+    interface MyFunc { void apply(); }
+
+49. Serialization?
+    ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream("file"));
+
+50. Java 8 new features?
+    - Lambda, Stream, Optional, Method refs, Default methods
+
+=====================================================================
+
+================================================================================
+              JAVA INTERVIEW QUESTIONS – PART 2 (51–100)
+================================================================================
+
+ 51. What is a volatile keyword in Java?
+     ➤ Guarantees visibility of changes across threads.
+     ➤ Used in multithreading.
+     ➤ Prevents caching of variable.
+
+ 52. What is the difference between synchronized method and synchronized block?
+     ➤ Method locks whole object.
+     ➤ Block allows finer-grained control (only a part is locked).
+
+ 53. Explain the Java Memory Model (JMM)?
+     ➤ Defines interaction of threads with memory.
+     ➤ Covers visibility, atomicity, ordering of variables.
+
+ 54. What is a ThreadLocal?
+     ➤ Provides thread-confined variables.
+     ➤ Each thread has its own isolated copy.
+
+ 55. Difference between HashMap and ConcurrentHashMap?
+     ➤ HashMap is not thread-safe.
+     ➤ ConcurrentHashMap uses segmentation/locking for thread safety.
+
+ 56. What is the use of Callable vs Runnable?
+     ➤ Runnable: returns nothing.
+     ➤ Callable: returns result and can throw exceptions.
+
+ 57. What is ExecutorService in Java?
+     ➤ Framework to manage and execute threads efficiently.
+
+ 58. What is ForkJoinPool?
+     ➤ Part of java.util.concurrent.
+     ➤ Used for parallelism via divide-and-conquer.
+
+ 59. What is the difference between wait() and sleep()?
+     ➤ wait() → releases lock, used with notify.
+     ➤ sleep() → doesn’t release lock.
+
+ 60. Explain the producer-consumer problem solution in Java.
+     ➤ Can use BlockingQueue or wait/notify pattern.
+
+ 61. What is the purpose of Object.wait() and Object.notify()?
+     ➤ Used for communication between threads on the same object monitor.
+
+ 62. How does HashMap handle collisions?
+     ➤ Uses linked list (Java 7) or red-black tree (Java 8+) on hash conflict.
+
+ 63. How does ConcurrentHashMap handle concurrency internally?
+     ➤ Bucket-level locking / segment-based locks.
+
+ 64. What is identity hash code?
+     ➤ Default hashcode from `System.identityHashCode(obj)`, not overridden.
+
+ 65. Difference between fail-fast and fail-safe iterators?
+     ➤ Fail-fast → throws ConcurrentModificationException.
+     ➤ Fail-safe → uses copy-on-write or snapshot.
+
+ 66. What is CopyOnWriteArrayList?
+     ➤ Thread-safe version of ArrayList.
+     ➤ On write: new copy of the array is made.
+
+ 67. What are Phantom, Weak, and Soft references?
+     ➤ Different levels of reachability for GC handling.
+
+ 68. Explain finalize() method and why it is deprecated.
+     ➤ Called before GC, not reliable → replaced by Cleaner API.
+
+ 69. What are functional interfaces?
+     ➤ Interfaces with single abstract method.
+     ➤ Used in lambda expressions. Example: Runnable, Callable, Function.
+
+ 70. What are some built-in functional interfaces in Java 8?
+     ➤ Function<T,R>, Consumer<T>, Supplier<T>, Predicate<T>.
+
+ 71. What is method reference in Java?
+     ➤ A shorthand for lambda.
+     ➤ Syntax: `ClassName::methodName`
+
+ 72. What is Stream API?
+     ➤ Functional-style operations on collections (filter, map, reduce).
+
+ 73. Difference between intermediate and terminal operations in streams?
+     ➤ Intermediate → returns Stream (lazy), Terminal → triggers computation.
+
+ 74. How to handle checked exceptions in lambda?
+     ➤ Use try-catch or create wrapper functional interfaces.
+
+ 75. What is Optional class?
+     ➤ A container to avoid null checks. Provides safe API like `ifPresent()`.
+
+ 76. What is reflection in Java?
+     ➤ Allows inspection and modification of classes, fields, methods at runtime.
+
+ 77. How do annotations work in Java?
+     ➤ Metadata processed at compile-time or run-time using reflection.
+
+ 78. How to create custom annotation?
+     ➤ Use @interface with retention and target metadata.
+
+ 79. What is marker interface?
+     ➤ Interface with no methods (e.g., Serializable, Cloneable).
+
+ 80. What is serialization in Java?
+     ➤ Converting object into byte stream. Uses ObjectOutputStream.
+
+ 81. What is transient keyword?
+     ➤ Prevents field from being serialized.
+
+ 82. What is Externalizable interface?
+     ➤ Allows full control over serialization with readExternal/writeExternal.
+
+ 83. What is classloader? Types?
+     ➤ Loads classes dynamically. Types:
+       ➤ Bootstrap, Extension, System/Application classloader.
+
+ 84. What is double-checked locking in Singleton?
+     ➤ Avoids overhead of synchronized by checking instance twice.
+
+ 85. Difference: Singleton vs Static class?
+     ➤ Singleton → allows object state, uses lazy initialization.
+     ➤ Static class → no instantiation, stateless.
+
+ 86. Explain Builder Design Pattern.
+     ➤ Used to construct complex objects with readable chained methods.
+
+ 87. What is Dependency Injection?
+     ➤ External objects injected into class (e.g., via constructor/setter).
+
+ 88. What are varargs in Java?
+     ➤ Method that accepts variable number of arguments: `void test(int... nums)`
+
+ 89. What are enums in Java? Can they have fields/methods?
+     ➤ Special class type. Yes, can have fields, constructors, methods.
+
+ 90. What is the purpose of assert keyword?
+     ➤ Used for debugging via runtime assertions.
+
+ 91. What is AutoCloseable?
+     ➤ Interface used in try-with-resources for automatic closing.
+
+ 92. What is the difference between == and equals()?
+     ➤ == compares reference, equals() compares object content.
+
+ 93. Can we override static methods?
+     ➤ No, static methods belong to class, not instance.
+
+ 94. What is the diamond problem? Does Java support multiple inheritance?
+     ➤ Problem in multiple inheritance (solved using interfaces in Java).
+
+ 95. What is memory leak in Java?
+     ➤ Unused objects are referenced and not garbage collected.
+
+ 96. How to detect memory leaks in Java?
+     ➤ Use profilers like VisualVM, Eclipse MAT, or jconsole.
+
+ 97. What is Metaspace in Java 8+?
+     ➤ Replacement of PermGen. Stores class metadata.
+
+ 98. Explain Java Records (Java 14+).
+     ➤ Immutable data classes with compact syntax.
+
+ 99. What is pattern matching in switch (Java 17+)?
+     ➤ Allows matching object types in switch-case.
+
+100. What is sealed class/interface (Java 17+)?
+     ➤ Restricts which classes can extend or implement it.
+
+================================================================================
