@@ -3,22 +3,54 @@
 =====================================================================
 
 1. What is the difference between JDK, JRE, and JVM?
-   - JDK: Dev kit. JRE + dev tools.
-   - JRE: Runtime env. JVM + libs.
-   - JVM: Runs .class files.
+
+JDK:java development kit
+Includes JRE + development tools (compiler javac, debugger, etc.).
+Used to develop and run Java applications.
+
+JRE: java runtime environment
+Provides environment to run Java programs only (no development tools).
+Includes JVM + core Java libraries.
+
+Java Standard Edition APIs, for example:
+java.lang (basic language classes like String, Math, System)
+java.util (collections, date/time, utilities)
+java.io (input/output streams, file handling)
+java.net (networking)
+java.nio (new IO, buffers)
+java.math (BigInteger, BigDecimal)
+javax.crypto (cryptography)
+These libraries provide core functionality needed to run most Java applications.
+
+JVM:java virtual machine
+Runs Java bytecode (.class files) on any platform.
+Loads, verifies, executes bytecode, and manages memory (garbage collection).
+Provides platform independence.
 
 2. What is a Class and Object?
-   class Car {
-       String model;
-       void drive() { System.out.println("Driving..."); }
-   }
 
-   Car c = new Car(); // object
+- Class: Blueprint/template defining data (fields) and behavior (methods).
+- Object: Instance of a class created in memory, representing a real-world entity.
 
-3. What are constructors in Java?
-   class Demo {
-       Demo() { System.out.println("Constructor called"); }
-   }
+Example:
+class Car {
+    String model;
+    void drive() { System.out.println("Driving..."); }
+}
+
+Car c = new Car();  // c is an object of class Car
+
+
+3. What are Constructors in Java?
+
+- Special methods called when an object is created to initialize it.
+- Name same as class, no return type.
+- Can be default (no-arg) or parameterized.
+
+Example:
+class Demo {
+    Demo() { System.out.println("Constructor called"); }
+}
 
 4. Constructor vs Method?
    - Constructor: No return type, name = class.
@@ -48,8 +80,48 @@
        System.out.println("Runs before main()");
    }
 
+   //not common in use but spring has other ways
+
+   Spring Boot Initialization Methods:
+
+   1. @PostConstruct
+      - Method annotated with @PostConstruct runs once after the bean is fully initialized.
+      - Used for any setup tasks after dependencies are injected.
+
+   2. @Bean Initialization Methods
+      - In @Configuration classes, methods annotated with @Bean create and configure beans.
+      - Can specify initMethod attribute for custom initialization logic.
+
+   3. ApplicationRunner / CommandLineRunner
+      - Interfaces whose run() method executes after Spring Boot application starts.
+      - Useful for running code right after startup (e.g., loading initial data).
+
+   4. @Configuration and @Component
+      - Classes annotated with @Configuration or @Component are auto-scanned and instantiated by Spring.
+      - Spring manages their lifecycle and initialization automatically.
+
+   5. Constructor Injection
+      - Spring injects dependencies via constructor, ensuring objects are ready to use after creation.
+
+   6. Environment / Properties Initialization
+      - Use application.properties/yml to configure properties loaded automatically by Spring.
+
+   Summary:
+   Spring manages object lifecycle and initialization using annotations and interfaces,
+   making static blocks mostly unnecessary in Spring Boot projects.
+
+
 10. What is 'final' keyword?
-    - final class, method, variable (cannot change/inherit/override).
+
+- final variable: value assigned once, cannot be changed (constant).
+- final method: cannot be overridden by subclasses.
+- final class: cannot be subclassed/inherited.
+
+Example:
+final int MAX = 100;           // constant variable
+final void display() { }       // method cannot be overridden
+final class Utils { }          // class cannot be extended
+
 
 11. Difference between '==' and '.equals()'?
     String a = new String("test");
@@ -60,23 +132,145 @@
     - Immutable object of characters.
 
 13. StringBuffer vs StringBuilder?
-    - StringBuffer is thread-safe, Builder is faster.
+
+- StringBuffer:
+  * Thread-safe (synchronized).
+  * Safe in multi-threaded code.
+  * Slightly slower.
+
+Example:
+StringBuffer sb = new StringBuffer("Hello");
+sb.append(" World");       // add text
+sb.insert(5, ",");         // insert comma after Hello,
+sb.replace(6, 11, "Java"); // replace "World" with "Java"
+- Replaces substring from index 6 (inclusive) to 11 (exclusive) with "Java".
+
+sb.delete(5, 6);           // delete comma
+String result = sb.toString();
+
+- StringBuilder:
+  * Not thread-safe.
+  * Faster in single-threaded code.
+
+Example:
+StringBuilder sb = new StringBuilder("Hello");
+sb.append(" World");
+sb.insert(5, ",");
+sb.replace(6, 11, "Java");
+sb.delete(5, 6);
+String result = sb.toString();
+
+Summary:
+Use StringBuffer if thread safety needed; else StringBuilder for better speed.
+
 
 14. What is method overloading?
     void show(int a) {}
     void show(String b) {}
 
 15. What is method overriding?
-    class A { void display() {} }
-    class B extends A { void display() {} }
+    class A {
+    void display() {}
+    }
+    class B extends A {
+     void display() {}
+      }
+
+      +------------------------+-------------------------------+------------------------------+
+      | Feature               | Method Overloading             | Method Overriding            |
+      +------------------------+-------------------------------+------------------------------+
+      | Definition             | Same method name,              | Same method name,             |
+      |                        | different parameters           | same parameters               |
+      +------------------------+-------------------------------+------------------------------+
+      | Class Scope            | Happens in the **same class**  | Happens in **subclass**       |
+      |                        | (or inherited too)             | (modifying superclass method) |
+      +------------------------+-------------------------------+------------------------------+
+      | Parameters             | Must be **different**          | Must be **same**              |
+      +------------------------+-------------------------------+------------------------------+
+      | Return Type            | Can be same or different       | Must be **same or covariant** |
+      +------------------------+-------------------------------+------------------------------+
+      | Purpose                | To perform different tasks     | To change behavior of parent  |
+      |                        | with different inputs          | method in subclass            |
+      +------------------------+-------------------------------+------------------------------+
+      | Binding Time           | **Compile-time (Static)**      | **Runtime (Dynamic)**         |
+      +------------------------+-------------------------------+------------------------------+
+      | Inheritance Required?  | ❌ Not required                 | ✅ Must involve inheritance    |
+      +------------------------+-------------------------------+------------------------------+
+      | Polymorphism Type      | Compile-time polymorphism      | Runtime polymorphism          |
+      +------------------------+-------------------------------+------------------------------+
+
+class Animal {
+    void sound() {
+        System.out.println("Animal makes sound");
+    }
+}
+
+class Dog extends Animal {
+    @Override
+    void sound() {
+        System.out.println("Dog barks");
+    }
+
+    void parentSound() {
+        super.sound();  // calling parent method explicitly
+    }
+}
+
+public class Main {
+    public static void main(String[] args) {
+        Animal a = new Dog();  // Reference is Animal, object is Dog
+        a.sound();             // Output: Dog barks (Overridden version)
+
+        Dog d = new Dog();
+        d.sound();             // Output: Dog barks
+        d.parentSound();       // Output: Animal makes sound (calling parent version)
+    }
+}
+
 
 16. What is abstraction?
     - Hiding implementation, showing functionality.
-    abstract class Shape { abstract void draw(); }
+    abstract class Shape {
+    abstract void draw();
+    }
+
+    1. Abstract Class Rules:
+       - If a class **extends** an abstract class:
+         👉 It must implement **all abstract methods** of that class.
+       - If it does NOT implement all methods, it must itself be declared abstract.
+
+    2. Interface Rules:
+       - If a class **implements** an interface:
+         👉 It must implement **all abstract methods** of the interface.
+       - Interfaces in Java 8+ can have:
+         - **default methods** (with body)
+         - **static methods** (can have body) cannot override
+         - But still, all **abstract methods** must be implemented by the class.
+
+    3. Key Differences:
+       - Abstract class can have constructors, state (fields), and both abstract + non-abstract methods.
+       - Interface is for full abstraction (until Java 7), and a class can implement **multiple interfaces**.
+
+    Example:
+
+    interface Flyable {
+        void fly();
+    }
+
+    class Bird implements Flyable {
+        public void fly() {
+            System.out.println("Bird flies");
+        }
+    }
+
 
 17. Interface vs Abstract class?
-    interface A { void run(); }
-    abstract class B { abstract void run(); }
+    interface A {
+    void run();
+    }
+    abstract class B {
+    abstract void run();
+    }
 
 18. Can interface have concrete methods?
     - Yes, default/static/private from Java 8+.
@@ -96,10 +290,16 @@
 
 23. What is instanceof?
     Animal a = new Dog();
-    if (a instanceof Dog) {}
+    if (a instanceof Dog) {
+        System.out.println("a is a Dog");
+    }
+    - Helps avoid ClassCastException before downcasting.
 
 24. What is Exception Handling?
-    try { int x = 5 / 0; } catch (ArithmeticException e) {}
+    try {
+    int x = 5 / 0; 
+    }
+     catch (ArithmeticException e) {}
 
 25. Difference between Checked and Unchecked exceptions?
     - Checked: IOException, SQLException (compile-time)
