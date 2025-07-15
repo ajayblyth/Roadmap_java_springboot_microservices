@@ -1,0 +1,294 @@
+====================================================================
+Singleton Pattern - Java & Spring Boot Notes
+====================================================================
+
+1. What is Singleton Pattern?
+-----------------------------
+- Its A creational design.
+- It ensures a class only has one instance, and provides a global point of access to it.
+
+                    Singleton Design Pattern - Accurate Structure
+============================================================================
+                                                       Singleton Class
+         +-------------------+        X           +-----------------------------+
+         |     Client A      |------------------->|    - Static Object          |
+         |                   |  not allowed       |    - Private Constructor    |
+         |     Client B      |------------------->|    - Static Method          |
+         |                   | coz private        |                             |
+         |     Client C      |------------------->|                             |
+         +-------------------+                    +-----------------------------+
+                            \                          ^
+                             \                         |
+                              \                        |
+                               \_______________________|
+                          (All clients must use static method)
+
+============================================================================
+
+
+2. Key Features
+---------------
+- Private constructor to prevent external instantiation.
+
+- Static variable to store the single instance, so that it belongs to the class and can hold the only instance globally accessible.
+
+- Public static method to access the instance, (acting as a global access point to return the same object every time it is called).
+
+- Optional lazy or eager initialization: eager is done by directly initializing the instance during declaration
+(e.g., private static final Singleton s = new Singleton();) to ensure fast access but may waste memory if never used;
+
+lazy delays creation until first use (e.g., inside getInstance()) using null check to save memory,
+but requires thread safety (like synchronized block or double-checked locking) to avoid multiple instances.
+
+- Optional thread-safety for multi-threaded apps to prevent multiple threads from creating separate instances at the same time
+(e.g., via synchronized blocks or volatile keyword).
+
+
+3. Why Use Singleton?
+---------------------
+- To avoid creating multiple instances of heavy objects.
+- To ensure consistent behavior (e.g., configurations).
+- Reduces memory footprint.
+- Easy to manage shared resources.
+- Common in:
+    * Database connection pools
+    * Logging
+    * Configuration settings
+    * Caching
+    * Thread pools
+
+
+====================================================================
+
+// Singleton class using static inner class approach
+
+/*
+ NOTE: Important concepts to understand before implementing Singleton using this approach:
+
+       1. In Java, classes are loaded only once into memory by the JVM when first referenced.
+
+       2. A static inner class is not loaded until it is explicitly used.
+          This means if we don't access or refer to the inner class in our code,
+          the JVM will not load it into memory.
+
+       3. Therefore, the Singleton instance held inside the static inner class is created
+          only when the outer class calls getInstance(), ensuring lazy initialization
+          and thread safety without synchronization.
+*/
+
+
+    public class Singleton {
+
+        // Private constructor prevents instantiation from outside
+        private Singleton() {
+            System.out.println("Singleton Instance Created");
+        }
+
+        // Static inner class - inner class is not loaded until it is referenced
+        private static class SingletonHolder {
+            private static final Singleton INSTANCE = new Singleton();
+        }
+
+        // Global access point to get the singleton instance
+        public static Singleton getInstance() {
+            return SingletonHolder.INSTANCE;
+        }
+
+        // Example method
+        public void showMessage() {
+            System.out.println("Hello from Singleton!");
+        }
+    }
+
+public class Main {
+    public static void main(String[] args) {
+        // Calling getInstance multiple times returns the same object
+        Singleton obj1 = Singleton.getInstance();
+        obj1.showMessage();
+
+        Singleton obj2 = Singleton.getInstance();
+        System.out.println("Are both instances same? " + (obj1 == obj2));
+    }
+}
+
+//✅ Thread-safe, no sync overhead, lazy-loaded. Highly recommended in Java.
+
+
+
+WHY STATIC IN INNER CLASS??
+
+The nested class is no longer tied to any specific instance of the outer class.
+
+You can create an instance of the nested class without creating an instance of the outer class.
+
+The nested class behaves like a top-level class, but scoped inside the outer class for organization and encapsulation.
+
+
+
+
+4. Basic Singleton in Java (Eager Initialization)
+-------------------------------------------------
+public class MySingleton {
+
+    // Step 1: Create the instance
+    private static final MySingleton instance = new MySingleton();
+
+    // Step 2: Private constructor
+    private MySingleton() {}
+
+    // Step 3: Public method to return the instance
+    public static MySingleton getInstance() {
+        return instance;
+    }
+}
+
+5. Lazy Initialization (Thread-Safe with Double-Checked Locking)
+----------------------------------------------------------------
+public class MyLazySingleton {
+
+    private static volatile MyLazySingleton instance;
+
+    private MyLazySingleton() {}
+
+    public static MyLazySingleton getInstance() {
+        if (instance == null) {
+            synchronized (MyLazySingleton.class) {
+                if (instance == null) {
+                    instance = new MyLazySingleton();
+                }
+            }
+        }
+        return instance;
+    }
+}
+
+
+6. Singleton in Spring Boot
+---------------------------
+- Spring beans are SINGLETON by default (one instance per ApplicationContext).
+- No need to implement pattern manually.
+
+Example:
+@Service
+public class MyService {
+    public void print() {
+        System.out.println("Hello from Singleton Service!");
+    }
+}
+
+Controller using Singleton Service:
+@RestController
+public class MyController {
+
+    @Autowired
+    private MyService myService;
+
+    @GetMapping("/test")
+    public String test() {
+        myService.print();
+        return "Service Called";
+    }
+}
+
+7. Declaring Singleton Scope Explicitly in Spring
+-------------------------------------------------
+@Component
+@Scope("singleton") // Optional, as this is the default
+public class MySingletonBean {
+}
+
+8. Singleton Scopes in Spring
+-----------------------------
+- singleton     → One per container (default)
+- prototype     → New bean per injection
+- request       → One per HTTP request (web only)
+- session       → One per HTTP session (web only)
+- application   → One per ServletContext
+- websocket     → One per WebSocket session
+
+10. When NOT to Use Singleton
+-----------------------------
+- When object state must be unique per use.
+- When testing: shared state can cause flaky tests.
+- In highly concurrent systems — may become a bottleneck.
+- If business logic requires multiple instances.
+
+11. Pros and Cons of Singleton
+------------------------------
+
+Pros:
+- Saves memory (only one instance).
+- Easy to manage shared state.
+- Useful for stateless services/utilities.
+- Avoids redundancy.
+
+Cons:
+- Can break SOLID principles (Single Responsibility & Dependency Inversion).
+- Hard to test (global state).
+- Tight coupling.
+- May lead to concurrency bugs if not designed carefully.
+
+12. Real-World Applications of Singleton
+----------------------------------------
+- Logger classes
+- Configuration managers
+- Thread pools
+- DB connection pools
+- Caching frameworks
+- File systems or driver managers
+
+13. Singleton vs Static
+------------------------
+| Feature            | Singleton                  | Static                         |
+|--------------------|----------------------------|--------------------------------|
+| Object creation    | Yes                        | No                             |
+| Inheritance        | Yes                        | No                             |
+| Interface support  | Yes                        | No                             |
+| Testable           | Yes (with DI)              | No (hard to mock)              |
+| Lifecycle managed  | Yes (Spring/Manual)        | No                             |
+
+14. Best Practices
+------------------
+- Use `enum` for safest Singleton in Java.
+- Prefer dependency injection over static calls.
+- Avoid holding state unless truly necessary.
+- Ensure thread-safety for shared data.
+- Combine with Factory or Builder patterns if needed.
+
+====================================================================
+INTERVIEW FAQs: Singleton Pattern
+====================================================================
+
+Q1: What is Singleton Pattern?
+→ A design pattern that restricts the instantiation of a class to one object.
+
+Q2: Is Spring Singleton the same as Java Singleton?
+→ No. Spring Singleton is per ApplicationContext, not per JVM.
+
+Q3: How to create a thread-safe Singleton?
+→ Use synchronized block with double-checked locking and volatile keyword.
+
+Q4: How is enum Singleton better?
+→ Enum Singleton is thread-safe, prevents serialization issues, and avoids reflection.
+
+Q5: Why not use static methods instead?
+→ Static methods are not testable, cannot implement interfaces, and lack flexibility.
+
+Q6: Can Singleton be harmful?
+→ Yes. If overused, it leads to global state, hidden dependencies, and difficult testing.
+
+Q7: How to test Singleton class?
+→ Use dependency injection (Spring), avoid static references, and use mock frameworks.
+
+Q8: Is Singleton an anti-pattern?
+→ It can be if misused. When global state is abused, it violates clean architecture.
+
+Q9: Can a Singleton be lazy-loaded?
+→ Yes, using Lazy Initialization + synchronized block or holder class pattern.
+
+Q10: How does Spring handle Singleton Beans?
+→ Spring creates one instance per ApplicationContext and injects it where needed.
+
+====================================================================
+End of Singleton Pattern Notes - Java & Spring Boot
+====================================================================

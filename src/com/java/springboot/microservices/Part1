@@ -27,6 +27,8 @@ SECTION-1
        - What is the default floating point type? ➤ `double`
        - When to use `char` over `String`? ➤ `char` is lighter for single characters.
 
+
+
        1.2 Non-Primitive Types String, Arrays, Classes, Interfaces – reference types, can be null
        - Wrapper classes are also non-primitive.
 
@@ -42,7 +44,8 @@ SECTION-1
 
         Null Allowed?      ❌ No                     ✅ Yes (can be null)
 
-        Default Value      0, false, '\u0000', etc.  null (for fields)
+        Default Value      0, false, '\u0000',   null (for fields)
+                           etc.
 
         Object Methods     ❌ Not allowed            ✅ Yes (e.g., x.toString())
 
@@ -91,6 +94,44 @@ SECTION-1
          ➤ The fractional part is truncated (lost), e.g., 10.99 becomes 10.
        - Why does Java not allow automatic narrowing?
          ➤ To prevent data loss that occurs when converting from a larger data type to a smaller one.
+
+         ----------------------------------------------------------------------------------------------
+
+         TYPECASTING vs BOXING/UNBOXING (Java)
+
+         -----------------------------------------------------------------------------------------------------------------------------
+         | Concept        | Typecasting (Manual Conversion Between Compatible Types)            | Boxing/Unboxing (Primitive <-> Wrapper)      |
+         -----------------------------------------------------------------------------------------------------------------------------
+         | Definition     | Manual conversion between compatible primitive types or related      | Conversion between primitive types and their |
+         |                | object types (e.g., float → int, subclass → superclass)              | corresponding wrapper classes (e.g., int → Integer) |
+         -----------------------------------------------------------------------------------------------------------------------------
+         | Applies To     | Primitive types and objects in the same inheritance hierarchy        | Primitive types and their wrapper objects     |
+         |                | (e.g., double, int, or casting Object to String)                     | (e.g., int <-> Integer, double <-> Double)    |
+         -----------------------------------------------------------------------------------------------------------------------------
+         | Syntax         | (type) value                                                         | Auto-boxing/unboxing or using utility methods |
+         |                | e.g., int i = (int) 3.14;                                             | e.g., Integer x = 10; int y = x;              |
+         -----------------------------------------------------------------------------------------------------------------------------
+         | Example        | int i = (int) 5.75;        // float to int (typecasting)              | Integer obj = 100; // boxing                  |
+         |                | Object o = "hello";                                                   | int val = obj;     // unboxing                |
+         |                | String s = (String) o;                                                | Integer.valueOf("123"); // manual boxing      |
+         -----------------------------------------------------------------------------------------------------------------------------
+         | Manual/Auto    | Always manual, explicitly written by programmer                       | Can be automatic (Java 5+) or manual using API|
+         -----------------------------------------------------------------------------------------------------------------------------
+         | Purpose        | To convert value to a different compatible type manually              | To work with objects (e.g., Collections) that |
+         |                | Useful in arithmetic, casting objects, memory optimization            | require object types instead of primitives    |
+         -----------------------------------------------------------------------------------------------------------------------------
+         | Risk           | May cause data loss or runtime exceptions if types are incompatible   | May cause NullPointerException if unboxing a  |
+         |                | (e.g., double to int loses precision)                                 | null wrapper object                           |
+         -----------------------------------------------------------------------------------------------------------------------------
+
+         Quick Notes:
+         -------------
+         - Typecasting: Converts between primitive types or object references manually using (type).
+         - Boxing: Automatically or manually wraps a primitive in its wrapper class (int → Integer).
+         - Unboxing: Automatically or manually extracts primitive from wrapper (Integer → int).
+         - Java autoboxing/unboxing introduced in Java 5 for cleaner syntax.
+
+
 -----------------------------------------------------------------------------------------------------------------------------
  3     Operators in Java
        3.1 Arithmetic          +, -, *, /, %
@@ -177,10 +218,40 @@ SECTION-1
         while loop     | while (condition) {
                        |    // body
                        | }
+                       ex.
+                       public class WhileLoopExample {
+                           public static void main(String[] args) {
+                               int i = 1; // Initialization
+
+                               while (i <= 5) { // Condition
+                                   System.out.println("Number: " + i); // Loop body
+                                   i++; // Increment
+                               }
+                           }
+                       }
+                      NOTE:
+                       The while loop checks the condition before executing the loop body.
+
+                       If the condition is false initially, the loop body won’t run at all.
+
+                       Don't forget to update the loop variable (i++), or you'll create an infinite loop.
+
 
         do-while loop  | do {
                        |    // body
                        | } while (condition);
+                       ex.
+                       public class DoWhileExample {
+                           public static void main(String[] args) {
+                             int i = 1;
+
+                             do {
+                                 System.out.println("i = " + i);
+                                 i++;  // increment is needed to avoid infinite loop
+                             } while (i <= 5);
+}
+                       }
+
        -----------------------------------------------------------------------------------------------
         Loop Controls  | break;    → Exit loop immediately
                        | continue; → Skip current iteration and proceed to next
@@ -191,13 +262,82 @@ SECTION-1
 
        🎯 Interview Focus for Loops:
        - Explain the difference between `for`, `while`, and `do-while` loops.
-       - When would you use `break` vs `continue`?
+       - When would you use `break` vs `continue`?-> slide  for answer.
        - What happens if a loop condition is always true? ➤ An infinite loop.
        - Always update loop variables properly ➤ Avoid infinite loops!
+
+       ANS:
+       Java Loop Control: break vs continue
+       ====================================
+
+       ► break
+       --------
+       - Immediately exits the loop (for, while, or do-while).
+       - No further iterations are executed.
+       - Typically used when a specific condition is met and no further looping is needed.
+
+       Example:
+       --------
+       for (int i = 1; i <= 10; i++) {
+           if (i == 5) {
+               break; // Exit the loop when i is 5
+           }
+           System.out.println("i = " + i);
+       }
+
+       Output:
+       -------
+       i = 1
+       i = 2
+       i = 3
+       i = 4
+
+
+       ► continue
+       -----------
+       - Skips the rest of the current loop iteration.
+       - Continues with the next iteration of the loop.
+       - Useful when you want to skip specific values or conditions.
+
+       Example:
+       --------
+       for (int i = 1; i <= 5; i++) {
+           if (i == 3) {
+               continue; // Skip iteration when i is 3
+           }
+           System.out.println("i = " + i);
+       }
+
+       Output:
+       -------
+       i = 1
+       i = 2
+       i = 4
+       i = 5
+
+
+       Summary Table:
+       --------------
+       | Keyword   | Effect                          | Use Case                                |
+       |-----------|----------------------------------|------------------------------------------|
+       | break     | Exits the loop entirely          | When a stop condition is met             |
+       | continue  | Skips to next iteration          | When a certain condition should be ignored |
+
+
+       When to Use:
+       ------------
+       ✔ Use 'break' when:
+         - You've found what you're searching for.
+         - You want to stop a loop early.
+
+       ✔ Use 'continue' when:
+         - You want to skip processing for some values.
+         - You're filtering out specific cases.
+
 -----------------------------------------------------------------------------------------------------------------------------
  5     INPUT / OUTPUT IN JAVA
 
-       5.1 Scanner Input
+        5.1 Scanner Input
 
            import java.util.Scanner;
 
@@ -221,30 +361,6 @@ SECTION-1
            sc.nextLine();             // <-- flush leftover newline
            String fullName = sc.nextLine(); // Now correctly reads the full name
 
-       🔁 Full Example Demo:
-           Scanner sc = new Scanner(System.in);
-
-           System.out.print("Enter first name using next(): "); // Using next() - reads only a single word
-           String firstName = sc.next(); // Reads one word only
-           sc.nextLine();               // Flush leftover newline
-
-           System.out.print("Enter full name using nextLine(): "); // Using nextLine() - reads a full sentence
-           String fullName = sc.nextLine(); // Reads full line
-
-           System.out.print("Enter your age using nextInt(): "); // Using nextInt() - reads an integer
-           int age = sc.nextInt();
-           sc.nextLine();               // Flush newline again
-
-           System.out.print("Enter booking amount using nextDouble(): "); // Using nextDouble() - reads a decimal value
-           double amount = sc.nextDouble();
-           sc.nextLine();               // Clear buffer if nextLine comes after
-
-           // Displaying all inputs
-           System.out.println("\n========= OUTPUT =========");
-           System.out.println("First name (next):         " + firstName);
-           System.out.println("Full name (nextLine):      " + fullName);
-           System.out.println("Age (nextInt):             " + age);
-           System.out.println("Booking Amount (double):   ₹" + amount);
 
            sc.close();
            // When you close a Scanner created on System.in, it also closes System.in itself.

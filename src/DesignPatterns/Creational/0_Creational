@@ -1,0 +1,91 @@
+====================================================================
+Creational Design Patterns - Java Interview Notes
+====================================================================
+
+1. What are Creational Design Patterns? -> deals with **object creation mechanisms**.
+---------------------------------------
+
+- Their purpose is to **create objects in a controlled manner** that is suitable to the situation.
+- Instead of instantiating objects directly using `new`, these patterns provide **better ways to create objects**,
+ especially when:
+    * object creation is complex
+    * involves many configurations
+    * object lifecycle needs to be managed
+
+2. Why use Creational Patterns?
+-------------------------------
+- Improve **flexibility** and **reusability** of code.
+- Helps decouple the object creation logic from the system.
+- Makes code easier to manage, test, and extend.
+
+3. Types of Creational Design Patterns
+--------------------------------------
+There are **five** main creational patterns:
+
+1. **Singleton**
+   - Ensures only **one instance** of a class is created.
+   - Provides a global point of access.
+   - Use case: configuration manager, logger, cache.
+
+2. **Factory Method**
+   - Defines an interface for creating objects but allows subclasses to alter the type of objects created.
+   - Use case: when the exact type of object isn’t known until runtime.
+
+3. **Abstract Factory**
+   - Produces **families of related objects** without specifying their concrete classes.
+   - Use case: GUI toolkits with different themes (e.g., Windows vs Mac styles).
+
+4. **Builder**
+   - Separates the construction of a complex object from its representation.
+   - Use case: building objects with many optional parameters (e.g., creating a complex Product object).
+
+5. **Prototype**
+   - Creates new objects by **cloning an existing object** (prototype).
+   - Use case: when creating a new instance is expensive, and a similar object already exists.
+
+4. Real-World Analogy
+---------------------
+- Think of ordering a pizza:
+    - Factory → You order a pizza, and the factory (kitchen) decides what type to make.
+    - Abstract Factory → You pick a theme (e.g., Italian), and get a full meal with matching items.
+    - Builder → You choose each ingredient step-by-step.
+    - Prototype → You say “make me another one exactly like that one.”
+    - Singleton → There’s only one chef allowed to cook, ever.
+
+5. Comparison Table
+-------------------
+| Pattern         | Responsibility                              | Use Case                                 |
+|-----------------|----------------------------------------------|-------------------------------------------|
+| Singleton       | One instance only                           | Logger, Configs, Cache                    |
+| Factory Method  | Create object via interface                 | When subclass decides the object type     |
+| Abstract Factory| Create related objects                      | GUI themes, cross-platform UI             |
+| Builder         | Build complex objects step-by-step          | Documents, Cars, Product creation         |
+| Prototype       | Clone from existing object                  | Performance critical object creation      |
+
+6. Interview FAQs - Creational Patterns
+---------------------------------------
+
+Q1: What are creational design patterns?
+→ Patterns that deal with the creation of objects, abstracting the instantiation logic from the user.
+
+Q2: Name all creational design patterns.
+→ Singleton, Factory Method, Abstract Factory, Builder, Prototype.
+
+Q3: When would you use Factory over Builder?
+→ Factory is for creating a variety of objects based on conditions; Builder is for step-by-step creation of complex objects.
+
+Q4: What’s the difference between Abstract Factory and Factory Method?
+→ Abstract Factory creates related objects (families); Factory Method creates one product type.
+
+Q5: Is Singleton a bad design?
+→ Not always. It's useful in many cases but can be misused, leading to global state and testability issues.
+
+Q6: When would you use Prototype?
+→ When object creation is expensive and a copy of an existing object is sufficient.
+
+Q7: Why are creational patterns important?
+→ They improve object creation flexibility, testability, and scalability in applications.
+
+====================================================================
+End of Notes: Creational Design Patterns - Java Interview
+====================================================================

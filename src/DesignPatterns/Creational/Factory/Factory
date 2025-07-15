@@ -1,0 +1,194 @@
+================================================================================
+                         FACTORY DESIGN PATTERN - FULL GUIDE
+================================================================================
+
+1. WHAT IS FACTORY DESIGN PATTERN?
+----------------------------------
+Factory Method defines an interface for creating an object but lets subclasses decide which class to instantiate.
+
+The main benefit is flexibility and decoupling; the client code doesn't need to know about the specific classes.
+
+Often used in frameworks and libraries where the exact type of object isn't known until runtime.
+--------------------------------------------------------------------------------
+2. WHY USE FACTORY PATTERN?
+----------------------------
+- To **encapsulate object creation**.
+- To follow **Open/Closed Principle** (open for extension, closed for modification).
+- To avoid tight coupling between client code and concrete classes.
+
+--------------------------------------------------------------------------------
+3. WHERE TO USE FACTORY PATTERN?
+---------------------------------
+3. WHERE TO USE FACTORY PATTERN?
+---------------------------------
+- When
+If your application needs to create different versions of a product or may introduce new types in the future, the Factory Method Pattern provides a flexible way to handle these variations by defining specific factory methods for each product type.
+
+- When the class to instantiate is determined at **runtime**.
+  WHY: When object type depends on dynamic input (e.g., user input or config),
+       factory centralizes the decision logic. Avoids spreading if-else checks
+       across the codebase. Keeps client code clean and flexible.
+
+- When you have a **superclass/interface** and multiple **subclasses**.
+  WHY: Factory lets the client depend only on the interface. No need to know or
+       change anything when new subclasses are added. Promotes loose coupling
+       and Open/Closed Principle.
+
+- When object creation involves **complex setup logic**.
+  WHY: Repeating configuration or setup logic everywhere is bad practice.
+       Factory centralizes it, avoids duplication, and ensures consistency.
+
+--------------------------------------------------------------------------------
+...
+--------------------------------------------------------------------------------
+4. REAL-WORLD EXAMPLES
+-----------------------
+- GUI Framework: Creating Buttons for Windows/Mac/Linux.
+- Notification System: Creating Email/SMS/Push Notification objects.
+- Parser: JSON/XML/YAML parser creation.
+- JDBC DriverManager: `DriverManager.getConnection()` hides actual DB driver.
+
+--------------------------------------------------------------------------------
+5. BASIC JAVA IMPLEMENTATION
+-----------------------------
+
+// Step 1: Define a common interface for all types of notifications
+
+interface Notification {
+    void notifyUser();  // Abstract method to be implemented by all notification types
+}
+
+// Step 2: Concrete implementation for Email notification
+class EmailNotification implements Notification {
+    public void notifyUser() {
+        System.out.println("Sending Email Notification");
+    }
+}
+
+// Step 3: Concrete implementation for SMS notification
+class SMSNotification implements Notification {
+    public void notifyUser() {
+        System.out.println("Sending SMS Notification");
+    }
+}
+
+// Step 4: Concrete implementation for Push notification
+class PushNotification implements Notification {
+    public void notifyUser() {
+        System.out.println("Sending Push Notification");
+    }
+}
+
+// Step 5: Factory class to encapsulate the object creation logic
+
+class NotificationFactory {
+
+    public static Notification createNotification(String type) {
+        if (type == null) return null;
+
+        if (type.equalsIgnoreCase("EMAIL")) return new EmailNotification();
+        if (type.equalsIgnoreCase("SMS")) return new SMSNotification();
+        if (type.equalsIgnoreCase("PUSH")) return new PushNotification();
+
+        return null;  // Default case: unknown type
+    }
+}
+
+// Step 6: Client-side code
+
+public class FactoryDemo {
+    public static void main(String[] args) {
+
+        // The client only knows the type, not which class to instantiate
+        // The factory takes care of object creation
+
+        Notification notification = NotificationFactory.createNotification("EMAIL");
+
+        // Call the interface method — actual implementation is hidden
+
+        notification.notifyUser();  // Output: Sending Email Notification
+    }
+}
+
+--------------------------------------------------------------------------------
+6. ADVANTAGES OF FACTORY PATTERN
+---------------------------------
+- Loose coupling between client and implementation classes.
+- Adds flexibility in changing object creation logic.
+- Easy to introduce new types of objects.
+- Cleaner and more maintainable code.
+
+--------------------------------------------------------------------------------
+7. DISADVANTAGES
+-----------------
+- Increases number of classes.
+- Can become hard to manage if many subclasses.
+- Switching logic in factory might violate Single Responsibility Principle.
+
+--------------------------------------------------------------------------------
+8. TYPES OF FACTORY PATTERNS (Variants)
+----------------------------------------
+1. Simple Factory     : Uses if-else/switch logic (Not a GOF pattern, but common).
+2. Factory Method     : Subclasses decide which object to create.
+3. Abstract Factory   : Factory of factories, for families of related objects.
+
+--------------------------------------------------------------------------------
+9. INTERVIEW QUESTIONS (WITH ANSWERS)
+--------------------------------------
+
+Q1. What problem does Factory Pattern solve?
+- It hides object creation logic and removes tight coupling.
+
+Q2. Is Factory Pattern a creational or structural pattern?
+- Creational.
+
+Q3. How is Factory Method different from Abstract Factory?
+- Factory Method creates one product, Abstract Factory creates families of products.
+
+Q4. Can Factory Pattern be used with interfaces?
+- Yes, it works perfectly when return type is an interface or abstract class.
+
+Q5. Is Simple Factory a design pattern?
+- It's a programming idiom, not one of the original 23 GOF patterns.
+
+Q6. What principles does Factory Pattern follow?
+- Open/Closed Principle, Dependency Inversion Principle.
+
+Q7. How to avoid `if-else` or `switch` in Factory?
+- Use Map of class references or reflection.
+
+Q8. How is Factory better than direct instantiation using `new`?
+- Promotes loose coupling, testability, and scalability.
+
+Q9. Where is Factory Pattern used in JDK?
+- `Calendar.getInstance()`, `NumberFormat.getInstance()`, `ResourceBundle.getBundle()`
+
+Q10. Can we make the Factory class Singleton?
+- Yes, especially in large systems to avoid multiple factory instances.
+
+--------------------------------------------------------------------------------
+10. BONUS: ALTERNATIVE TO SWITCH IN FACTORY
+---------------------------------------------
+Using HashMap to avoid `if-else`:
+
+static Map<String, Supplier<Notification>> map = new HashMap<>();
+static {
+    map.put("EMAIL", EmailNotification::new);
+    map.put("SMS", SMSNotification::new);
+    map.put("PUSH", PushNotification::new);
+}
+
+public static Notification createNotification(String type) {
+    Supplier<Notification> supplier = map.get(type.toUpperCase());
+    return (supplier != null) ? supplier.get() : null;
+}
+
+--------------------------------------------------------------------------------
+11. QUICK SUMMARY
+------------------
+- Factory Pattern = Object creator.
+- Goal: Hide instantiation logic from client.
+- Key Advantage: Flexibility and loose coupling.
+- Real Use: Notification systems, UI controls, parsers, JDBC, Spring BeanFactory.
+
+================================================================================

@@ -1,0 +1,303 @@
+================================================================================
+                           STRATEGY DESIGN PATTERN
+================================================================================
+
+1. What is Strategy Pattern?
+----------------------------
+The Strategy Design Pattern is a behavioral design pattern that allows you to define a family of algorithms or behaviors,
+put each of them in a separate class, and make them interchangeable at runtime.
+This pattern is useful when you want to dynamically change the behavior of a class without modifying its code.
+- It promotes the principle: "Favor composition over inheritance".
+
+2. Why use Strategy Pattern?
+----------------------------
+- To avoid multiple conditional statements (if-else or switch-case) to select
+  behavior.
+- To separate the algorithm implementation from the client using it.
+- To enable runtime selection of algorithm/strategy.
+- To improve code maintainability and flexibility.
+- To adhere to Open/Closed Principle: open for extension, closed for modification.
+
+3. Where to use Strategy Pattern?
+---------------------------------
+- When you have multiple algorithms for a specific task and want to switch
+  between them dynamically.
+- When you want to avoid cluttering client code with conditional logic.
+- When related classes differ only in their behavior.
+- When you want to isolate complex, changing algorithms from the client.
+- Example domains: Sorting strategies, Payment methods, Compression algorithms,
+  Validation rules, Route calculation in navigation.
+
+4. Structure / Components
+-------------------------
+- Context:
+   - Maintains a reference to a Strategy object.
+   - Is configured with a ConcreteStrategy.
+   - Delegates execution to the Strategy.
+- Strategy (Interface/Abstract):
+   - Declares an interface common to all supported algorithms.
+- ConcreteStrategy:
+   - Implements the Strategy interface with a specific algorithm.
+
+5. How it works (flow)
+----------------------
+- Client creates a Context object.
+- Client sets a ConcreteStrategy instance to the Context.
+- Context delegates work to the Strategy object.
+- Strategy executes the algorithm.
+
+6. Advantages
+-------------
+- Eliminates conditional statements for choosing behaviors.
+- Increases flexibility by isolating algorithms.
+- Simplifies unit testing of algorithms independently.
+- Supports open/closed principle.
+- Allows runtime switching of strategies.
+
+7. Disadvantages
+----------------
+- Increases the number of objects/classes.
+- Clients must be aware of different strategies to choose among them.
+- Can add complexity if overused or used for trivial variations.
+
+8. Real-world examples
+----------------------
+- Payment processing (CreditCard, PayPal, UPI payment strategies).
+- Sorting (QuickSort, MergeSort, BubbleSort strategies).
+- File compression (ZIP, RAR, 7z strategies).
+- Logging (Console, File, Database loggers).
+- Navigation apps choosing route calculation strategies (fastest, shortest).
+
+9. Java Code Example
+--------------------
+interface Strategy {
+    void execute();
+}
+
+class ConcreteStrategyA implements Strategy {
+    public void execute() {
+        System.out.println("Executing Strategy A");
+    }
+}
+
+class ConcreteStrategyB implements Strategy {
+    public void execute() {
+        System.out.println("Executing Strategy B");
+    }
+}
+
+class Context {
+    private Strategy strategy;
+
+    public Context(Strategy strategy) {
+        this.strategy = strategy;
+    }
+
+    public void setStrategy(Strategy strategy) {
+        this.strategy = strategy;
+    }
+
+    public void executeStrategy() {
+        strategy.execute();
+    }
+}
+
+public class StrategyPatternDemo {
+    public static void main(String[] args) {
+        Context context = new Context(new ConcreteStrategyA());
+        context.executeStrategy();  // Output: Executing Strategy A
+
+        context.setStrategy(new ConcreteStrategyB());
+        context.executeStrategy();  // Output: Executing Strategy B
+    }
+}
+
+10. Interview Questions on Strategy Pattern
+-------------------------------------------
+==============================
+Strategy Design Pattern - FAQ
+==============================
+
+Q1: What is the Strategy Pattern and what problem does it solve?
+----------------------------------------------------------------
+The Strategy Pattern is a behavioral design pattern.
+It defines a family of algorithms, encapsulates each one,
+and makes them interchangeable.
+
+It solves the problem of hardcoded conditional logic (e.g., if-else or switch)
+by delegating behavior to strategy classes.
+
+Use it when:
+- You have multiple ways to do something (e.g., different sorting or payment methods).
+- You want to select the algorithm at runtime.
+- You want to follow the Open/Closed Principle.
+
+------------------------------------------------------------
+
+Q2: How does Strategy Pattern promote open/closed principle?
+------------------------------------------------------------
+The Open/Closed Principle states that software should be:
+- Open for extension
+- Closed for modification
+
+Strategy Pattern supports this by:
+- Allowing new algorithms to be added as new classes (strategies)
+- Without modifying the context or client code
+
+So, you can extend behavior without changing existing code.
+
+------------------------------------------------------------
+
+Q3: Difference between Strategy and State design patterns?
+------------------------------------------------------------
+| Feature       | Strategy Pattern        | State Pattern            |
+|---------------|-------------------------|---------------------------|
+| Purpose       | Choose behavior         | Track internal state      |
+| Who switches? | Client code             | Context object            |
+| Behavior      | External selection      | Changes automatically     |
+| Example       | Sorting algorithms      | ATM state transitions     |
+
+Strategy: Used when behavior must be chosen at runtime.
+State: Used when an object needs to behave differently based on internal state.
+
+------------------------------------------------------------
+
+Q4: Real-world use case for Strategy Pattern?
+---------------------------------------------
+Example: E-commerce payment system
+
+Define payment strategies:
+- CreditCardPayment implements PaymentStrategy
+- PayPalPayment implements PaymentStrategy
+- UpiPayment implements PaymentStrategy
+
+At runtime, the user chooses the payment method,
+and the app executes the chosen strategy.
+
+------------------------------------------------------------
+
+Q5: Strategy Pattern in Java (code example)?
+--------------------------------------------
+interface PaymentStrategy {
+    void pay(int amount);
+}
+
+class CreditCardPayment implements PaymentStrategy {
+    public void pay(int amount) {
+        System.out.println("Paid " + amount + " using Credit Card.");
+    }
+}
+
+class PayPalPayment implements PaymentStrategy {
+    public void pay(int amount) {
+        System.out.println("Paid " + amount + " using PayPal.");
+    }
+}
+
+class PaymentContext {
+    private PaymentStrategy strategy;
+
+    public PaymentContext(PaymentStrategy strategy) {
+        this.strategy = strategy;
+    }
+
+    public void setStrategy(PaymentStrategy strategy) {
+        this.strategy = strategy;
+    }
+
+    public void executePayment(int amount) {
+        strategy.pay(amount);
+    }
+}
+
+// Usage
+PaymentContext context = new PaymentContext(new CreditCardPayment());
+context.executePayment(100);
+
+context.setStrategy(new PayPalPayment());
+context.executePayment(200);
+
+------------------------------------------------------------
+
+Q6: Strategy Pattern vs. Conditional Statements?
+------------------------------------------------
+Strategy Pattern:
+- Eliminates long if-else or switch logic
+- Adds flexibility via interchangeable behaviors
+- Better organization and testability
+
+Conditional Statements:
+- Simple but become messy as logic grows
+- Hard to maintain or extend
+- Violates Open/Closed Principle
+
+Strategy Pattern avoids modifying existing code for new behavior.
+
+------------------------------------------------------------
+
+Q7: Advantages and Disadvantages?
+---------------------------------
+Advantages:
+- Follows Open/Closed Principle
+- Encapsulates behavior cleanly
+- Reduces duplicate code
+- Easier to test and maintain
+
+Disadvantages:
+- More classes to manage
+- Overhead if used for very simple logic
+- Slightly more complex to understand at first
+
+------------------------------------------------------------
+
+Q8: How does Strategy Pattern relate to polymorphism?
+-----------------------------------------------------
+Strategy Pattern uses polymorphism heavily.
+
+- All strategies implement a common interface.
+- The context uses the interface, not the concrete implementation.
+- At runtime, different behaviors are executed via polymorphism.
+
+It's an example of "program to an interface, not an implementation."
+
+------------------------------------------------------------
+
+Q9: Can you switch strategies at runtime? How?
+----------------------------------------------
+Yes.
+
+You can set a new strategy object in the context.
+
+Example in Java:
+context.setStrategy(new PayPalPayment());
+context.executePayment(200);
+
+This allows behavior to change without altering the context logic.
+
+------------------------------------------------------------
+
+Q10: How does Strategy Pattern affect the number of classes?
+------------------------------------------------------------
+Strategy Pattern increases the number of classes:
+- Each algorithm/behavior is its own class.
+- Plus a common interface and the context class.
+
+This can be seen as overhead,
+but it brings modularity, reusability, and separation of concerns.
+
+For complex systems, this trade-off is beneficial.
+
+============================================================
+
+
+11. Additional Important Info
+------------------------------
+- Strategy pattern is often used with Dependency Injection frameworks to inject
+  specific strategies.
+- Can be combined with Factory Pattern to create and provide strategies.
+- Helps in unit testing as strategies can be tested independently.
+- Should not be confused with Template Method Pattern:
+  -- Template method defines the skeleton of algorithm in superclass.
+  -- Strategy pattern defines interchangeable algorithms independently.
+
+================================================================================
