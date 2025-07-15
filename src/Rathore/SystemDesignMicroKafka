@@ -1,0 +1,262 @@
+Circuit Breaker Pattern Usage:
+Now there are two main projects that implement the circuit breaker pattern and that is
+1. hystrix
+2. resilience
+
+So a Hystrix is implemented by Netflix team and this project is currently in maintenance mode.
+And this resilience is actually the advanced version of Hystrix and it has some extra functionalities.
+So it is advisable by Netflix to always go for Resilience Forge project for implementing the circuit
+breaker pattern in the project and also actually the Hystrix project all only provide the circuit breaker
+pattern.
+
+But in Resilience Forge it provides a lot of functionality like circuit breaker along with rate limiter,
+retry options and as well as bulk hit features.
+So due to all this functionality, it always advisable if you want to implement the circuit breaker
+in our project, always go for the resilience forge implementation.
+Part of the circuit breaker is pretty straightforward.
+We just need to call the APIs of Resilience Forge and IT internally we take care of moving the interceptor
+from one state to the another state depending on the status of the dependent module.
+So the first API that we call is circuit breaker dot off defaults.
+And here we specify the name of the circuit breaker.
+
+And if you see we call off defaults.
+It means in this particular method, all the default value will be set, like for example, the timeout
+period of a particular module or how many number of requests we have to do a particular module to verify
+that whether it's working or not.
+
+So all those stuffs we specify default here, we can customize as well.
+So there is a API to customize that as well.
+But mostly during implementation we always go for the default values.
+Now it will return the circuit breaker instance that is KB.
+And then the most important call that is decorate supplier.
+So this decorate supplier is the method in circuit breaker where we specify the two things.
+One is the instance of circuit breaker that we have created in the previous step.
+And another thing is the supplier.
+
+So if you know, in case of Java eight, we have multiple functional interfaces like predicate supplier or consume.
+------------------------------------------------------------------------------------------------------------------------
+Micro Services Drawback:
+In case of microservices, managing the microservice microservices is not that easy.
+So we have a lot of infrastructure issues.
+We will get it when we are implementing the microservices.
+So in this tutorial we will understand how to separate the infrastructure issue from the development
+so microservices can be managed effectively.
+So let's first understand what are these terms like service, discovery, load balancing, distributed
+racing's authentication, authorization and network policies monitoring.
+
+Service Discovery:
+First, let's first understand the service discovery so we have the different microservices, and as
+we know, each microservice is running on a different machines.
+Or if you are running on a cloud, then each microservice is running on a different virtual machine
+with its own IP address and the ports.
+So the question here is how one microservice know the IP address of the other microservice for communication.
+Like let's say, if this billing service wants to communicate with the passenger management, it should
+know the IP address of this particular machine.
+Then only i
+So one possible option is we will hardcode the IP address of the machines in each and every microservices
+like this.
+Microservice has IP address of all the different microservices that are available in this particular
+system.
+But there is a issue here and the issue is, let's say if this is my one microservice, which is passenger
+management and it's a very big feature and I want to scale it.
+So what we do, we use the different clusters of machines of passenger management.
+
+Service discovery helps us get the latest IP from of the Micro services to communicate between each other.
+
+So one microservice won't interact with the other microservice directly, but it will first look up
+into the service discovery, get the list of IP address and then communicate with them.
+So by using this, our infrastructure will much more easier.
+So using the service discovery, it is very easy to perform the communication between the different
+IP address, different microservices, even if this microservice will restart.
+------------------------------------------------------------------------------------------------------------------------
+Load Balancing:
+
+So what we generally use is a load balancer which balances the payload among the multiple instances
+of the service.
+Like in this case, if this this is my trip management and I want to scale this trip management.
+So we have the clusters of machines which are performing this task of trip management.
+Now we have the ribbon also here.
+So this ribbon is nothing, but it's kind of a load balancer that is used inside a microservices.
+------------------------------------------------------------------------------------------------------------------------
+Distributed Tracing(Debugging):
+So generally in this particular scenario, let's say the flow is happening from the treatment to the
+passenger management and from the passenger management is moving to the billing microservice.
+So we introduce the trace ID which will uniquely identify that particular flow that this trace identify
+that this flow is currently in trip management.
+Then if it moves to the passenger management, then we introduce the trace I.D. to there is some kind
+of unique ID and similarly trace 83.
+So by using this distributed tracing, we can easily able to debug any issues in the production environment.
+------------------------------------------------------------------------------------------------------------------------
+Security:
+So security is also one of the major concern while designing a microservice architecture.
+So this is my single microservice and one app is running in this particular microservice.
+Let's add all the infrastructure stuffs.
+Like first we add the authentication layer.
+Then we also add the authorizations, like who will use which endpoint.
+Then we also add the service discovery load balancing and then distributed tracing.
+So all these infrastructure stuffs are infrastructure layer is added to each and every microservice.
+So as we know that in production environment we have the hundreds of microservices are running and for
+managing all these layers of infrastructure is very tedious job for a developer.
+So the solution is we do not burden the code with all these infrastructure related issues.
+------------------------------------------------------------------------------------------------------------------------
+Side Car:
+So we create a separate service, which we call it sidecar, and this sidecar performs all these task.
+So this sidecar is responsible for communicating with other microservices along with that load balancing
+or all the security stuffs like installing all the required certificate in the microservice.
+So developer will only concentrate on the app development and all the infrastructure issues will be
+taken care of by this sidecar like
+service discovery,
+load balancing,
+ authorization,
+ authentication,
+network policy,
+distributed tracing,
+ monitoring.
+Everything will be done by the sidecar itself.
+
+But here we have one more issue.
+So we have now lot of sidecars are there in a production environment, like if you see in case of production,
+we have hundreds of machines, so all these different machines have their own sidecars.
+So operation team can't log in to different microservices to manage the different sidecars.
+So what we do, we introduce one more module and we call it control panel.
+------------------------------------------------------------------------------------------------------------------------
+Control Panel:
+So this control panel will manage all the sidecars.
+Developer don't have any responsibility of the sidecar or this control panel.
+It is fully managed and configured by the operation team and that operation team will take care of this
+control panel and all the sidecars.
+Also, this control panel can also take care of traffic management.
+Like, for example, let's say if I want only 10% of traffic will move to this particular microservice
+so that we can do in the control panel itself.
+
+So control panel will be used to configure each and every sidecars related with all these configurations
+So this control panel is nothing but some kind of you can say that through the command prompt or through
+the commands only we can able to configure all these infrastructure related issues.
+So we already have the project available for site Cars and Control panel.
+	-> So we call it Istio, which works as a control panel
+	-> and envoy, which is which works as a sidecar in microservices.
+So these two are mostly used in the industries for a control panel and a sidecar.
+------------------------------------------------------------------------------------------------------------------------
+Kafka:
+As we are talking about the distributed system.
+So in distributed system in one second, hundreds of requests are coming like in case of Amazon or LinkedIn
+or Facebook.
+So this huge number of events coming in a very small amount of time, the messaging system like Activemq
+can't able to handle it.
+Why?
+Because this activemq works on messaging system.
+It's a messages.
+But here we are talking about the streams.
+We have a continuous streams that are coming.
+So when the request are coming in the form of streams, then we need a distributed messaging system
+like Kafka.
+So Kafka is very famous nowadays among the interview room, as currently all the companies are moving
+towards distributed system, so they need a developers who have good understanding of the Kafka.
+And one of the best feature of Kafka is it is highly available and resilient in node failures, and
+also it supports automatic recovery.
+Kafka is very fast, scalable and fault tolerant, and it works on publisher subscription messaging
+system like Kafka.
+
+So let's see a few components of Kafka.
+It has
+Kafka Broker,
+ then Kafka, topic partitions,
+ consumer groups and cost
+ the producer and consumers.
+So let's discuss this components in detail.
+Kafka is also a messaging system, so it also has a producer and consumer producer will send the data
+and consumer will receive the data.
+And we have the different set of machines.
+So this different set of machines, we call it Kafka broker, and it creates one single clusters.
+So one cluster contains the different set of machines, individual machines we call it broker and completely
+one cluster we call it as a Kafka clusters.
+So producer will send the data to a Kafka Clusters and Kafka cluster.
+
+
+Producer --> Kafka Topic(Partation Data: P1, P2, P3, P4) --> Brokers(B1, B2, B3, B4) --> Consumers (Individual or Groups)
+
+So generally we broke up this Kafka topic into the different partitions.
+It's nothing, but we are actually dividing the messages.
+
+We put all these different partitions into the different brokers.
+So broker one, store the partition P1.
+Similarly, P2, P3 and P4.
+So that's how we able to manage the huge distributed systems.
+ Imp: One broker cannot send the data to the different consumer inside a one consumer group.
+
+ That is not valid because as we have the same data which we partition into the four parts.
+So these are the four partition of the same data.
+Now let's say this is the one partition, and if the same partition we are trying to send to the consumer
+one as well as, let's say, consumer two and these two consumer are actually the part of the same consumer
+group.
+So it's actually the duplication of data.
+------------------------------------------------------------------------------------------------------------------------
+Fault Tolerence in Kafka:
+As the Kafka is a distributed system and it works on the clusters of machines.
+And also the Kafka spread the data in the form of partitions over the various system in the clusters.
+So what if the case is one of the system in the cluster is down?
+So what happened to our data?
+Of course we can't able to get it.
+So it's a fault.
+So let's do the fault.
+Tolerant of it.
+So fault tolerant is very common term in the distributed system.
+
+So let's make our Kafka system also fault tolerant.
+So it continue operate properly in the event of failure of some of the nodes or components.
+So logically what we should do here.
+So we should create a multiple copies of this partitions and store that into the multiple machines.
+And we call this system, we call this concept as replication factor.
+So what it means if the replication factor is three, it means we have two more copies of this particular
+partition P1.
+Let's say these are the two copies of this particular partition and store that into the broker three
+and broker four.
+So even if this broker, if this system or this broker is down, we can still able to our Kafka system
+is still able to operate it properly.
+So here replication factor we set on the Kafka topic, not on a partition level.
+So what this means is if the Kafka topic at the Kafka topic level, if we set the replication factor
+as three, it means it creates the two copies of all the partitions.
+For all the partitions.
+We cannot create just the.
+Three copies or the two copies of a specific partitions, but we have to set that on a Kafka topic level
+so it applies to each and every partitions.
+So there is one more term here and we call it leader.
+So basically for every partition, one broker is elected as a reader.
+So in this case, for this partition P one, this broker works as a leader and the rest all copy of
+partitions are the followers.
+------------------------------------------------------------------------------------------------------------------------
+Zookeeper:
+Kafka is a huge sub system, so we need someone to manage that.
+So Kafka uses Zookeeper to manage the clusters of machines.
+Please note that you can't run Kafka service without first installing the Apache Zookeeper and the Zookeeper.
+And of course, this Apache zookeeper and Apache Kafka open source.
+So you can easily able to download it from the Internet.
+So this zookeeper actually do a lot of stuffs for Kafka.
+So the first thing it do is Zookeeper maintain all the list of all the brokers that are currently working
+in the Kafka system and how we do that.
+So this zookeeper actually regularly sends the heartbeat request to each and every broker.
+So it at any moment of time, this zookeeper got to know that a particular broker is dead or alive.
+Then let's say if a broker node by some reason is shutting down.
+So it's a zookeeper responsibility to tell all the replicas to act as a partition leaders in order to
+fulfill the duties of the partition leaders.
+Then the third responsibility of the zookeeper is the Zookeeper store.
+All the configuration of this complete Kafka systems, like it stores the number of partitions of each
+Kafka topic.
+Because in Kafka system there are multiple Kafka topics, and each and every topics have multiple partitions.
+So all these details are stored in Apache, Apache, Zookeeper.
+Then also the locations of all the replicas of a particular partitions and also which broker node is
+elected as a leader and which broker nodes are followers.
+So all these details are stored in the form of configuration in Zookeeper.
+So that's all the basic introductions of the distributed messaging system.
+------------------------------------------------------------------------------------------------------------------------
+Concurrency and System Falure in DB transaction in System Design:
+1. Two Phase Commit(prepare and commit)
+2. SAGA
+
+------------------------------------------------------------------------------------------------------------------------
+
+------------------------------------------------------------------------------------------------------------------------
+
+------------------------------------------------------------------------------------------------------------------------
+
+------------------------------------------------------------------------------------------------------------------------

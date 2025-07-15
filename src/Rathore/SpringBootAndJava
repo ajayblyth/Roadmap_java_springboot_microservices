@@ -1,0 +1,837 @@
+Thread dump:
+--------------------------------------------------------------------------------------------------------------------------------------------------------
+A thread dump is a snapshot of the state of all the threads of a Java process. The state of each thread is presented with a stack trace, showing the
+content of a thread’s stack. A thread dump is useful for diagnosing problems, as it displays the thread’s activity. Thread dumps are written in plain
+text, so we can save their contents to a file and look at them later in a text editor.
+--------------------------------------------------------------------------------------------------------------------------------------------------------
+Each thread in JVM list below points:
+	1. ID
+	2. Name
+	3. Current State
+	4. JAva Call Stack(It shows what monitor has locked or is waiting on)
+--------------------------------------------------------------------------------------------------------------------------------------------------------
+How to take Thread Dump:
+	1. kill -3 <PID> (get pid by ps -ef| grep java |jps)
+	2. Jstack -l <Pid> (get pid by ps -ef| grep java | jps)
+	3. jcmd <pid> Thread.print > <file-path>
+
+	"C:\Users\aratho12\Documents\thread.txt"
+--------------------------------------------------------------------------------------------------------------------------------------------------------
+When to take the Thread Dump?
+	Especially when your application runs under load and it get hang or stuck.
+		1. To identify deadlock.
+		2. To identify other thread contention.
+		3. To identify performance bottleneck
+		4. High CPU usage
+		5. Application freezing or haging.
+	To see how many threads are running in application.
+
+--------------------------------------------------------------------------------------------------------------------------------------------------------
+How many thread dumps we need.
+	Single Thread Dump:
+		It will solve the problem, if we have a deadlock in our applications. Where two or more Threads are waiting for locks obtained by each other.
+	Multiple Thread Dump:
+		It will help to solve those problems where Threads waiting for other processing, like I/O from databases.This type of problem is not detected
+		by single Dump. In this case multiple thread dumps taken over time will show the same Thread waiting for the process to complete during that
+		time span.
+--------------------------------------------------------------------------------------------------------------------------------------------------------
+Highest and second highest Salary
+Select department, max(salary)from table
+group by department
+order by salary desc
+offet 1
+--------------------------------------------------------------------------------------------------------------------------------------------------------
+How does Spring builder class improves performance concatenation?
+`StringBuilder` outperforms `String` in Java for performance optimization. `String` is immutable, creating new objects for modifications, consuming
+ memory and slowing execution. In contrast, `StringBuilder` is mutable, making it efficient for frequent concatenation, string modification, and
+ large string construction. It minimizes memory overhead and execution time by avoiding unnecessary object creation during concatenation and
+ dynamic memory allocation for large strings.
+
+--------------------------------------------------------------------------------------------------------------------------------------------------------
+Find the integer from the array such that the integer is highest when compare to all the elements to its right?
+
+--------------------------------------------------------------------------------------------------------------------------------------------------------
+Which Java collection is best to use contains methods?
+	Hashset have contains method but hash map have containsKey and containsValue
+--------------------------------------------------------------------------------------------------------------------------------------------------------
+How to avoid circular dependency in spring boot?
+By modifying code to use interface insted of the class directly.
+	By using lazy annotation.
+	@Component
+public class BeanA {
+
+    private BeanB beanB;
+
+    @Autowired
+    public BeanA(BeanB beanB) {
+        this.beanB = beanB;
+    }
+}
+@Component
+public class BeanB {
+
+    private BeanA beanA;
+
+    @Autowired
+    public BeanB(BeanA beanA) {
+        this.beanA = beanA;
+    }
+}
+@Component
+public class BeanA {
+
+    private BeanB beanB;
+
+    @Autowired
+    public BeanA(@Lazy BeanB beanB) {
+        this.beanB = beanB;
+    }
+}
+Bean A → Bean B → Bean A
+a circular dependency is a relation between two or more modules that either directly or indirectly depend on each other to function properly.
+--------------------------------------------------------------------------------------------------------------------------------------------------------
+Qualifier annotation in spring boot.
+Qualifier annotation is used in conjuction with Autowired to avoid confusion when we have two or more Beans configured for same type.
+ex: instead of injecting the class which implements the interface we inject the interface (Loose coupling)
+Then when we are passing it as parameter in controller class
+--------------------------------------------------------------------------------------------------------------------------------------------------------
+class PizzaController {
+	@Autowired
+	private Pizza pizza;
+
+	public PizzaController(@Qualifier("vegPizza")Pizza pizza) {
+	this.pizza = pizza;
+	}
+	}
+--------------------------------------------------------------------------------------------------------------------------------------------------------
+What is singleton pattern and use case of it, write a code for it and how to prevent creating multiple objects in multithreaded environment?
+package com.journaldev.singleton;
+
+Singleton pattern restricts the instantiation of a class and ensures that only one instance of the class exists in the Java Virtual Machine.
+The singleton class must provide a global access point to get the instance of the class.
+--------------------------------------------------------------------------------------------------------------------------------------------------------
+To implement a singleton pattern, we have different approaches, but all of them have the following common concepts.
+
+Private constructor to restrict instantiation of the class from other classes.
+Private static variable of the same class that is the only instance of the class.
+Public static method that returns the instance of the class, this is the global access point for the outer world to get the instance of
+the singleton class.
+--------------------------------------------------------------------------------------------------------------------------------------------------------
+
+public class ThreadSafeSingleton {
+
+    private static ThreadSafeSingleton instance;
+
+    private ThreadSafeSingleton(){}
+
+    public static synchronized ThreadSafeSingleton getInstance() {
+        if (instance == null) {
+            instance = new ThreadSafeSingleton();
+        }
+        return instance;
+    }
+
+}
+--------------------------------------------------------------------------------------------------------------------------------------------------------
+
+The preceding implementation works fine and provides thread-safety, but it reduces the performance because of the cost associated with the
+synchronized method, although we need it only for the first few threads that might create separate instances. To avoid this extra overhead every time,
+ double-checked locking principle is used. In this approach, the synchronized block is used inside the if condition with an additional check to ensure
+ that only one instance of a singleton class is created. The following code snippet provides the double-checked locking implementation:
+--------------------------------------------------------------------------------------------------------------------------------------------------------
+
+public static ThreadSafeSingleton getInstanceUsingDoubleLocking() {
+    if (instance == null) {
+        synchronized (ThreadSafeSingleton.class) {
+            if (instance == null) {
+                instance = new ThreadSafeSingleton();
+            }
+        }
+    }
+    return instance;
+}
+--------------------------------------------------------------------------------------------------------------------------------------------------------
+Single Responsibility Principle (SRP):
+A class should have only one reason to change, meaning it should have a single, focused responsibility.
+--------------------------------------------------------------------------------------------------------------------------------------------------------
+Open/Closed Principle (OCP):
+Software entities (classes, modules, etc.) should be open for extension but closed for modification, meaning you should be able to add new
+functionality without altering existing code.
+--------------------------------------------------------------------------------------------------------------------------------------------------------
+Liskov Substitution Principle (LSP):
+if you have a function that works with a base class, it should also work seamlessly with any of its subclasses without causing
+ unexpected errors or behavior changes.
+--------------------------------------------------------------------------------------------------------------------------------------------------------
+What is I in SOLID pattern?
+In the SOLID design principles, the "I" stands for the Interface Segregation Principle, which means that clients should not be forced to depend
+on interfaces they do not use.
+--------------------------------------------------------------------------------------------------------------------------------------------------------
+Dependency Inversion Principle (DIP):
+High-level modules should not depend on low-level modules: Instead, both should depend on abstractions (like interfaces or abstract classes).
+Abstractions should not depend on details: Details (concrete implementations) should depend on abstractions.
+--------------------------------------------------------------------------------------------------------------------------------------------------------
+
+Key benefits of applying SOLID principles to microservices:
+Improved maintainability:
+By having well-defined responsibilities, changes to one microservice are less likely to impact other services, making
+maintenance easier.
+-------------------------------------------------------------------------------------------------------------------------------------------------------------------
+Increased scalability:
+Individual microservices can be scaled independently based on their specific needs.
+-------------------------------------------------------------------------------------------------------------------------------------------------------------------
+Enhanced testability:
+Loosely coupled services are easier to test in isolation.
+-------------------------------------------------------------------------------------------------------------------------------------------------------------------
+Reduced complexity:
+Focusing on single responsibilities within each microservice simplifies overall system design.
+-------------------------------------------------------------------------------------------------------------------------------------------------------------------
+what is jwt token? how is it generated?
+It's primarily used for authentication and authorization, allowing a server to verify the identity of a user and their permissions.
+A JWT consists of three parts, separated by dots (.), each Base64url-encoded:
+Header: Contains metadata about the token, like the signing algorithm (e.g., HS256, RS256).
+Payload: Contains the claims (information) about the user or the application, like user ID, roles, or permissions.
+Signature: A digital signature that verifies the integrity and authenticity of the token, created using a secret key or a public/private key pair
+
+--------------------------------------------------------------------------------------------------------------------------------------------------------
+waq to find 2nd highest salaried employee department wise.
+SELECT name, MAX(salary) as sal from employees where salary < (select Max(salary) from employees
+	group by department);
+	offset
+
+--------------------------------------------------------------------------------------------------------------------------------------------------------
+SQL Query for marks:
+	SELECT name, sum(marks) as totalMarks from Student
+		group by name
+		order by totalMarks
+		desc
+--------------------------------------------------------------------------------------------------------------------------------------------------------
+How to search all the zip files containing the given word and give me latest 3 files.
+find /path/to/folder -type f -name "*.zip" -print0 |xargs -0 grep -1 "yourword"| head -3)
+find /path/to/folder -type f -name "*.zip" --> find all zip files
+grep "yourword" --> contains yourword in their
+xargs ls -lt --> sort files by modification time
+head -n 3 --> shows only latest 3 files
+
+--------------------------------------------------------------------------------------------------------------------------------------------------------
+Comand to find a specific file under a folder and it's subfolder.
+find /path/to/folder -type f -name "filename"
+
+--------------------------------------------------------------------------------------------------------------------------------------------------------
+chmod 475 <File-Name> what this command do?
+4--> sets the setUID(suid) bit, allowing the file to run with the owners permissions.
+7--> owners get read(4), write(2) execute(1) permissions.
+5--> Group and others get read(4) and execute(1) permissions.
+
+This means  if the normal user executes this file, it will run with the owner's privileges(useful for certain admin tasks)
+
+--------------------------------------------------------------------------------------------------------------------------------------------------------
+Which Data Structure is use to search effectively by student id and also to print the list whenever required in the same order we read from the file?
+For effective search by student_id  and maintaining insertion order, LinkedHashMap is a suitable choice. It provides
+o(1) time complexity for searching by student_id
+preserves insertion order.
+Alternatively. if linkedHashMap is not available, then you can use a combination of List and a HashMap:
+	A List<Student> to maintain the orderA HashMap<Integer, Student> for fast lookup.
+
+--------------------------------------------------------------------------------------------------------------------------------------------------------
+
+Which data structure will be used when we want to fetch the list of students by dob range.(start and end date)
+	TreeMap<LocalDate, List<Student>> will be best.
+	Why
+		1. Efficient range queries with subMap(startDate, endDate), making it easy to fetch students within a date range,
+		2. Preserves natural sorting of dates automatically.
+		3. Supports multiple students with the same DOB by storing a List<Student> for each date.
+--------------------------------------------------------------------------------------------------------------------------------------------------------
+Difference between runnable and callable?
+Runnable interface 	Callable interface
+It is a part of java.lang package since Java 1.0 |	It is a part of the java.util.concurrent package since Java 1.5.
+It cannot return the result of computation.	| It can return the result of the parallel processing of a task.
+It cannot throw a checked Exception.	| It can throw a checked Exception.
+In a runnable interface, one needs to override the run() method in Java. |	In order to use Callable, you need to override the call()
+--------------------------------------------------------------------------------------------------------------------------------------------------------
+Static:
+Static methods can't be Overriden. They just hide behind the new Overiden functon.
+The reason is method overriding is based on dynamic binding at runtime.
+
+--------------------------------------------------------------------------------------------------------------------------------------------------------
+Checked vs Unchecked Exception:
+Throwable -- Error -- Exception
+Checked is compile time error like IOException, SQLException, ClassNotFoundException, InterruptedException.
+Unchecked exception are due to coding error and need not to be handled for best practices.
+--------------------------------------------------------------------------------------------------------------------------------------------------------
+Second Highest Salary:
+
+Optional<Employee> emp2 = empList.stream().sorted(Comparator.comparingDouble(Employee::getSalary)
+                         .reversed()).skip(1).findFirst();
+System.out.println("Second Highest Salary in the organisation : " + emp2.get().getSalary());
+--------------------------------------------------------------------------------------------------------------------------------------------------------
+3rd round(client interview)
+--------------------------------------------------------------------------------------------------------------------------------------------------------
+spring-boot-starter-security
+Spring security is a powerful and customizable authentication and access-control framework for java application.
+--------------------------------------------------------------------------------------------------------------------------------------------------------
+@preauthorize
+We used Roles to dictate which users can access which endpoint and we did that in Security filter chain.
+ It is called url based security.
+
+Now, we will do the same thing but use method level Security.
+So, instead of defining it in Security Configuration --> Security Filter Chain
+We will define it on the method.
+
+@PreAuthorize("hasRole('Admin')")
+@GetMapping("/request")
+public String special() {
+return "special";
+}
+
+There are two annotation that we need to add
+	1. @EnableGlobalMethodSecurity(prePostEnable = true)  --> Should be added in Security Config.
+	2. @PreAuthorize("hasRole('Admin')")  --> should be added in individual methid.
+
+Additionally
+	@preAuthorize --> checks authorization before the method is called.
+	@postAuthorize --> checks authorization after the method is called. useful if you need to check the return value's contents before returning.
+
+Internal Working
+	preauthorize uses the Spring Expression Language
+	1. so inside the parentheses, we pass in a string and then the spring expression language parses it to understand what it's trying to do
+		so, we're going to say hasRole of admin and spring expression language will figure it out.
+
+Combining both
+	off course we can combine both url based security and method level security.
+	first it checks url based security and then
+	If passes  --> checks method level security.
+
+FYI
+	@Secured  --> older version of postAuthorize that doesn't support spring expression language.
+	@preFilter/@postFilter --> Similar to preAuthorize and postAuthorize. Allows you to filter a collection & only pass certain items into the method
+	that you actually want.
+--------------------------------------------------------------------------------------------------------------------------------------------------------
+What is functional programming? with example.
+Functions are first class citizen meaning we will be passing function in function, create variable with function and returning value as function.
+
+--------------------------------------------------------------------------------------------------------------------------------------------------------
+Custom Annotation:
+A custom annotation is a developer-defined annotation that can encapsulate specific behaviors or configurations. For example, you might create a custom
+ annotation to perform logging, validate input, or implement security checks without repeating code.
+
+ Steps to Create a Custom Annotation:
+	1. Define the Custom Annotation:
+		@Target(ElementType.METHOD)  // Specifies that this annotation can be applied to methods
+@Retention(RetentionPolicy.RUNTIME)  // The annotation will be available at runtime
+public @interface LogExecutionTime {
+}
+	2. Implement Aspect for Custom Behavior
+	3. Apply the Custom Annotation
+	4. Testing the Custom Annotation
+	5. Additional Features (Optional)
+	Custom annotations can also have parameters. For example, you could modify the @LogExecutionTime annotation to take a boolean parameter to enable or disable
+	logging dynamically.
+
+--------------------------------------------------------------------------------------------------------------------------------------------------------
+Write a Rest controller?
+Spring provides two main controller annotations:
+
+@Controller annotation is used for MVC-based applications where responses are typically HTML pages.
+@RestController annotation is a specialized version of @Controller that automatically serializes return objects into JSON/XML responses.
+ It is equivalent to @Controller + @ResponseBody.
+
+--------------------------------------------------------------------------------------------------------------------------------------------------------
+Stream api to create a map with employee id and employee.
+employee.stream().maptoInt(Employee::getSalary).average().orElse(Double.NaN);
+--------------------------------------------------------------------------------------------------------------------------------------------------------
+Aspect Oriented programming basics:
+	In AOP, these cross-cutting concerns are modularized into separate units called aspects . This modularization helps keep the business logic clean and
+	uncluttered by separating the additional functionalities into aspects.
+	Aspect : The key unit of modularity in AOP, representing a concern that cuts across multiple classes. For example, an aspect for logging can be
+	applied across various methods in different classes.
+	Advice : This is the action taken by an aspect at a particular join point. There are five types of advice:
+	Before : Executed before the method call.
+	After : Executed after the method call, regardless of its outcome.
+	AfterReturning : Executed after the method returns a result, but not if an exception occurs.
+	Around : Surrounds the method execution, allowing you to control the method execution and its result.
+	AfterThrowing : Executed if the method throws an exception.
+
+--------------------------------------------------------------------------------------------------------------------------------------------------------
+Springboot:
+
+--------------------------------------------------------------------------------------------------------------------------------------------------------
+GraphQl: how it works and why it is used?
+Graph Quary language. It is a new API standard. it is an API only but it is more efficient, more powerful and more flexible. It is open source and developed
+by Facebook.
+Whatever data we ned, we will send it in the form of Query and the server will respond for that query.
+
+Describe your data 									Ask for what you want							Get predictable results
+new Project{										{project(name: "GraphQl"){							{
+name: String,											tagline												"project": {
+tagline: String,										}														tagline: "A query language for API"
+contributors: { User }									}														}
+}																											}
+
+
+--------------------------------------------------------------------------------------------------------------------------------------------------------
+Create a spring boot flow controller, service and repository class.
+
+--------------------------------------------------------------------------------------------------------------------------------------------------------
+java 17 feature: stream api, autowired removal:
+
+--------------------------------------------------------------------------------------------------------------------------------------------------------
+Spring beam life cycle:
+The lifecycle of a Spring bean consists of the following phases, which are listed below
+
+Container Started: The Spring IoC container is initialized.
+Bean Instantiated: The container creates an instance of the bean.
+Dependencies Injected: The container injects the dependencies into the bean.
+Custom init() method: If the bean implements InitializingBean or has a custom initialization method specified via @PostConstruct or init-method.
+Bean is Ready: The bean is now fully initialized and ready to be used.
+Custom utility method: This could be any custom method you have defined in your bean.
+Custom destroy() method: If the bean implements DisposableBean or has a custom destruction method specified via @PreDestroy or destroy-method,
+it is called when the container is shutting down.
+
+--------------------------------------------------------------------------------------------------------------------------------------------------------
+SQL query for marks
+
+--------------------------------------------------------------------------------------------------------------------------------------------------------
+OverRiding vs OverLoading:
+
+--------------------------------------------------------------------------------------------------------------------------------------------------------
+== vs .equals
+n Java, == compares object references (memory addresses), while .equals() compares object content or state.
+For primitive types, == compares values directly, and .equals() is not applicable.
+
+--------------------------------------------------------------------------------------------------------------------------------------------------------
+Autowired
+@Autowired is an annotation used for automatic dependency injection, allowing Spring to resolve and inject collaborating beans into your classes,
+ eliminating the need for manual configuration
+
+--------------------------------------------------------------------------------------------------------------------------------------------------------
+Difference between Spring and Spring boot
+The reason why we need Spring Boot is we are changing or shifting towards applications like microservices and with microservices, one of the most important
+ thing aim is we would want to be able to develop applications very quickly. So instead of building one large application, we would like to build ten small
+ microservices, which have their own scope and their own capabilities. Spring-based applications have lots of configurations. It can be of XML configuration,
+ Java configuration or annotations, etc. For example, If we want to use Spring MVC, we need to use @ComponentScan annotation, Dispatcher servlet, view
+ resolver, web jars, etc. This kind of configuration makes it slow to develop an application. So, in this place, Spring Boot Autoconfiguration comes in.
+ It looks at what types of frameworks are available at the classpath and it looks at what configurations are provided by the programmers or what configurations
+ are provided already for the application. It will look at both of them. Data is not configured but there is hibernation on the classpath, so it will configure
+ the data source automatically. It will configure the in-memory database, it will configure the dispatcher servlet automatically.
+
+--------------------------------------------------------------------------------------------------------------------------------------------------------
+Fibnoci Series
+
+
+--------------------------------------------------------------------------------------------------------------------------------------------------------
+Singleton
+
+--------------------------------------------------------------------------------------------------------------------------------------------------------
+Solid Principle
+
+
+--------------------------------------------------------------------------------------------------------------------------------------------------------
+Multi threading
+
+
+--------------------------------------------------------------------------------------------------------------------------------------------------------
+composite key
+a composite key is a combination of two or more columns that, together, uniquely identify each row in a table, unlike a single-column primary key.
+
+--------------------------------------------------------------------------------------------------------------------------------------------------------
+Create employee class and do some filter operation
+
+
+--------------------------------------------------------------------------------------------------------------------------------------------------------
+Imp and most challanging:
+Can we use Employee Class as a key in HashMap
+--------------------------------------------------------------------------------------------------------------------------------------------------------
+What is Executor Service
+The java.util.concurrent.ExecutorService interface is a new way of executing a task asynchronously in the background. an ExecutorService is very similar
+to a thread pool.
+
+Ex:
+							Executors.newScheduledThreadPool();
+							Executors.newSingleThreadExecutor();
+ Future executor = Executors.newFixedThreadPool(5);
+        executor.submit(new Runnable() {
+            @Override
+            public void run() {
+                System.out.println("Thread 1 is running");
+            }
+        });
+
+		executor.shutdown();
+
+The great thing about using ExecutorService is that it can tell you when the threads are done as we get Future as an output. It will return null.
+Additionally, we can use Callable to return something from the Thread
+Future executor = Executors.newFixedThreadPool(5);
+        executor.submit(new Callable() {
+            @Override
+            public String call() {
+                return "String";
+            }
+        });
+
+		executor.shutdown();
+--------------------------------------------------------------------------------------------------------------------------------------------------------
+Join in thread:
+	ThreadExample thread1 = new ThreadExample();
+	ThreadExample thread2 = new ThreadExample();
+	ThreadExample thread3 = new ThreadExample();
+lets say thread1, thread2 to run parallely but thread3 when thread 2 is done.Then we can use
+	1. thread1.start();
+	2. thread2.start();
+
+	thread1.join();  wait for thread 1 to complete.
+
+	thread3.start();
+
+	thread1.join(2000);
+	we can also use timeline inside join, if in that timeline the thread is not done then next thread will execute
+--------------------------------------------------------------------------------------------------------------------------------------------------------
+yield() --> a call to yield method changes the state of thread to Runnable from Running. However the scheduler might pick up the same thread to run
+again, specially if it's the thread with highest priority.
+ Summary is yield method is a request from a thread to go to Runnable State.
+
+--------------------------------------------------------------------------------------------------------------------------------------------------------
+wait, notify and notifyAll:
+	Wait and notify usually works in parallel. And if there are many threads then we can use notifyAll.
+
+--------------------------------------------------------------------------------------------------------------------------------------------------------
+What is threadpool and how to create threads
+A thread pool is a group of pre-created, idle threads that are ready to execute tasks, improving efficiency by avoiding the overhead of creating new threads
+ for each task. To create threads, you can either extend the Thread class or implement the Runnable interface, then start the thread using the start() method.
+--------------------------------------------------------------------------------------------------------------------------------------------------------
+How to create threads?
+extends Runnable --> run method without parameters --> public static run(){}
+	1. ThreadDemo td = new ThreadDemo();
+		td.start();
+implements  Thread --> run method without parameters --> public static run(){}
+	1. ThreadDemo td = new ThreadDemo();
+		Thread thread = new Thread(td);
+		td.start();
+--------------------------------------------------------------------------------------------------------------------------------------------------------
+priority
+	By default, the thread have priority 5.
+	We can change the priority from 1- 10
+	10 being the highest
+
+--------------------------------------------------------------------------------------------------------------------------------------------------------
+Idempotenet:
+Idempotency means that multiple identical requests have the same effect as a single request. In other words, no matter how many times you make the same
+ request, the result will be the same.
+	ex: GET, PUT, and DELETE
+--------------------------------------------------------------------------------------------------------------------------------------------------------
+Different states of Thread:
+	1. New
+	2. Runnable
+	3. Running
+	4. Blocked/Waiting
+	5. Terminated/dead
+--------------------------------------------------------------------------------------------------------------------------------------------------------
+Circuit breaker pattern
+The Circuit Breaker pattern, a software design pattern, enhances system resilience by preventing repeated calls to a failing service, acting like an electrical
+ circuit breaker to prevent cascading failures.
+Here's a more detailed explanation:
+Purpose:
+The primary goal of the Circuit Breaker pattern is to protect an application from the negative impact of a failing service or dependency.
+How it works:
+It monitors the health of a service or dependency and transitions through three states:
+Closed: The circuit is "closed," meaning the application can make calls to the service.
+Open: If the service experiences a high failure rate, the circuit "opens," and the application stops making calls to the service to prevent further failures.
+Half-Open: After a period of time, the circuit enters a "half-open" state, allowing a small number of test calls to the service to determine if it has recovered.
+Benefits:
+Prevents cascading failures: By stopping requests to a failing service, the Circuit Breaker pattern helps prevent a failure in one service from cascading and
+affecting other parts of the application.
+Improves fault tolerance: The pattern makes the application more resilient to failures by allowing it to gracefully handle service outages.
+Reduces resource consumption: By preventing repeated calls to a failing service, the Circuit Breaker pattern helps reduce unnecessary resource consumption.
+Use cases:
+Microservices: In microservices architectures, where services are often distributed, the Circuit Breaker pattern is particularly useful for protecting against
+ failures in inter-service communication.
+API gateways: API gateways can use the Circuit Breaker pattern to protect downstream services from failures.
+Distributed systems: The pattern can be used in any distributed system where services rely on each other.
+Implementation:
+--------------------------------------------------------------------------------------------------------------------------------------------------------
+Sum of substring of the index:
+
+
+--------------------------------------------------------------------------------------------------------------------------------------------------------
+Custom Exception Handler:
+// A Class that represents user-defined exception
+class MyException extends Exception {
+    public MyException(String m) {
+        super(m);
+    }
+}
+
+// A Class that uses the above MyException
+public class setText {
+    public static void main(String args[]) {
+        try {
+            // Throw an object of user-defined exception
+            throw new MyException("This is a custom exception");
+        }
+        catch (MyException ex) {
+            System.out.println("Caught");  // Catch and print message
+            System.out.println(ex.getMessage());
+        }
+    }
+}
+
+--------------------------------------------------------------------------------------------------------------------------------------------------------
+Stream avg age of person:
+List<Integer> listofInts = listOfListofInts.stream()
+                                    .flatMap(list -> list.stream())
+                                    .collect(Collectors.toList());
+
+IntStream stream = IntStream.of(2, 3, 3, 4, 6, 8, 8);
+
+        // OptionalDouble is a container object
+        // which may or may not contain a
+        // double value.
+        OptionalDouble obj = stream.average();
+--------------------------------------------------------------------------------------------------------------------------------------------------------
+Springboot Annotations:
+
+--------------------------------------------------------------------------------------------------------------------------------------------------------
+try catch finally:
+
+--------------------------------------------------------------------------------------------------------------------------------------------------------
+joins in threads and different situation based question on it. Situation based question on multi threading
+
+--------------------------------------------------------------------------------------------------------------------------------------------------------
+query optimization  techniques, indexes, indexes disadvantages:
+
+
+--------------------------------------------------------------------------------------------------------------------------------------------------------
+Immutable class n objects:
+
+--------------------------------------------------------------------------------------------------------------------------------------------------------
+Given an n*m 2D integer array where each row is sorted(but columns are not), find the smallest n elements eficiently:
+kth smallest element
+--------------------------------------------------------------------------------------------------------------------------------------------------------
+write a query to find 3rd highest salary in sql.
+Select max(salary) from table
+limit 1
+offset 2;
+--------------------------------------------------------------------------------------------------------------------------------------------------------
+One bathroom 5 slots and criteria is one gender is allowed
+	1. F enter then allowed
+	2. M enters then F should come out'
+	3. F enters she will be allowed can occupy to another slots.
+--------------------------------------------------------------------------------------------------------------------------------------------------------
+System.gc and Runtime.gc methods do?
+The garbage collector automatically finds and removes objects that are no longer needed, freeing up memory in the heap. It runs in the background as
+a daemon thread, helping to manage memory efficiently without requiring the programmer’s constant attention.
+Both are same. System.gc() is effectively equivalent to Runtime.gc(). System.gc()internally calls Runtime.gc().
+The only difference is System.gc() is a class method where as Runtime.gc() is an instance method. So, System.gc() is more convenient.
+
+Ways to Request JVM to Run Garbage Collection
+Once an object is eligible for garbage collection, it may not be destroyed immediately.The garbage collector runs at the JVM’s discretion, and you cannot
+ predict when it will occur.
+We can also request JVM to run Garbage Collector. There are two ways to do it :
+Using System.gc(): This static method requests the JVM to perform garbage collection.
+Using Runtime.getRuntime().gc(): This method also requests garbage collection through the Runtime class.
+--------------------------------------------------------------------------------------------------------------------------------------------------------
+Write a code to convert string to number.
+
+--------------------------------------------------------------------------------------------------------------------------------------------------------
+Fail fast and fail safe iterators
+Iterators in java are used to iterate over the Collection objects.Fail-Fast iterators immediately throw ConcurrentModificationException if there is
+structural modification of the collection. Structural modification means adding, removing any element from collection while a thread is iterating
+over that collection. Iterator on ArrayList, HashMap classes are some examples of fail-fast Iterator.
+Fail-Safe iterators don’t throw any exceptions if a collection is structurally modified while iterating over it. This is because, they operate on the
+ clone of the collection, not on the original collection and that’s why they are called fail-safe iterators. Iterator on CopyOnWriteArrayList,
+ ConcurrentHashMap classes are examples of fail-safe Iterator.
+--------------------------------------------------------------------------------------------------------------------------------------------------------
+hashmap internal implementation?
+
+--------------------------------------------------------------------------------------------------------------------------------------------------------
+HashMap vs HashSet:
+
+--------------------------------------------------------------------------------------------------------------------------------------------------------
+Will finally execute if the try block without a catch block throws exception:
+yes
+--------------------------------------------------------------------------------------------------------------------------------------------------------
+Can we have statements between try catch and finally?
+Compile time erro
+
+--------------------------------------------------------------------------------------------------------------------------------------------------------
+When try statement has return statement. will finally execute?
+es, the finally block will be executed even after a return statement in a method. The finally block will always execute even an exception occurred or
+ not in Java. If we call the System. exit() method explicitly in the finally block then only it will not be executed.
+
+--------------------------------------------------------------------------------------------------------------------------------------------------------
+Unreachable catch block:
+A block of statements to which the control can never reach under any case can be called as unreachable blocks. Unreachable blocks are not supported by
+Java. The catch block mentioned with the reference of Exception class should and must be always last catch block because Exception is the superclass of
+ all exceptions. When we are keeping multiple catch blocks, the order of catch blocks must be from most specific to most general ones. i.e subclasses
+ of Exception must come first and superclasses later. If we keep superclasses first and subclasses later, the compiler will throw an unreachable catch
+ block error.
+try {
+   // statements
+} catch(Exception e) {
+   System.out.println(e);
+} catch(NumberFormatException nfe) { //unreachable block. Not supported by Java, leads to an error.
+   System.out.println(nfe);
+}
+
+--------------------------------------------------------------------------------------------------------------------------------------------------------
+Dependency Injection, Design pattern:
+Dependency Injection is a design pattern used in software development to acheive loose coupling between components. It is a technique wherean object
+receives it's dependency from an external source, rather than creating them itself.
+
+Design pattern are proven solutions to common problems that occur in softwre design. They provide a standard approach to solving recurring challanges,
+making code more organized, reusable and maintainable.
+
+--------------------------------------------------------------------------------------------------------------------------------------------------------
+Inner join, left and outer joins:
+
+--------------------------------------------------------------------------------------------------------------------------------------------------------
+WAP to get distinct character with their count in a string:
+
+
+--------------------------------------------------------------------------------------------------------------------------------------------------------
+Coding related to few collections methods and java 8.
+
+
+--------------------------------------------------------------------------------------------------------------------------------------------------------
+git stash vs git
+
+--------------------------------------------------------------------------------------------------------------------------------------------------------
+Remove duplicates
+
+--------------------------------------------------------------------------------------------------------------------------------------------------------
+Flattened Array
+
+--------------------------------------------------------------------------------------------------------------------------------------------------------
+zeros to end
+
+--------------------------------------------------------------------------------------------------------------------------------------------------------
+@Repository
+
+--------------------------------------------------------------------------------------------------------------------------------------------------------
+String str1 = new String("Hello"):
+String str2 = new String("Hello"):
+str1 == str2  ==> false;
+	This explicitly creates a new String object in the heap memory, even if an identical string already existes in the String Pool
+Performance:
+		Slower and consumes more memory, as it creates a redundant object.
+--------------------------------------------------------------------------------------------------------------------------------------------------------
+String str1 = "hello":
+String str2 = "hello":
+str1 == str2  ==> true;
+	This uses string iterning, meaning
+	If "hello" already exists in the String pool, str will refer to that existing object.
+	If not, Java creates a new entry in the String Pool.
+Performance:
+	More efficient, as it avoids, creating duplicate objects.
+--------------------------------------------------------------------------------------------------------------------------------------------------------
+.findFirst() vs findAny():
+
+--------------------------------------------------------------------------------------------------------------------------------------------------------
+Functional interface:
+
+--------------------------------------------------------------------------------------------------------------------------------------------------------
+Different ways to communicate in Microservices:
+ Rest APIs, GRBC or message broker like kafka.
+--------------------------------------------------------------------------------------------------------------------------------------------------------
+How to handle exceptions anywhere in java program:
+
+--------------------------------------------------------------------------------------------------------------------------------------------------------
+.jar vs .var
+
+--------------------------------------------------------------------------------------------------------------------------------------------------------
+what annotation will be used if the data is pdf or file:
+MULTIPART_FORM_DATA_VALUE
+--------------------------------------------------------------------------------------------------------------------------------------------------------
+lambda: how to create/add triggers?
+
+--------------------------------------------------------------------------------------------------------------------------------------------------------
+bean scope:
+
+
+--------------------------------------------------------------------------------------------------------------------------------------------------------
+How to add configuration in one micro service:
+
+--------------------------------------------------------------------------------------------------------------------------------------------------------
+ Lambda Expression:
+	Allows us to write short block of code that we can pass around in our programs. It's commonly used with functional interface to simplyfy our code,
+	specially when using collections or stream.
+--------------------------------------------------------------------------------------------------------------------------------------------------------
+How can you use a lambda expression to instantiate a functional interface.
+	By providing a simple concise implementation of abstract method declared in a interface.
+--------------------------------------------------------------------------------------------------------------------------------------------------------
+Can an intarface be considered functional interface if it has multiple default methods?
+	Yes, an interface can still be cosidered functional if it has multiple default methods untill or unless it has just 1 abstract method.
+	Default methods have implementations so thay don't affect the fuctional interface status.
+--------------------------------------------------------------------------------------------------------------------------------------------------------
+How do we handle null pointer exceptions?
+	By using Optional class or annotations like @NotNull.
+--------------------------------------------------------------------------------------------------------------------------------------------------------
+Factory design pattern, singleton design pattern and abstract design pattern:
+	factory: lets us create objects without specifying the exact class of the object that will be created.
+	singleton: ensures a calss has one one instance and provides a global point of access.
+	abstract: creates an interface for creating families of related or dependent objects without specfying their concreate classes.
+
+--------------------------------------------------------------------------------------------------------------------------------------------------------
+Follow up questions:
+	Suppose you are using a factory pattern to create objects in a multithreaded environment. How would you ensure that the factory itself is thread safe
+	without significiantly impacting the performance of object creation?
+Ans: We can use a double check locking pattern with a volatile field in singleton factories. This approach minimises the synchronous overhead.
+2. Give 2 3 scenerious where we can use singleton pattern?
+Ans: Creating one DB connection, one one logging service that handles all logging and common cache across whole application.
+
+--------------------------------------------------------------------------------------------------------------------------------------------------------
+Circuit breaker pattern in microservices:
+	It stops calls to a micro service when it fails preventing further overload and this allows service time to recover.
+Q. How would you configure circuit breaker to a service that shows periodic spikes in failure rates?
+	Ans. By setting a higher failure threshould and a shorter reset timeout.
+--------------------------------------------------------------------------------------------------------------------------------------------------------
+Comparable vs comparator:
+	Comparable defines a default sorting by using a compareTo method within the class itself.
+	Comparator allows defines multiple sorting strategies outside the object class through the compare method in seperate classes.
+--------------------------------------------------------------------------------------------------------------------------------------------------------
+Ways to create spring application:
+	1. Spring initializer.
+	2. Spring boot CLI
+	3. IDE support
+--------------------------------------------------------------------------------------------------------------------------------------------------------
+@SpringbootApplication:
+	This is the key annotation in spring boot that Enables Auto configuration, Component Scanning and Configuration management.
+	It combines 3 annotation.
+		1. Configuration
+		2. Enable Auto Configuration
+		3. Component Scan
+
+--------------------------------------------------------------------------------------------------------------------------------------------------------
+How can we exclude or config auto configuration while using the SpringbootApplication annotation.
+	We can use exclude parameter inside SpringbootApplication annotation.
+--------------------------------------------------------------------------------------------------------------------------------------------------------
+What are the best practices for optimizing the performance of a Spring Boot application?
+	Enable Caching
+	Optimize data base queries
+	Use asynchronous processing
+	minimize bean creation
+	optimize memory.
+--------------------------------------------------------------------------------------------------------------------------------------------------------
+How do we handle exception in our spring boot application?
+	Exceptions are handle using Controller Advice and exception handle controller advice applies globally across controllers.
+	Whereas exceptional handler are used to handle specific exceptions.
+--------------------------------------------------------------------------------------------------------------------------------------------------------
+Can you walk through the process of creating and handling a custom exceptions in a spring boot application.
+	First define a class extending a runtime exception throw the exception in service or controller and handle it globally using controller Advice and
+	Exception handler annotations
+--------------------------------------------------------------------------------------------------------------------------------------------------------
+How would you design an exception hierarchy in a large Spring Boot Application to improve maintainability and error tracking?
+	By creating a base custom exception like application exception for all app specific error and then derives specialized exception like service exception
+	and database exception. this structure makes tracking and maintainability easy.
+--------------------------------------------------------------------------------------------------------------------------------------------------------
+How can we handle exceptions from asynchronous methods in Spring Boot?
+	We can use async annotation method with a custom async uncought exception handler. We can implement the handler by overriding the uncought method to
+	capture and process exceptions set occurs in async tasks.
+--------------------------------------------------------------------------------------------------------------------------------------------------------
+logn(n):
+If the operation is dependent on division then instead of O(n) we use LogN(n).
+where N is the number of times it's getting divided.
+	e.x:
+	n % 10;
+	then
+	log10(n)
+

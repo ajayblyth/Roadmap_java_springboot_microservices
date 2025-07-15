@@ -1,0 +1,1863 @@
+Java:
+
+NOTEPAD-STYLE DIAGRAM: JDK vs JRE vs JVM
+-----------------------------------------------------------
+
+        +--------------------------------------------------------+
+        |                        JDK    Java Development Kit     |
+        |--------------------------------------------------------|
+        | Includes everything in JRE                             |
+        | + Development Tools:                                   |
+        | - javac (Java compiler)                                |
+        | - javadoc, jar, jdb, jshell, etc.                      |
+        | Used to develop, compile, debug, and run Java programs |
+        +--------------------------------------------------------+
+                             |
+                             v
+        +--------------------------------------------------------+
+        |                        JRE  <- Java Runtime Environment|
+        |--------------------------------------------------------|
+        | Includes JVM + Java Standard Libraries                 |
+        | - Provides runtime environment to run Java apps        |
+        | - Does not contain compiler or dev tools               |
+        | Used by end users to run precompiled Java programs     |
+        +--------------------------------------------------------+
+                             |
+                             v
+        +--------------------------------------------------------+
+        |                        JVM  <- Java Virtual Machine    |
+        |--------------------------------------------------------|
+        | Loads, verifies, and executes Java bytecode (.class)   |
+        | Handles memory management, security, GC, threading     |
+        | Platform-independent engine for "Write once, run anywhere" |
+        +--------------------------------------------------------+
+
+
+---------------------------
+JDK Corporation:
+1. Standard Edition Java Platform
+2. Enterprise Edition Java Platform
+3. Micro Edition Java Platform
+The JDK contains a private Java Virtual Machine (JVM) and a few other resources such as an interpreter/loader (java), a compiler (javac), an archiver (jar), a documentation generator (Javadoc), etc. to complete the development of a Java
+ Application.
+--------------------------------------------------------------------------------------------------------------------------
+OOPs
+OOPs is a programming method based on the concept of objects and classes.
+OOPs use objects as a primary source to implement what is to happen in the code.
+OOPs improves reusability, maintainability, and helps model real-world problems effectively.
+
+
+Class:
+Classes = Blueprints
+
+Just like a blueprint defines a house, a class defines the structure of an object — what data it holds and what it can do.
+
+
+Objects = Real Entities
+
+You can represent real-world things like Car, BankAccount, Employee as objects with properties (fields) and behaviors (methods).
+
+------------------------------------------------------------
+| PILLAR         | MEANING & PURPOSE                        |
+------------------------------------------------------------
+| 1. Encapsulation | Wrapping data & methods in a class to  |
+|                  | hide internal state and protect from   |
+|                  | outside interference (using private)   |
+------------------------------------------------------------
+| 2. Inheritance   | One class (child) can inherit fields   |
+|                  | & methods from another (parent) to     |
+|                  | promote code reuse and hierarchy       |
+------------------------------------------------------------
+| 3. Polymorphism  | One interface, many forms – same       |
+|                  | method name behaves differently based  |
+|                  | on object (method overloading/override)|
+------------------------------------------------------------
+| 4. Abstraction   | Hiding complex details and showing     |
+|                  | only essential features (via abstract  |
+|                  | classes or interfaces)                 |
+------------------------------------------------------------
+
+-------------------------------------------------------------------------------------------------------------------------
+Inheritance:
+Inheritance allows one class to inherit the fields and methods of another class.
+It enables code reuse and allows a new class to be based on an existing class.
+You can also add new fields and methods to the new class.
+
+Example:
+
+// Parent class
+class Animal {
+    void eat() {
+        System.out.println("Eating...");
+    }
+}
+
+class Dog extends Animal {  // Child class inherits from Animal
+
+    void bark() {
+        System.out.println("Barking...");
+    }
+}
+
+public class Main {
+    public static void main(String[] args) {
+        Dog dog = new Dog();
+        dog.eat();    // Inherited from Animal
+        dog.bark();   // Defined in Dog
+    }
+}
+Usage
+
+Use extends to inherit from a parent class.
+
+Child class inherits methods and fields from the parent.
+
+You can add or override methods in the child class.
+---------------------------------------------------------------------------------------------------------------------------
+
+Polymorphism in Java
+
+Polymorphism is an important OOP feature that allows one action to be performed in multiple ways.
+It means “many forms” and enables code flexibility and reusability. With polymorphism, a single interface can have multiple implementations.
+
+Types of Polymorphism:
+
+Compile-Time Polymorphism (Static)
+----------------------------------
+Achieved through method overloading (same method name with different parameters).
+
+Resolved during compile time.
+
+// Compile-Time Polymorphism (Overloading)
+class Calculator {
+    int add(int a, int b) { return a + b; }
+    double add(double a, double b) { return a + b; }
+}
+
+Runtime Polymorphism (Dynamic)
+-------------------------------
+Achieved through method overriding (subclass provides specific implementation of a method in the superclass).
+
+Resolved during runtime using dynamic method dispatch.
+
+// Runtime Polymorphism (Overriding)
+class Animal {
+    void sound() { System.out.println("Animal sound"); }
+}
+class Dog extends Animal {
+    void sound() { System.out.println("Bark"); }
+}
+
+-----------------------------------------------------------------
+---------------------------------------------------------------
+|                  POLYMORPHISM RULES IN JAVA                 |
+|          (Overloading vs Overriding Rules Summary)          |
+---------------------------------------------------------------
+|   METHOD OVERLOADING (Compile-Time Polymorphism)            |
+---------------------------------------------------------------
+| 1. Same method name, but DIFFERENT parameter list required  |
+|    - Change in number of parameters                         |
+|    - OR change in type/order of parameters                  |
+| 2. Can change return type (but not enough alone)            |
+| 3. Can change access modifier (e.g., public, private)       |
+| 4. Can overload static methods                              |
+| 5. Can overload methods in same class                       |
+---------------------------------------------------------------
+|   METHOD OVERRIDING (Runtime Polymorphism)                  |
+---------------------------------------------------------------
+| 1. Same method name, SAME parameter list                    |
+| 2. Must be in Parent-Child (Inheritance) relationship       |
+| 3. Return type must be same or covariant (subtype)          |
+| 4. Access modifier: Cannot be more restrictive              |
+|    - e.g., parent public → child must stay public           |
+| 5. Cannot override static methods (they get hidden instead) |
+| 6. Cannot override private/final methods                    |
+| 7. Child class method is called via parent class reference  |
+---------------------------------------------------------------
+
+
+--------------------------------------------------------------------------------------------------------------------------
+---------------------------------------------------------------
+|                     ABSTRACTION IN JAVA                     |
+---------------------------------------------------------------
+| - Hides internal implementation; shows only what is needed  |
+| - Used to reduce complexity.      |
+| - Helps focus on "what it does" not "how it does it"        |
+| - Achieved via abstract classes and interfaces              |
+---------------------------------------------------------------
+|                  ABSTRACT CLASS (abstract)                  |
+---------------------------------------------------------------
+| - Declared using 'abstract' keyword                         |
+| - Can have abstract + non-abstract methods                  |
+| - Can have constructors, fields, static methods             |
+| - Cannot be instantiated directly                           |
+| - Used when classes share common structure or behavior      |
+| Example:                                                    |
+|   abstract class Animal {                                   |
+|     abstract void sound();                                  |
+|     void sleep() { System.out.println("Sleep"); }           |
+|   }                                                         |
+------------------------------------------------------------
+| Abstract Method                                         |
+------------------------------------------------------------
+| - Declared without a body (ends with semicolon).        |
+|   Example: abstract void draw();                        |
+| - Must be inside an abstract class or interface.        |
+| - Subclass must override and implement it.              |
+------------------------------------------------------------
+| Example                                                 |
+------------------------------------------------------------
+| abstract class Shape {                                  |
+|     abstract void draw();                               |
+|     void color() { System.out.println("Red"); }         |
+| }                                                       |
+|                                                         |
+| class Circle extends Shape {                            |
+|     void draw() { System.out.println("Drawing Circle"); }|
+| }                                                       |
+------------------------------------------------------------
+
+
+-------------------------------------------------------------------------------------------------------------------------------------
+
+------------------------------------------------------------
+|          USE OF ABSTRACT CLASS & ABSTRACT METHODS       |
+------------------------------------------------------------
+| 1. Provide a Common Blueprint                           |
+| - Abstract class defines a common base for subclasses.  |
+| - Useful when multiple classes share common code.       |
+------------------------------------------------------------
+| 2. Enforce Implementation                               |
+| - Abstract methods force child classes to implement     |
+|   their own specific version of the method.             |
+------------------------------------------------------------
+| 3. Partial Implementation                               |
+| - Abstract class can have both abstract & concrete      |
+|   methods—allows shared logic + flexibility.            |
+------------------------------------------------------------
+| 4. Avoid Object Instantiation                           |
+| - Abstract classes can't be instantiated directly.      |
+| - Ensures base class is only used via subclassing.      |
+------------------------------------------------------------
+| 5. Promotes Code Reusability                            |
+| - Common fields and logic written once in abstract base |
+|   and reused in subclasses.                             |
+------------------------------------------------------------
+| Example:                                                |
+| abstract class Animal {                                 |
+|     void eat() { System.out.println("Eating"); }        |
+|     abstract void sound();                              |
+| }                                                       |
+| class Dog extends Animal {                              |
+|     void sound() { System.out.println("Bark"); }        |
+| }                                                       |
+------------------------------------------------------------
+
+
+
+-----------------------------------------------------------------------------------------------------------------------------
+|                     INTERFACE (interface)                   |
+---------------------------------------------------------------
+| - Declares method signatures only (until Java 8)            |
+| - No constructors or fields (except public static final)    |
+| - Supports multiple inheritance                             |
+| - All methods are public & abstract by default              |
+| - Implemented using 'implements' keyword                    |
+| - Ideal for defining capabilities or roles                  |
+| Example:                                                    |
+|   interface Vehicle { void drive(); }                       |
+|   class Car implements Vehicle {                            |
+|     public void drive() { System.out.println("Driving"); }  |
+|   }                                                         |
+---------------------------------------------------------------
+|               WHEN TO USE WHICH (Abstract vs Interface)     |
+---------------------------------------------------------------
+| Abstract Class:                                             |
+| - Classes are related with shared base behavior             |
+| - Need to provide default method implementation             |
+| - Can evolve base class without breaking child classes      |
+|                                                             |
+| Interface:                                                  |
+| - Classes may be unrelated (e.g., Bird, Drone → Flyable)    |
+| - Multiple inheritance of behavior needed                   |
+| - Define contract only; implementation varies               |
+---------------------------------------------------------------
+|                REAL-WORLD ABSTRACTION EXAMPLE               |
+---------------------------------------------------------------
+| - Car Driver uses pedals, wheel (knows interface)           |
+| - Internals of engine, brakes are hidden                    |
+| - Same in code: expose methods; hide logic                  |
+---------------------------------------------------------------
+
+
+----------------------------------------------------------------------------------------------------------------------
+
+------------------------------------------------------------
+|         Concrete Methods in Interfaces (Java 8+)        |
+------------------------------------------------------------
+| 1. Default Methods                                      |
+| - Use `default` keyword.                                |
+| - Provide a method body in the interface.               |
+| - Can be overridden in implementing classes.            |
+| - Syntax:                                               |
+|   default void show() {                                 |
+|       System.out.println("Default implementation");     |
+|   }                                                     |
+------------------------------------------------------------
+| 2. Static Methods                                       |
+| - Use `static` keyword.                                 |
+| - Can be called via InterfaceName.methodName()          |
+| - Cannot be overridden.                                 |
+| - Syntax:                                               |
+|   static void utility() {                               |
+|       System.out.println("Static method");              |
+|   }                                                     |
+------------------------------------------------------------
+| 3. Private Methods (Java 9+)                            |
+| - Use `private` keyword for helper methods.             |
+| - Used only inside the interface itself.                |
+------------------------------------------------------------
+
+✅ Note: Interfaces cannot have constructors or instance variables (only constants), and abstract methods are still required to be implemented unless they have default bodies.
+Interfaces don't have constructors because they cannot be instantiated directly.
+
+----------------------------------------------------------
+✅ Interface Methods Are Implicitly Public and Abstract
+So, the preferred and cleanest way (by Java convention) is:
+
+interface Animal {
+    void eat();   // public + abstract (by default)
+    void sleep(); // public + abstract (by default)
+
+----------------------------------------------------------------------
++-------------------+----------------------------+-----------------------------+
+|Method Type(Interface)| Must Override in Class?    | Purpose                   |
++-------------------+----------------------------+-----------------------------+
+| abstract(incomplete)| ✅ Yes                     | Force implementing class to |
+|                   |                            | define behavior             |
++-------------------+----------------------------+-----------------------------+
+| default           | ❌ No (optional)           | Provide reusable default    |
+|                   |                            | implementation              |
++-------------------+----------------------------+-----------------------------+
+| static            | ❌ No (call via interface) | Utility/helper methods      |
++-------------------+----------------------------+-----------------------------+
+
+
+---------------------------------------------------------------------------------------
+Note: Implementing the Interface:
+
+In the implementing classes, you must override the method, and the method must be public because methods in an interface are implicitly public, and overriding them requires the method to have the same or wider visibility (i.e., public).
+
+
+--------------------------------------------------------------------------------------------------------------------------
+Encapsulation:
+Java Encapsulation is a way of hiding the implementation details of a class from outside access and only exposing a public
+ interface that can be used to interact with the class.
+In Java, encapsulation is achieved by declaring the instance variables of a class as private, which means they can only
+ be accessed within the class. To allow outside access to the instance variables, public methods called getters and
+setters are defined, which are used to retrieve and modify the values of the instance variables, respectively.
+ By using getters and setters, the class can enforce its own data validation rules and ensure that its internal state
+ remains consistent.
+--------------------------------------------------------------------------------------------------------------------------
+---------------------------------------------------------------
+| FINAL, FINALLY, and FINALIZE in Java                       |
+---------------------------------------------------------------
+| 1. final                                                   |
+|-------------------------------------------------------------|
+| - Modifier for classes, methods, or variables              |
+| - Class: Cannot be subclassed                              |
+| - Method: Cannot be overridden                              |
+| - Variable: Value/reference can only be assigned once      |
+---------------------------------------------------------------
+| 2. finally                                                 |
+|-------------------------------------------------------------|
+| - Block used in try-catch-finally construct                |
+| - Always executes after try/catch, even if exception occurs |
+| - Ideal for resource cleanup (e.g., closing files, locks)  |
+---------------------------------------------------------------
+| 3. finalize()                                              |
+|-------------------------------------------------------------|
+| - Method in java.lang.Object, called by garbage collector  |
+| - Allows cleanup before object destruction                 |
+| - Deprecated since Java 9; use try-with-resources or Cleaner|
+---------------------------------------------------------------
+
+--------------------------------------------------------------------------------------------------------------------------
++-----------+--------------------------------------------------------------------------+
+| Type      | Definition & Properties                                                  |
++-----------+--------------------------------------------------------------------------+
+| List      | Ordered collection that allows duplicates.                              |
+|           | Provides positional access using 0-based index.                         |
+|           | Can contain null elements.                                               |
+|           | Common types: ArrayList (fast read), LinkedList (fast insert/delete).   |
++-----------+--------------------------------------------------------------------------+
+| Set       | Unordered (or ordered depending on type) collection with no duplicates. |
+|           | Does not allow index-based access.                                      |
+|           | HashSet is unordered; LinkedHashSet maintains insertion order;          |
+|           | TreeSet keeps elements sorted (natural or custom order).                |
++-----------+--------------------------------------------------------------------------+
+| Map       | Stores key-value pairs, keys must be unique.                            |
+|           | Allows fast retrieval via keys; values can be duplicate.                |
+|           | HashMap is unordered, LinkedHashMap maintains insertion order,          |
+|           | TreeMap stores keys in sorted order.                                    |
++-----------+---------------------------------------------------------------------------+
+| Stack     | LIFO (Last-In-First-Out) data structure.                                 |
+|           | Operations on top: push() adds, pop() removes, peek() views top element. |
+|           | Legacy Stack class or modern Deque (ArrayDeque) is preferred.            |
+|           | Used in undo operations, backtracking, parsing.                          |
++-----------+---------------------------------------------------------------------------+
+| Queue     | FIFO (First-In-First-Out) data structure.                                |
+|           | Operations: add() inserts at end, remove() deletes from front,           |
+|           | peek() retrieves front element without removing.                         |
+|           | Types: PriorityQueue (sorted), LinkedList, ArrayDeque.                   |
+|           | Used in task scheduling, resource sharing, etc.                          |
++-----------+---------------------------------------------------------------------------+
+
+
+-------------------------------------------------------------------------------------------------
+
+
+------------------------------------------------------------
+|                 LIST vs MAP in Java                      |
+------------------------------------------------------------------------------------------
+| Feature             | List                              | Map                          |
+------------------------------------------------------------------------------------------
+| Interface           | java.util.List                    | java.util.Map                |
+| Key Structure       | Ordered collection (index-based)  | Key-value pairs              |
+| Duplicates Allowed  | Yes (elements)                    | Keys - No, Values - Yes      |
+| Access Method       | get(index)                        | get(key)                     |
+| Ordering            | Maintains insertion order         | Depends on implementation    |
+| Null Values         | Allows multiple nulls             | One null key, many null vals |
+| Common Classes      | ArrayList, LinkedList, Vector     |HashMap, TreeMap, LinkedHashMap|
+| Use Case            | Storing list of items             | Lookup table (id → value)    |
+| Example             | [10, 20, 30]                      | {1="A", 2="B", 3="C"}        |
+------------------------------------------------------------------------------------------
+
+--------------------------------------------------------------------------------------------------------------------------
+
+                        ArrayList vs LinkedList in Java
+------------------------------------------------------------------------------------------
+| Feature              | ArrayList                        | LinkedList                   |
+------------------------------------------------------------------------------------------
+| Interface            | List                             | List, Deque                  |
+| Data Structure       | Dynamic Array                    | Doubly Linked List           |
+| Insertion Order      | Maintained                       | Maintained                   |
+| Access Time          | Fast (O(1) random access)        | Slow (O(n) traversal)        |
+| Insertion/Removal    | Slower (shifting needed)         | Faster (no shifting)         |
+| Memory Usage         | Less (contiguous array)          | More (node pointers)         |
+| Performance          | Best for frequent reads          | Best for frequent add/remove |
+| get(index)           | Fast                             | Slow                         |
+| add/remove (middle)  | Costly (shift elements)          | Efficient (pointer update)   |
+| Null Elements        | Allows multiple nulls            | Allows multiple nulls        |
+| Thread Safety        | Not synchronized (manual sync)   |Not synchronized (manual sync)|
+| Example Use Case     | Caching, read-heavy lists        |Queues, frequent insert/delete|
+-------------------------------------------------------------------------------------------
+
+--------------------------------------------------------------------------------------------------------------------------
+difference between list and set:
+------------------------------------------------------------
+|                   List vs Set in Java                   |
+-----------------------------------------------------------------------------------------
+| Feature              | List                             | Set                          |
+------------------------------------------------------------------------------------------
+| Interface            | java.util.List                   | java.util.Set                |
+| Duplicate Elements   | Allowed                          | Not Allowed                  |
+| Ordering             | Maintains insertion order        | No guaranteed order (unless LinkedHashSet/TreeSet) |
+| Positional Access    | Allowed (get(index))             | Not Allowed                  |
+| Index-Based          | Yes                              | No                           |
+| Null Elements        | Multiple nulls allowed           | One null allowed (in HashSet)|
+| Performance          | Slower for search (with index)   | Faster lookup (in HashSet)   |
+| Common Implementations| ArrayList, LinkedList           | HashSet, LinkedHashSet, TreeSet |
+| Use Case             | Ordered collection with duplicates | Unique collection (no duplicates) |
+| Example              | [10, 20, 20, 30]                 | [10, 20, 30]                 |
+------------------------------------------------------------
+
+
+--------------------------------------------------------------------------------------------
+
+------------------------------------------------------------
+| Why HashSet is Faster than List                         |
+------------------------------------------------------------
+| 1. Internal Structure                                   |
+| - HashSet uses HashTable (hashing technique).           |
+| - List uses array or linked list (linear structure).    |
+------------------------------------------------------------
+| 2. Lookup/Search Time Complexity                        |
+| - HashSet: O(1) average time using hash codes.          |
+| - List: O(n) as it searches element-by-element.         |
+------------------------------------------------------------
+| 3. Insert/Delete Efficiency                             |
+| - HashSet: Uses hashing, so fast add/remove.            |
+| - List: May require shifting elements (especially ArrayList). |
+------------------------------------------------------------
+| 4. Uniqueness Enforcement                               |
+| - HashSet prevents duplicates by design.                |
+| - List allows duplicates; search can be redundant.      |
+------------------------------------------------------------
+
+
+--------------------------------------------------------------------------------------------------------------------------
+difference between array and arraylist:
++----------------------------------------------------------------------------+
+|                        ARRAY vs ARRAYLIST in Java                         |
++------------------------+--------------------------------+-----------------+
+| Feature                | Array                          | ArrayList       |
++------------------------+--------------------------------+-----------------+
+| Size                   | Fixed-size                     | Dynamic resizing|
+| Type Support           | Primitives & Objects           | Only Objects     |
+| Performance            | Faster for simple use          | Slower (resizing)|
+| Syntax                 | int[] arr = new int[5];        | ArrayList<Integer> list = new ArrayList<>(); |
+| Access by Index        | arr[0]                         | list.get(0)      |
+| Insertion/Deletion     | Manual shifting required       | Internally managed|
+| Memory Usage           | Less (no overhead)             | More (due to resizing) |
+| Length/Size Method     | arr.length                     | list.size()      |
+| Utility Methods        | None (use Arrays class)        | Many: add(), remove() |
+| Ideal Use              | Known & fixed size             | Varying size, dynamic|
++------------------------+--------------------------------+-----------------+
+| ✅ Arrays: Better for performance and memory when size is known.           |
+| ✅ ArrayLists: Easier and flexible when frequent additions/removals needed.|
++----------------------------------------------------------------------------+
+
+
+--------------------------------------------------------------------------------------------------------------------------
++-------------------+--------------------------+------------------------------+
+| Feature           | HashSet                  | LinkedHashSet                |
++-------------------+--------------------------+------------------------------+
+| Order             | No guarantee of order    | Maintains insertion order    |
+| Performance       | Faster (less overhead)   | Slightly slower (extra link) |
+| Internal Structure| Uses HashMap             | Uses HashMap + Linked list   |
+| Null Elements     | Allows one null element  | Allows one null element      |
+| Use Case          | High performance set     | Predictable iteration order  |
++-------------------+--------------------------+------------------------------+
+
+// Example:
+Set<String> set1 = new HashSet<>();
+Set<String> set2 = new LinkedHashSet<>();
+
+--------------------------------------------------------------------------------------------------------------------------
++-------------------------------------------------------------+
+|                  HASHMAP vs HASHTABLE                      |
++------------------------+----------------------+-------------+
+| Feature                | HashMap              | Hashtable   |
++------------------------+----------------------+-------------+
+| Thread-Safety          | Not synchronized     | Synchronized|
+|                        | (not thread-safe)    | (thread-safe)|
++------------------------+----------------------+-------------+
+| Null Keys/Values       | Allows one null key  | No null keys|
+|                        | & multiple null vals | or values   |
++------------------------+----------------------+-------------+
+| Performance & Memory   | Faster, less memory  | Slower, more|
+|                        | (no sync overhead)   | memory (sync)|
++------------------------+----------------------+-------------+
+--------------------------------------------------------------------------------------------------------------------------
++--------------------------------------------------------------+
+|                  HASHMAP vs HASHTABLE                       |
++------------------------+-----------------------+------------+
+| Feature                | HashMap               | Hashtable  |
++------------------------+-----------------------+------------+
+| Thread-Safety          | Not synchronized      | Synchronized (thread-safe)
+|                        | (not thread-safe)     |            |
++------------------------+-----------------------+------------+
+| Null Keys/Values       | Allows one null key   | Does not allow null keys or values
+|                        | & multiple null values|            |
++------------------------+-----------------------+------------+
+| Performance & Memory   | Faster, uses less     | Slower, more memory overhead
+|                        | memory (no sync)      | due to synchronization
++------------------------+-----------------------+------------+
+| Iteration Order        | Not ordered           | Guarantees order of insertion
++------------------------+-----------------------+------------+
+| Use Case               | High-performance,      | Thread-safe applications that
+|                        | non-thread-safe needs | require synchronized access
++------------------------+-----------------------+------------+
+
+--------------------------------------------------------------------------------------------------------------------------
++----------------------+------------------------------+-------------------------------+
+| Feature              | Hashtable                    | ConcurrentHashMap             |
++----------------------+------------------------------+-------------------------------+
+| Thread-Safety        | Fully synchronized           | Fine-grained synchronization  |
+| Locking Mechanism    | Locks entire object          | Locks only segments/buckets   |
+| Performance          | Slower (more locking)        | Much faster (less contention) |
+| Null Keys/Values     | No null key or value         | Allows null values (❌ No)     |
+| Java Version         | Legacy (pre-Java 2)          | Introduced in Java 1.5+       |
+| Usage Today          | Rarely used                  | Preferred for concurrency     |
++----------------------+------------------------------+-------------------------------+
+
+// Example:
+Hashtable<String, String> table = new Hashtable<>();
+ConcurrentHashMap<String, String> map = new ConcurrentHashMap<>();
+
+
+
+--------------------------------------------------------------------------------------------------------------------------
+
+difference between HashMap and linkedHashMap:
+Linkedhashmaps also provide the benefit of maintaining the order of insertion, which can be useful when the order of
+elements is important. Hashmaps, on the other hand, do not maintain the order of insertion, which can be beneficial when
+ the order of elements is not important.
+--------------------------------------------------------------------------------------------------------------------------
+difference between treeset and treemap:
+TreeSet is mainly an implementation of SortedSet in java where duplication is not allowed and objects are stored in
+sorted and ascending order.
+TreeMap is an implementation of Map Interface. TreeMap is also an implementation of NavigableMap along with
+ AbstractMap class.
+
+--------------------------------------------------------------------------------------------------------------------------
+difference between abstract class and interface:
+Abstract class can have abstract and non-abstract methods.
+Interface can have only abstract methods. Since Java 8, it can have default and static methods also.
+ Abstract class can provide the implementation of interface.
+Interface can't provide the implementation of abstract class.
+
+--------------------------------------------------------------------------------------------------------------------------
++---------------------------- JAVA 8 FEATURES -----------------------------+
+| 1. Lambda Expressions                                                |
+|    - Enables concise syntax for functional interfaces.               |
+|    - Improves code readability and reduces boilerplate.
+|                                                                      |
+|    - A lambda expression is an anonymous function (no name).         |
+|    - Syntax: (parameters) -> { expression or block of code }         |
+|    - Enables concise syntax for functional interfaces.               |
+|    - Improves code readability and reduces boilerplate.              |
+|    - Example: (a, b) -> a + b  (implements a method like add(int, int)) |
++------------------------------------------------------------------------+
+| 2. Streams API                                                        |
+|    - Processes collections in a functional style (map, filter, etc.).|
+|    - Supports sequential and parallel processing.                    |
++------------------------------------------------------------------------+
+| 3. Java Time API (java.time.*)                                        |
+|    - Modern date/time API replacing java.util.Date/Calendar.         |
+|    - Immutable, thread-safe classes like LocalDate, LocalTime, etc.  |
+|    - Support for time zones, formatting, durations, parsing.         |
+|    - Example:                                                        |
+|        LocalDate date = LocalDate.now();  // 2025-04-30                           |
+|        LocalTime time = LocalTime.of(10, 30);  //print 10:30
+                 |
+|        LocalDateTime dt = LocalDateTime.parse("2025-04-30T10:15");   |
+|        ZonedDateTime zdt = ZonedDateTime.now(ZoneId.of("Asia/Kolkata"));
+
+Note: This came in java 1.0 --> long currentTime = System.currentTimeMillis();
+
++------------------------------------------------------------------------+
+| 4. Functional Interfaces                                              |
+|    - Interface with only one abstract method.                        |
+|    - Used with Lambdas (e.g., Runnable, Comparator, custom FI).      |
+|    - `@FunctionalInterface` annotation to enforce structure(Optional).
+
+     - Can include default and static methods.
+       |
++------------------------------------------------------------------------+
+| 5. Method Reference                                                   |
+|    - Shortcut to refer existing method by name.                      |
+|    - Syntax: ClassName::methodName                                   |
+|    - Types: static, instance, constructor references.                |
++------------------------------------------------------------------------+
+| 6. Static & Default Methods in Interface                              |
+|    - Static: InterfaceName.staticMethod()                            |
+|    - Default: Allows method body in interface using `default` keyword|
+|    - Enables interface evolution without breaking code.              |
++------------------------------------------------------------------------+
+| 7. Concurrency Enhancements                                           |
+|    - New classes in java.util.concurrent.atomic (e.g., LongAdder).   |
+|    - Improved parallelism with Streams (parallelStream).             |
+|    - CompletableFuture API for async programming.                    |
++------------------------------------------------------------------------+
+
+--------------------------------------------------------------------------------------------------------------------------
+
+
+            Strings Immutability Advantages
++------------------------------+--------------+-----------------+
+| 1. Security                  |                                |
+|    - Strings often store sensitive data like passwords.       |
+|    - Immutability prevents modification after creation.       |
+|    - Avoids risks from unauthorized value tampering.          |
++------------------------------+--------------------------------+
+| 2. Thread Safety             |                                |
+|    - Immutable strings are automatically thread-safe.         |
+|    - Shared across threads without synchronization.           |
++------------------------------+--------------------------------+
+| 3. Efficient HashMap Keys    |                                |
+|    - String's hashcode is cached at creation.                 |
+|    - Improves lookup performance in HashMaps.                 |
+|    - Changing the value would invalidate the hashcode.        |
++------------------------------+--------------------------------+
+| 4. String Pool Memory Saving |                                |
+|    - Strings with the same value refer to the same object.    |
+|    - Saves memory via interning in the String pool.           |
+|    - This optimization would break if Strings were mutable.   |
++------------------------------+--------------------------------+
+| 5. Class Loading             |                                |
+|    - Class names are passed as Strings to ClassLoaders.       |
+|    - Ensures safe and consistent behavior during loading.     |
++------------------------------+--------------------------------+
+| Example:                                                      |
+| String s = "a";                                               |
+| s = s.concat("b");  // creates a new String "ab"              |
+|                                                               |
+| // Both s1 and s2 point to the same object in the pool        |
+| String s1 = "hello";                                          |
+| String s2 = "hello";                                          |
+| System.out.println(s1 == s2);  // true                        |
++------------------------------+---------------------------------
+
+==========================================================================================
+
+
+                         == vs equals()
+
++---------------------------+------------------------------------------------------------+
+| Comparison Type           | Explanation                                                |
++---------------------------+------------------------------------------------------------+
+| == (Objects)              | Compares references (memory addresses).                    |
+|                           | true only if both references point to same object.         |
+|                           | Example:                                                   |
+|                           |   String s1 = new String("a");                             |
+|                           |   String s2 = new String("a");                             |
+|                           |   s1 == s2 → false (different memory)                      |
++---------------------------+------------------------------------------------------------+
+| equals() (Objects)        | Compares actual content/values of objects.                 |
+|                           | Must be overridden in custom classes.                      |
+|                           | Example:                                                   |
+|                           |   s1.equals(s2) → true (both have same value "a")          |
++---------------------------+------------------------------------------------------------+
+| == (Primitives)           | Compares actual values. Works correctly for all types.     |
+|                           | Example:                                                   |
+|                           |   int a = 5; int b = 5;                                    |
+|                           |   a == b → true (same value)                               |
++---------------------------+------------------------------------------------------------+
+| Special Case (String Pool)| String literals with same value share reference.           |
+|                           | Example:                                                   |
+|                           |   String x = "hi";                                         |
+|                           |   String y = "hi";                                         |
+|                           |   x == y → true (pooled)                                   |
++---------------------------+------------------------------------------------------------+
+
+
+
+
+
+--------------------------------------------------------------------------------------------------------------------------
+
+                     String vs StringBuffer vs StringBuilder
++---------------+------------------------------+------------------------------+------------------------------+
+| Feature       | String                       | StringBuffer                 | StringBuilder                |
++---------------+------------------------------+------------------------------+------------------------------+
+| Mutability    | Immutable                    | Mutable                      | Mutable                      |
+| Thread-Safe   | Yes (implicitly)             | Yes (synchronized)           | No (not synchronized)        |
+| Performance   | Slow (creates new object)    | Slower (sync overhead)       | Fastest (no sync overhead)   |
+| Use Case      | Fixed/constant strings       | Multi-threaded env           | Single-threaded env          |
+| Memory        | Uses string pool             | Stored on heap               | Stored on heap               |
+| Efficiency    | Inefficient for modifications| Efficient for modifications  | Efficient for modifications  |
+| API Methods   | length(), charAt(),          | append(), insert(),          | append(), insert(),          |
+|               | concat(), substring(),       | delete(), reverse(),         | delete(), reverse(),         |
+|               | equals(), compareTo(),       | replace(), capacity(),       | replace(), capacity(),       |
+|               | toLowerCase(), toUpperCase() | ensureCapacity(),            | ensureCapacity(),            |
+|               | trim(), indexOf(),           | toString(), charAt()         | toString(), charAt()         |
+|               | replace(), split(), matches()|                               |                             |
+| Introduced In | Since Java 1.0               | Since Java 1.0               | Since Java 1.5               |
++---------------+------------------------------+------------------------------+------------------------------+
+
+
+Methods examples:
+
+
+public class StringBufferBuilderExample {
+    public static void main(String[] args) {
+        // STRING METHODS
+        String str = " Hello World ";
+
+        System.out.println(str.length());               // 13: length() - number of characters including spaces
+        System.out.println(str.charAt(1));              // 'e': charAt() - character at index 1
+        System.out.println(str.concat("!"));            // " Hello World !": concat() - returns a new String
+        System.out.println(str.substring(1, 5));        // "ello": substring() - from index 1 to 4
+        System.out.println(str.equals("Hello World ")); // false: equals() - content mismatch (leading space)
+        System.out.println(str.compareTo("Hello World"));// ≠0: compareTo() - lexicographical difference
+        System.out.println(str.toLowerCase());          // " hello world ": toLowerCase()
+        System.out.println(str.toUpperCase());          // " HELLO WORLD ": toUpperCase()
+        System.out.println(str.trim());                 // "Hello World": trim() - removes leading/trailing spaces
+        System.out.println(str.indexOf("o"));           // 4: indexOf() - first occurrence of 'o'
+        System.out.println(str.replace("Hello", "Hi"));// " Hi World ": replace() - replaces substring
+        String[] parts = str.split(" ");
+        System.out.println(parts[1]);                   // "Hello": split() - element at index 1
+        System.out.println(str.matches(".*World.*"));   // true: matches() - regex check
+
+        // STRINGBUFFER METHODS
+        StringBuffer sbf = new StringBuffer("Hello");
+
+        System.out.println(sbf.append(" World"));       // "Hello World": append() - mutates buffer
+        System.out.println(sbf.insert(5, " Java"));    // "Hello Java World": insert() at index 5
+        System.out.println(sbf.delete(5, 9));           // "Hello World": delete() from index 5 to 8
+        System.out.println(sbf.reverse());              // "dlroW olleH": reverse() - reverses content
+        System.out.println(sbf.replace(0, 5, "Hi"));    // "Hi World": replace() - replaces substring
+        System.out.println(sbf.capacity());             // e.g. 32: capacity() - current buffer capacity
+        sbf.ensureCapacity(50);
+        System.out.println(sbf.capacity());             // ≥50: ensureCapacity() - minimum capacity guaranteed
+        System.out.println(sbf.toString());             // "dlroW olleH": toString() - converts buffer to String
+        System.out.println(sbf.charAt(2));              // 'r': charAt() - character at index 2
+
+        // STRINGBUILDER METHODS
+        StringBuilder sbd = new StringBuilder("Hello");
+
+        System.out.println(sbd.append(" World"));       // "Hello World": append() - mutates builder
+        System.out.println(sbd.insert(5, " Java"));    // "Hello Java World": insert() at index 5
+        System.out.println(sbd.delete(5, 9));           // "Hello World": delete() from index 5 to 8
+        System.out.println(sbd.reverse());              // "dlroW olleH": reverse() - reverses content
+        System.out.println(sbd.replace(0, 5, "Hi"));    // "Hi World": replace() - replaces substring
+        System.out.println(sbd.capacity());             // e.g. 32: capacity() - current builder capacity
+        sbd.ensureCapacity(50);
+        System.out.println(sbd.capacity());             // ≥50: ensureCapacity() - minimum capacity guaranteed
+        System.out.println(sbd.toString());             // "dlroW olleH": toString() - converts builder to String
+        System.out.println(sbd.charAt(2));              // 'r': charAt() - character at index 2
+    }
+}
+
+
+
+--------------------------------------------------------------------------------------------------------------------------
+==============================
+   BOXING VS UNBOXING IN JAVA
+==============================
+--------------------------------------------------
+1. BOXING: converting a primitive type into its corresponding wrapper class object.
+--------------------------------------------------
+Manual Boxing (before Java 5):
+--------------------------------
+int iPrimitive = 10;
+Integer iWrapper = new Integer(iPrimitive); // Explicit boxing
+
+Autoboxing (Java 5 and later):
+-------------------------------
+int iPrimitive = 10;
+Integer iWrapper = iPrimitive; // Autoboxing (automatic)
+
+--------------------------------------------------
+2. UNBOXING: converting a wrapper class object back into its
+primitive type.
+--------------------------------------------------
+
+
+Manual Unboxing:
+-----------------
+
+Auto-unboxing (Java 5 and later):
+----------------------------------
+Integer iWrapper = 20;
+int iPrimitive = iWrapper; // Auto-unboxing (automatic)
+
+--------------------------------------------------
+3. CASTING IN JAVA
+--------------------------------------------------
+Casting is the process of converting a variable from one type to another.
+
+Widening Casting (automatic):
+------------------------------
+int i = 100;
+double d = i; // int to double (no data loss)
+
+Narrowing Casting (manual):
+----------------------------
+double d = 100.5;
+int i = (int) d; // double to int (manual, possible data loss)
+
+--------------------------------------------------
+4. DIFFERENCES AND SUMMARY
+--------------------------------------------------
+
+| Concept        | Description                                     | Example                         |
+|----------------|-------------------------------------------------|---------------------------------|
+| Boxing         | Primitive to Wrapper                            | Integer i = Integer.valueOf(5); |
+| Autoboxing     | Auto primitive to Wrapper                       | Integer i = 5;                  |
+| Unboxing       | Wrapper to Primitive                            | int i = iWrapper.intValue();    |
+| Auto-unboxing  | Auto Wrapper to Primitive                       | int i = iWrapper;               |
+| Casting        | Primitive to another primitive type             | int i = (int) 10.5;             |
+
+--------------------------------------------------
+5. BONUS: COLLECTION EXAMPLE (Autoboxing in action)
+--------------------------------------------------
+
+import java.util.ArrayList;
+
+public class BoxingExample {
+    public static void main(String[] args) {
+        ArrayList<Integer> numbers = new ArrayList<>();
+
+        // Autoboxing: int to Integer
+        numbers.add(5);
+
+        // Auto-unboxing: Integer to int
+        int num = numbers.get(0);
+
+        System.out.println("Number: " + num);
+    }
+}
+
+--------------------------------------------------------------------------------------------------------------------------
+====================================
+    CONSTANT POOL IN JAVA & intern()
+====================================
+
+The Constant Pool in Java is a special memory area used to store:
+  - String literals
+  - Constant values (like final variables)
+  - References to classes, methods, and fields (in bytecode)
+
+Java uses it to optimize memory and improve performance by reusing objects.
+
+----------------------------------------------
+1. TYPES OF CONSTANT POOLS
+----------------------------------------------
+
+A. STRING CONSTANT POOL
+-------------------------
+- A special memory region inside the heap.
+- Stores string literals to avoid creating duplicate strings.
+- Reuses strings with the same content.
+
+Example:
+---------
+String s1 = "Hello";
+String s2 = "Hello";
+
+=> s1 and s2 refer to the same object from the pool.
+
+But:
+String s3 = new String("Hello");
+
+=> Creates a new object in the heap, NOT reused from the pool.
+
+
+B. CLASS CONSTANT POOL (Part of JVM)
+-------------------------------------
+- Part of the .class file structure.
+- Stores:
+  - Names of classes and interfaces
+  - Field and method names and descriptors
+  - String literals used in code
+
+This pool is used at runtime by the JVM to resolve method calls, field accesses, etc.
+
+----------------------------------------------
+2. WHY USE A CONSTANT POOL?
+----------------------------------------------
+- Saves memory by reusing immutable objects (like strings).
+- Reduces object creation overhead.
+- Faster comparisons using '==' (for pooled strings).
+
+----------------------------------------------
+3. INTERN() METHOD (FOR STRINGS)
+----------------------------------------------
+- Used to manually add a String to the String Constant Pool.
+
+Example:
+---------
+String s1 = new String("World");
+String s2 = s1.intern(); // s2 now points to the pool version
+
+String s3 = "World";
+
+System.out.println(s2 == s3); // true
+
+----------------------------------------------
+4. COMMON INTERVIEW QUESTION
+----------------------------------------------
+
+Q: What is the output of the following code?
+
+String a = "Java";
+String b = "Java";
+String c = new String("Java");
+String d = c.intern();
+
+System.out.println(a == b); // true (same literal)
+System.out.println(a == c); // false (new object)
+System.out.println(a == d); // true (interned)
+
+----------------------------------------------
+5. SUMMARY
+----------------------------------------------
+- The Constant Pool avoids duplicate values in memory.
+- String Constant Pool is part of the heap (used at runtime).
+- Class Constant Pool is part of the JVM (used in bytecode).
+- 'intern()' helps add or fetch strings from the pool.
+
+
+--------------------------------------------------------------------------------------------------------------------------
+===============================
+     TYPES OF MEMORY IN JAVA
+===============================
+  - Stack Memory
+  - Heap Memory
+  - Method Area
+  - Program Counter (PC) Register
+  - Native Method Stack
+
+These memory areas are managed by the **Java Virtual Machine (JVM)**
+
+1. STACK MEMORY
+---------------------------------------------
+- Stores:
+  - Local variables
+  - method calls & Method parameters
+
+- Memory is allocated and deallocated in a **Last In, First Out (LIFO)** manner.
+- Each thread has its own stack.
+- Grows and shrinks automatically when methods are invoked or return.
+
+Example:
+---------
+void myMethod() {
+    int x = 10;      // stored in stack
+    String s = "Hi"; // reference in stack, string literal in pool
+}
+
+Advantages:
+-----------
+- Fast access
+- No memory fragmentation
+- Automatically managed (no garbage collection)
+
+NOTE:
+- Stack memory is limited. Deep or infinite recursion may cause a **StackOverflowError**.
+
+---------------------------------------------
+2. HEAP MEMORY
+---------------------------------------------
+- Used to allocate memory for **objects** and **class instances**.
+- Shared among all threads.
+- Objects created with `new` are stored here.
+
+Example:
+---------
+String s = new String("Hello"); // object stored in heap
+
+- Heap memory is managed by the **Garbage Collector (GC)**.
+
+Divided further into:
+----------------------
+  - **Young Generation**: Newly created objects.
+  - **Old Generation**: Long-lived objects.
+  - **Permanent Generation / Metaspace**: Class metadata (Java 8+ uses Metaspace instead).
+
+=====================================================
+Java Heap Memory Structure (Garbage-Collected Areas)
+
+Java's heap is divided into generations to optimize garbage collection. The idea is based on the observation that:
+
+    💡 Most objects die young, and only a few survive longer.
+
+Hence, the heap is split into the following areas:
+
+1. Young Generation
+
+What It Is:
+
+    Area where new objects are allocated.
+
+    Most short-lived objects (like temporary strings, method-scoped objects) are created here.
+
+Subdivisions:
+
+    Eden Space: Where new objects are created.
+
+    Survivor Spaces (S0 and S1): Two regions used to hold objects that survive the first round of garbage collection.
+
+How It Is Swept (Garbage Collection):
+
+    Minor GC (a fast and frequent process):
+
+        When Eden fills up, GC moves surviving objects to the survivor space.
+
+        If objects survive a few GC cycles, they are promoted to the Old Generation.
+
+
+2. Old Generation: Stores long-lived objects, i.e., objects that survived multiple Minor GCs.
+
+    Larger objects and persistent caches are typically stored here.
+
+How It Is Swept (Garbage Collection):
+
+    Major GC / Full GC:
+
+        Less frequent, but slower.
+
+        Scans the entire Old Generation.
+
+        Can cause application pause if not optimized.
+
+Example GC algorithm: Mark-Sweep-Compact, G1, CMS, ZGC, Shenandoah
+
+
+Replaced in Java 8+ by:
+4. Metaspace (Java 8 and Later)
+
+What It Is:
+
+    Replaces the PermGen area(used before java 8).
+
+    Stores class-level metadata like:
+
+        Class definitions
+
+        Method signatures
+
+        Static variables
+
+    Allocated in native memory, not JVM heap.
+
+    Grows automatically (unlike PermGen, which had fixed size).
+
+How It Is Swept (Garbage Collection):
+
+    When classes are unloaded (e.g., from dynamically loaded class loaders), Metaspace is cleaned up by class unloading during Full GC.
+
+    Tuning Metaspace: You can limit it using -XX:MaxMetaspaceSize.
+=================================================================================
+
+Advantages:
+-----------
+- Flexible memory allocation at runtime.
+- Large memory space.
+
+Disadvantages:
+--------------
+- Slower than stack memory access.
+- Requires GC to reclaim unused memory.
+
+---------------------------------------------
+3. METHOD AREA (METASPACE in Java 8+)
+---------------------------------------------
+- Stores class-level data such as:
+  - Class definitions
+  - Static variables
+  - Constant Pool
+  - Method and field metadata
+
+- Shared among all threads.
+
+- From Java 8 onward, the **Method Area** is replaced by **Metaspace**, which is allocated in **native memory**, not the JVM heap.
+
+---------------------------------------------
+4. PROGRAM COUNTER (PC) REGISTER
+---------------------------------------------
+- Each thread has its own PC register.
+- Stores the address of the current instruction being executed.
+- Updated as each bytecode instruction is executed.
+
+---------------------------------------------
+5. NATIVE METHOD STACK
+---------------------------------------------
+- Used for executing native (non-Java) methods, written in languages like C or C++.
+- Stores information similar to the Java stack but for native code.
+
+---------------------------------------------
+6. OBJECT ALLOCATION ON STACK (RARE CASE)
+---------------------------------------------
+- Normally, objects are stored in the heap.
+- However, in special optimizations like **escape analysis**,
+  the JVM may allocate an object on the stack if it determines the object is:
+    - Short-lived
+    - Not accessible outside the method scope
+
+- This reduces GC load and improves performance.
+
+---------------------------------------------
+7. GARBAGE COLLECTION (GC)
+---------------------------------------------
+- The JVM automatically removes unreachable objects from heap memory.
+- Helps prevent memory leaks and optimize resource usage.
+
+Types of GC (examples):
+------------------------
+- Serial GC
+- Parallel GC
+- G1 GC
+- ZGC (Java 11+)
+- Shenandoah GC (Java 12+)
+
+---------------------------------------------
+8. SUMMARY TABLE
+---------------------------------------------
+
+| Memory Area        | Stores                              | Thread-specific | GC-managed |
+|--------------------|--------------------------------------|------------------|------------|
+| Stack              | Local variables, method calls       | Yes              | No         |
+| Heap               | Objects, class instances            | No (shared)      | Yes        |
+| Method Area        | Class metadata, static variables    | No (shared)      | Partial    |
+| PC Register        | Bytecode execution address          | Yes              | No         |
+| Native Method Stack| Native method info (C/C++ methods)  | Yes              | No         |
+
+
+
+--------------------------------------------------------------------------------------------------------------------------
+can we write try finally without catch:
+The answer is “Yes, it is not mandatory that each try block must be followed by a catch block in Java.” After try block,
+we can use either “catch” block or “finally” block. Generally, thrown exceptions should be declared in the thrown clause
+ of the method
+--------------------------------------------------------------------------------------------------------------------------
+can we write multiple catch blocks under single try block:
+Yes you can have multiple catch blocks with try statement. You start with catching specific exceptions and then in the
+last block you may catch base Exception . Only one of the catch block will handle your exception.
+--------------------------------------------------------------------------------------------------------------------------
+Microservices
+This architecture breaks down software into smaller, independent services that communicate with each other through APIs.
+ Each service can be updated, modified, deployed, or scaled independently. This makes it easier to add new features and
+scale specific components without affecting the rest of the application.
+
+Monolithic
+This traditional architecture uses a single code base to perform multiple business functions. All the software components
+ are interdependent, so making small changes can impact large areas of the code base. When scaling a monolithic application
+, the entire application must scale, which can be inefficient.
+
+--------------------------------------------------------------------------------------------------------------------------
+
+===========================
+         PROCESS IN JAVA
+===========================
+
+✅ DEFINITION:
+A **process** is an independent, self-contained program in execution.
+
+It contains:
+- Its own memory space (heap, stack, etc.)
+- System resources (CPU, file handles, etc.)
+- At least one main thread of execution
+
+Every time you run a Java application using `java ClassName`, the Java Virtual Machine (JVM) starts a **new process**.
+
+--------------------------------------------
+1. PROCESS VS THREAD
+--------------------------------------------
+| Aspect         | Process                         | Thread                            |
+|----------------|----------------------------------|------------------------------------|
+| Memory         | Separate memory space            | Shares memory with other threads  |
+| Communication  | Slower (uses IPC mechanisms)     | Faster (shared memory)            |
+| Creation cost  | Higher                           | Lower                             |
+| Crash impact   | One process crash doesn't affect others | One thread crash may affect process |
+
+--------------------------------------------
+2. PROCESS IN JAVA CONTEXT
+--------------------------------------------
+- The JVM is a process.
+- It manages memory, loads classes, runs code, and starts threads.
+- You can create or control external processes using Java.
+--------------------------------------------------------------------------------------------------------------------------
+
+===========================
+       THREAD IN JAVA
+===========================
+
+✅ DEFINITION:
+A thread in Java is a lightweight, independent path of execution within a program.
+
+Java is a multi-threaded language — it allows multiple threads to run in parallel, improving the performance
+of applications, especially on multi-core processors.
+
+-------------------------------------------
+1. THREAD CHARACTERISTICS
+-------------------------------------------
+- A thread is a unit of execution within a process.
+- Each thread has:
+  - Its own call stack
+  - Program counter
+  - Local variables
+- All threads within the same process share:
+  - Heap memory (objects, class data)
+  - Method area
+
+-------------------------------------------
+2. CREATING THREADS IN JAVA
+-------------------------------------------
+
+A. By extending the Thread class:
+----------------------------------
+class MyThread extends Thread {
+    public void run() {
+        System.out.println("Thread is running.");
+    }
+}
+
+public class Main {
+    public static void main(String[] args) {
+        MyThread t1 = new MyThread();
+        t1.start(); // Starts the new thread
+    }
+}
+
+B. By implementing the Runnable interface:
+-------------------------------------------
+class MyRunnable implements Runnable {
+    public void run() {
+        System.out.println("Runnable thread running.");
+    }
+}
+
+public class Main {
+    public static void main(String[] args) {
+        Thread t1 = new Thread(new MyRunnable());
+        t1.start();
+    }
+}
+
+Note: Runnable interface only has one method i,e run(), so we need to make an object of Thread class to use built in methods of thread.
+In short making object of Thread class is needed in both "extend Thread" and "implement runnable" method of creating threads.
+
+-------------------------------------------
+3. THREAD STATES
+-------------------------------------------
++----------------+----------------------------------------------+--------------------------------------+
+| Thread State   | Description                                  | Example Method                       |
++----------------+----------------------------------------------+--------------------------------------+
+| NEW            | Thread object created but not started        | Thread t = new Thread();            |
++----------------+----------------------------------------------+--------------------------------------+
+| RUNNABLE       | Ready to run or running                      | t.start();                           |
++----------------+----------------------------------------------+--------------------------------------+
+| BLOCKED        | Waiting to acquire object monitor lock       | synchronized(obj) { ... }           |
+|                | (another thread holds the lock)              | (Thread enters BLOCKED if obj locked)|
++----------------+----------------------------------------------+--------------------------------------+
+| WAITING        | Waiting indefinitely for another thread      | t.join();                            |
+|                | to perform a particular action               | lock.wait();                         |
++----------------+----------------------------------------------+--------------------------------------+
+| TIMED_WAITING  | Waiting for a specific period of time        | Thread.sleep(1000);                  |
+|                |                                              | t.join(500);                         |
+|                |                                              | lock.wait(1000);                     |
++----------------+----------------------------------------------+--------------------------------------+
+| TERMINATED     | Thread has completed or was aborted          | (After run() method completes)       |
++----------------+----------------------------------------------+--------------------------------------+
+
+Notes:
+BLOCKED: Happens when a thread tries to enter a synchronized block/method but the monitor is already held by another thread.
+
+WAITING: No timeout is specified. E.g., join(), wait() without time.
+
+TIMED_WAITING: Has a timeout. E.g., sleep(ms), join(ms), wait(ms).
+
+TERMINATED: Thread has completed its execution or is stopped.
+-------------------------------------------
+4. THREAD METHODS (COMMON)
+-------------------------------------------
+- start(): Begins thread execution, calls run()
+- run(): Contains the code executed by the thread
+- sleep(ms): Makes thread sleep for a period
+- join(): Waits for another thread to finish
+- isAlive(): Checks if thread is still running
+- interrupt(): Interrupts a sleeping or waiting thread
+
+-------------------------------------------
+5. ADVANTAGES OF THREADS
+-------------------------------------------
+- Enables parallelism (multi-core execution)
+- Better CPU utilization
+- Efficient handling of I/O-bound tasks
+- Improves application responsiveness (e.g., GUI apps)
+
+-------------------------------------------
+6. THREAD SAFETY
+-------------------------------------------
+When multiple threads access shared data, synchronization is needed to avoid race conditions.
+
+Tools for thread safety:
+- synchronized keyword
+- volatile keyword
+- Locks (ReentrantLock)
+- Atomic variables (AtomicInteger, etc.)
+
+-------------------------------------------
+7. THREAD POOLING (Advanced)
+-------------------------------------------
+Instead of creating a new thread every time, use a thread pool to reuse threads.
+
+import java.util.concurrent.*;
+
+ExecutorService executor = Executors.newFixedThreadPool(5);
+executor.execute(() -> {
+    System.out.println("Task executed by pooled thread");
+});
+executor.shutdown();
+
+
+--------------------------------------------------------------------------------------------------------------------------
+
+
+what is multithreading in java:
+Threads
+Threads are virtual units of execution that share the same memory space as the process they are part of. They can be
+thought of as independent parallel execution paths.
+
+Multithreading
+When multiple threads are executing in a process at the same time, it's called multithreading. This is similar to
+multitasking, where a user can perform multiple tasks simultaneously on their computer.
+Efficiency
+Multithreading allows for efficient use of multi-core processors. A single CPU can share its execution time between
+multiple threads, switching between each thread for a set amount of time.
+--------------------------------------------------------------------------------------------------------------------------
+
+// Java code for thread creation by extending the Thread class
+class MultithreadingDemo extends Thread {
+public void run()
+{
+try {
+// Displaying the thread that is running
+System.out.println(
+"Thread " + Thread.currentThread().getId()
++ " is running");
+}
+catch (Exception e) {
+// Throwing an exception
+System.out.println("Exception is caught");
+}
+}
+}
+
+// Main Class
+public class Multithread {
+public static void main(String[] args)
+{
+int n = 8; // Number of threads
+for (int i = 0; i < n; i++) {
+MultithreadingDemo object
+= new MultithreadingDemo();
+object.start();
+}
+}
+}
+
+
+--------------------------------------------------------------------------------------------------------------------------
+// Java code for thread creation by implementing the Runnable Interface
+class MultithreadingDemo implements Runnable {
+public void run()
+{
+try {
+// Displaying the thread that is running
+System.out.println(
+"Thread " + Thread.currentThread().getId()
++ " is running");
+}
+catch (Exception e) {
+// Throwing an exception
+System.out.println("Exception is caught");
+}
+}
+}
+
+// Main Class
+class Multithread {
+public static void main(String[] args)
+{
+int n = 8; // Number of threads
+for (int i = 0; i < n; i++) {
+Thread object = new Thread(new MultithreadingDemo());
+object.start();
+}
+}
+}
+
+If we extend the Thread class, our class cannot extend any other class because Java doesn’t support multiple inheritance.
+ But, if we implement the Runnable interface, our class can still extend other base classes.
+We can achieve basic functionality of a thread by extending Thread class because it provides some inbuilt methods like
+ yield(), interrupt() etc. that are not available in Runnable interface.
+Using runnable will give you an object that can be shared amongst multiple threads.
+--------------------------------------------------------------------------------------------------------------------------
+equals() and == in Java?
+In Java, == is an operator that compares the references or memory addresses of objects to
+determine if they are the same, whereas . equals() is a method that compares the contents of the objects to check for
+value equality
+
+--------------------------------------------------------------------------------------------------------------------------
+Collision:
+Collisions occur when multiple keys hash to the same index. To manage collisions, each bucket in the array is actually a
+linked list. New key-value pairs are added to the list at the corresponding index. Retrieval involves traversing the list
+ to find the correct key.
+--------------------------------------------------------------------------------------------------------------------------
+how to remove duplicate entries in array list using stream
+public int[] removeDuplicatesWithStreams(int[] data){
+        return Arrays.stream(data).distinct().toArray();
+    }
+--------------------------------------------------------------------------------------------------------------------------
+map() vs flatMap():
+`map` transforms each element in a stream into another form individually, while `flatMap` transforms each element into a
+stream and flattens the result. Use `map` for one-to-one transformations and `flatMap` for one-to-many transformations,
+ such as flattening nested
+--------------------------------------------------------------------------------------------------------------------------
+when to use constructor injection and setter injection:
+Constructor injection is generally recommended when dependencies are required and unlikely to change, while setter
+injection is more flexible and can be used for optional dependencies or reconfiguration:
+Constructor injection
+Use when dependencies are essential and unlikely to change. Constructor injection ensures that dependencies are provided
+ when an object is created, making them explicit and immutable. This can lead to cleaner, easier-to-understand code.
+
+Setter injection
+Use when dependencies are optional or can be changed after an object is created. Setter injection uses set* methods in a
+class file to make property names configurable in the spring XML config. Setter injection can be easier to read from a
+configuration standpoint. Setter injection can also be used for management through JMX MBeans.
+
+--------------------------------------------------------------------------------------------------------------------------
+method overloading and method overriding:
+Method overloading means defining multiple methods within the same class with the same name but different parameter lists
+ (number or type of parameters), while method overriding occurs when a subclass provides its own implementation of a
+method already defined in its parent class, essentially changing the behavior of the method within the subclass while
+maintaining the same method name and signature; the key difference is that overloading happens within a single class based
+on parameter differences, while overriding happens between a parent and child class with the same method signature.
+--------------------------------------------------------------------------------------------------------------------------
+Exception Hierarchy:
+  object
+ |
+ |
+Throwable
+Exceptions Error
+ |  |
+Checked Exceptions Virtiual Machine Error
+
+ |  |
+Unchecked Exceptions Assertion Error etc
+
+--------------------------------------------------------------------------------------------------------------------------
+Exceptions can occur due several reasons, such as:
+
+Invalid user input
+Device failure
+Loss of network connection
+Physical limitations (out-of-disk memory)
+Code errors
+Out of bound
+Null reference
+Type mismatch
+Opening an unavailable file
+Database errors
+Arithmetic errors
+
+--------------------------------------------------------------------------------------------------------------------------
+Checked vs Unchecked Exceptions:
+Checked exceptions are called compile-time exceptions because these exceptions are checked at compile-time by the
+compiler. Examples of Checked Exception are listed below:
+ClassNotFoundException
+IOException
+InstantiationException
+SQLException
+FileNotFoundException
+--------------------------------------------------------------------------------------------------------------------------
+Unchecked Exceptions
+The unchecked exceptions are just opposite to the checked exceptions. The compiler will not check these exceptions at
+compile time. In simple words, if a program throws an unchecked exception, and even if we didn’t handle or declare it,
+the program would not give a compilation error. Examples of Unchecked Exception are listed below:
+ArithmeticException
+ClassCastException
+NullPointerException
+ArrayIndexOutOfBoundsException
+ArrayStoreException
+IllegalThreadStateException
+---------------------------------------------------------------------------------------------------------------------------
+HashMap and ConcurrentHashMap:
+The main difference between HashMap and ConcurrentHashMap is that HashMap is not thread-safe, while ConcurrentHashMap is:
+Thread safety.
+HashMap is not synchronized, so it's not thread-safe. ConcurrentHashMap is thread-safe and is designed to handle concurrent
+ access safely.
+Performance.
+HashMap is faster than ConcurrentHashMap because it's not synchronized. In a multi-threaded environment, ConcurrentHashMap
+ may require some threads to wait, which can affect its performance.
+Exceptions.
+When a thread iterates a HashMap object and another thread tries to modify it, a ConcurrentModificationException is
+ thrown. ConcurrentHashMap doesn't throw this exception when modifications are made during iteration.
+Suitability.
+HashMap is best for single-threaded applications, while ConcurrentHashMap is best for multi-threaded applications.
+--------------------------------------------------------------------------------------------------------------------------
+Hashset vs hashmap:
+The main difference between a HashSet and a HashMap is that a HashSet stores unique elements without values, while a
+ HashMap stores key-value pairs.
+-------------------------------------------------------------------------------------------------------------------------
+Internal working of Hash Map:
+HashMaps are incredibly efficient for storing key-value pairs.
+
+Hashing is a process of converting an object into integer form by using the method hashCode(). It’s necessary to write
+ the hashCode() method properly for better performance of HashMap. Here, we are taking the key of my class so that we
+ can override the hashCode() method to show different scenarios.
+
+Here override hashCode() method returns the first character’s ASCII value as hash code. So whenever the first character
+ of the key is same, the hash code will be the same. You should not approach these criteria in your program. It is just
+for demo purposes. As HashMap also allows a null key, so hash code of null will always be 0.
+---------------------------------------------------------------------------------------------------------------------------
+How HashSet avoids duplicate values in collection.
+In case of HashSet, when you add or retrieve an element, it checks for both hashcode and equals() method. First it check
+ if there exists an element with same hashcode, if not, add it. If it exists, then check if the equals() is returning
+true for those two objects.
+--------------------------------------------------------------------------------------------------------------------------
+Stream API and its uses:
+The Java Stream API is a feature that allows developers to perform bulk operations on sequences of elements. It was
+introduced in Java 8 and can be used to:
+Perform operations on collections: Without the need for external iteration
+Chain multiple operations: To perform sequential operations
+Support parallel streams: Use multithread functionality to process data on multiple cores
+Manipulate, transform, and process data: Without the need for explicit loops or boilerplate code
+Some methods of the Stream API include:
+forEach: Iterates through every element of the stream
+collect: Returns the result of the intermediate operations performed on the stream
+flatMap(): Converts 2 levels of stream into 1 level of stream
+The Stream API also uses lazy evaluation, which means that the stream only performs operations on the elements of the
+ collection as they are needed. This can save time and memory.
+1. stream.filter(item->item.startsWith(“E”));
+2. languages.stream().sorted().forEach(System.out::println);
+3. language.stream().map(item->item.uppercase().forEach(System.out::println));
+4. List<String> case language = languages.stream().map(item ->item.toUpperCase()).collect(collectors.toList()));
+5. Integer maximum = Stream.of(10,13,4,9,2,100).max(Integer::valueOf)).get();
+6. Integer minimum = Stream.of(10,13,4,9,2,100).min(Comparator.comparing(Integer::valueOf)).get();
+7. long count = languages.stream().filter(item->item.getName().startsWith(‘G’)).count();
+-----------------------------------------------------------------------------------------------------------------------
+How to restrict a class to create only single instance in Java?
+The singleton design pattern is used to restrict a class to only one instance at a time. This restriction is achieved by
+ changing the accessibility of the constructor to private so that a new instance cannot be created using that constructor
+ from outside the class.
+------------------------------------------------------------------------------------------------------------------------
+SpringBoot:
+Spring Boot is an extension of the Spring Framework that's used to develop and run applications faster and more
+efficiently. Here are some reasons why you might use Spring Boot over Spring:
+----------------------------------------------------------------------------------------------------------------
+No XML configuration: Spring Boot eliminates the need for XML configuration to set up applications.
+Less boilerplate code: Spring Boot reduces the amount of boilerplate code, annotations, and XML configurations
+required to develop applications.
+-----------------------------------------------------------------------------------------------------------------------
+Easier to launch: Spring Boot is easier to launch and run than Spring.
+-----------------------------------------------------------------------------------------------------------------------
+Production-ready features: Spring Boot provides production-ready features.
+-----------------------------------------------------------------------------------------------------------------------
+Easy dependency management: Spring Boot offers easy dependency management.
+-----------------------------------------------------------------------------------------------------------------------
+Auto configuration: Spring Boot's "Auto Configuration" feature helps set up applications.
+-----------------------------------------------------------------------------------------------------------------------
+Command line interface: Spring Boot offers a command line interface (CLI) for developing and testing applications.
+-----------------------------------------------------------------------------------------------------------------------
+Build tool support: Spring Boot supports commonly used build tools like Maven and Gradle.
+-----------------------------------------------------------------------------------------------------------------------
+Embedded servers: Spring Boot uses embedded servers like Jetty, Undertow, or Tomcat.
+-----------------------------------------------------------------------------------------------------------------------
+Lightweight applications: Spring Boot can help create lightweight applications.
+-----------------------------------------------------------------------------------------------------------------------
+Easier to learn: Spring Boot is easier to set up and learn than other similar frameworks.
+-----------------------------------------------------------------------------------------------------------------------
+@Component
+A parent annotation in a hierarchy of stereotype annotations that identifies Java classes to be registered as Spring beans.
+-----------------------------------------------------------------------------------------------------------------------
+@Service
+An annotation that identifies and documents the application's business layer entry point. It can be used with Spring AOP
+to target the business layer entry point, inject a service, and improve the maintainability of AOP Pointcut expressions.
+-----------------------------------------------------------------------------------------------------------------------
+@Controller
+Used for MVC-based web applications, where the controller prepares a model and uses it with a view.
+-----------------------------------------------------------------------------------------------------------------------
+@RestController
+Used for RESTful web services, where the controller returns data directly to the caller, typically in JSON or XML format.
+@RestController combines the @Controller and @ResponseBody annotations.
+@RestController automatically serializes the return value to the HTTP response body
+-----------------------------------------------------------------------------------------------------------------------
+@Qualifier
+The @Autowired annotation is a great way of making the need to inject a dependency in Spring explicit. Although it’s
+useful, there are use cases for which this annotation alone isn’t enough for Spring to understand which bean to inject.
+By default, Spring resolves autowired entries by type.
+If more than one bean of the same type is available in the container, the framework will throw NoUniqueBeanDefinitionException,
+indicating that more than one bean is available for autowiring.
+ This is because Spring doesn’t know which bean to inject. To avoid this problem, there are several solutions;
+the @Qualifier annotation is one of them.
+-----------------------------------------------------------------------------------------------------------------------
+@Qualifier vs @Primary
+The @Primary and @Qualifier annotations in Spring serve complementary roles in resolving bean ambiguity during dependency
+ injection. @Primary designates a primary bean for default injection, while @Qualifier allows for precise selection of a
+ specific bean by name or custom qualifier.
+if both the @Qualifier and @Primary annotations are present, then the @Qualifier annotation will have precedence.
+-----------------------------------------------------------------------------------------------------------------------
+MVC:
+…
+Model-View-Controller (MVC) is a software design pattern that separates an application's logic into three interconnected
+parts: the model, the view, and the controller.
+Part
+Description
+Model
+The internal representation of information
+View
+The interface that presents information to and accepts it from the user
+Controller
+The software that links the model and view.
+-------------------------------------------------------------------------------------------------------------------------
+what are spring boot actuator?
+Spring Boot Actuator is a module that provides production-ready features for managing and monitoring Spring Boot applications.
+ It offers a variety of endpoints and metrics that can be used for:
+Health checks: Check the health of the application
+Gathering metrics: Gather metrics about the application
+Logging: Perform logging
+Auditing: Perform auditing
+Exporting metrics: Export metrics data to third-party monitoring tools
+-------------------------------------------------------------------------------------------------------------------------
+spring boot scope of bean:
+The scope of a bean in Spring Boot defines how the bean is created and shared throughout the application lifecycle. The
+ scope of a bean is defined using the @Scope annotation.
+-------------------------------------------------------------------------------------------------------------------------
+Here are some of the different scopes in Spring Boot:
+-------------------------------------------------------------------------------------------------------------------------
+Singleton: The default scope, where only one instance of the bean is created for the entire application lifecycle.
+ This instance is shared by all clients that request the bean.
+-------------------------------------------------------------------------------------------------------------------------
+Prototype: A new instance is created every time the bean is requested.
+-------------------------------------------------------------------------------------------------------------------------
+Request: Similar to the prototype scope, but used for web applications. A new instance is created for each HTTP request.
+-------------------------------------------------------------------------------------------------------------------------
+Session: A new instance is created for each HTTP session.
+-------------------------------------------------------------------------------------------------------------------------
+Global-session: Used to create global session beans for Portlet applications.
+-------------------------------------------------------------------------------------------------------------------------
+WebSocket: A special type of scope that lasts for the duration of the WebSocket session. This type of scope is used to
+create WebSocket applications
+-------------------------------------------------------------------------------------------------------------------------
+Significance of Hibernate over JDBC:
+Hibernate has several advantages over JDBC, including:
+Object-oriented approach
+Hibernate allows developers to code using object-oriented principles without worrying about database semantics.
+Automatic object mapping
+Hibernate can automatically map database tables to application objects, which can save time.
+Reduced boilerplate code
+Hibernate reduces the amount of boilerplate code needed.
+Improved performance
+Hibernate supports features like caching and lazy loading, which can improve performance.
+Simplified maintenance
+Hibernate simplifies maintenance with automatic schema generation and higher-level query languages.
+Reduced development time
+Hibernate can reduce development time by relieving programmers from manual handling of persistent data.
+-------------------------------------------------------------------------------------------------------------------------
+What is session and sessionfactory in Hibernate:
+Session
+A session object is used to establish a connection with the database and perform CRUD operations like save, delete, and
+ update. Sessions are small and designed to be instantiated each time a database interaction is required.
+SessionFactory
+A session factory is a factory class that creates session objects and handles database connectivity tasks. It also
+performs connection pooling, thread pooling, and JNDI interactions
+-------------------------------------------------------------------------------------------------------------------------
+what is dialect in hibernate:
+Dialect allows Hibernate to generate SQL optimized for a particular relational database. Hibernate generates queries for
+ the specific database based on the Dialect class. A hibernate dialect gives information to the framework of how to
+convert hibernate queries(HQL) into native SQL queries.
+-------------------------------------------------------------------------------------------------------------------------
+what is lazy and eager loading in hibernate:
+Lazy loading and eager loading are two different data fetching strategies in Hibernate that impact the performance and
+ efficiency of an application:
+-------------------------------------------------------------------------------------------------------------------------
+Lazy loading
+This strategy delays the initialization of a resource until it's explicitly accessed. In Hibernate, lazy loading is the
+default fetch type for all annotation relationships. This means that Hibernate won't load the relationships for an object
+ instance unless a getter explicitly asks for them. Lazy loading is recommended because it optimizes performance by only
+loading the necessary data.
+-------------------------------------------------------------------------------------------------------------------------
+Eager loading
+This strategy initializes a resource as soon as the code is executed. In Hibernate, eager loading loads all relationships
+ related to a particular object. Eager loading is beneficial when there's a need to load resources in the background. For
+ example, some websites display a "loading" screen and eagerly load all the resources required for the web application to
+ run.
+-------------------------------------------------------------------------------------------------------------------------
+how do we declare multiple primarykey in Hibernate:
+If the database table has more than one column as primary key then we call it as composite primary key.
+If the table has one primary key then in hibernate mapping file we need to configure this column by using <id> element.
+if the table has multiple primary key columns , in order to configure these primary key we need to use <composite-id="">
+element in our hibernate hbm file.
+-------------------------------------------------------------------------------------------------------------------------
+what is pojo class in java:
+A plain old Java object (POJO) is a class definition that is not tied to any Java framework so any Java program can use
+it. A POJO has no particular naming convention for properties and methods, or any other special restrictions. Their
+primary advantage is their reusability and simplicity
+-------------------------------------------------------------------------------------------------------------------------
+what is string intern:
+String str = new String("Welcome to JavaTpoint").intern(); // statement - 1
+String str1 = new String("Welcome to JavaTpoint").intern(); // statement - 2
+System.out.println(str1 == str); // prints true
+In the above code snippet, the intern() method is invoked on the String objects. Therefore, the memory is allocated in
+the SCP. For the second statement, no new string object is created as the content of str and str1 are the same.
+Therefore, the reference of the object created in the first statement is returned for str1. Thus, str and str1 both point
+ to the same memory. Hence, the print statement prints true.
+-------------------------------------------------------------------------------------------------------------------------
+what is the need of creating incomplete methods in interface:
+In Java, the need to create incomplete methods in an interface is to provide external functionality without breaking
+existing implementations. This is done by using the default keyword to provide a default implementation for a method in
+ the interface
+-------------------------------------------------------------------------------------------------------------------------
+Inversion of Control (IoC)
+A software design principle that gives control of an application's flow to an external source, such as a framework. This
+ allows the developer to focus on business logic, while the framework handles dependency management. IoC can make code
+more modular, testable, and maintainable.
+-------------------------------------------------------------------------------------------------------------------------
+The @Transactional annotation is used to mark a method or a class as transactional, meaning that any database operations
+ performed within the marked method or class will be executed within a transaction. If the transaction is successful, the
+ changes will be committed to the database. If an error occurs and the transaction is rolled back, the changes will not
+be persisted in the database.
+-------------------------------------------------------------------------------------------------------------------------
+
+DEEP COPY VS SHALLOW COPY
+
+✅ Deep Copy in Java
+A deep copy means copying all fields, and recursively copying any objects referenced by the fields. So changes to the copied object don’t affect the original.
+
+🔹 Ways to Achieve Deep Copy:
+
+1. Manual Deep Copy (Recommended)
+Create a custom cloneDeep() or constructor that copies all fields manually.
+
+
+class Address {
+    String city;
+    Address(String city) {
+        this.city = city;
+    }
+    Address(Address other) {
+        this.city = other.city;
+    }
+}
+
+class Person {
+    String name;
+    Address address;
+
+    Person(String name, Address address) {
+        this.name = name;
+        this.address = new Address(address); // deep copy
+    }
+}
+✅ Best Practice: Use copy constructors or custom methods when you control the class.
+
+2. Using clone() Method
+Java's clone() does a shallow copy by default. To make it deep, override clone() and ensure all referenced objects are also cloned.
+
+class Address implements Cloneable {
+    String city;
+
+    public Address(String city) {
+        this.city = city;
+    }
+
+    protected Object clone() throws CloneNotSupportedException {
+        return super.clone();
+    }
+}
+
+class Person implements Cloneable {
+    String name;
+    Address address;
+
+    public Person(String name, Address address) {
+        this.name = name;
+        this.address = address;
+    }
+
+    protected Object clone() throws CloneNotSupportedException {
+        Person cloned = (Person) super.clone();
+        cloned.address = (Address) address.clone(); // Deep copy
+        return cloned;
+    }
+}
+🔸 Be sure to implement Cloneable and override clone() in all nested objects.
+
+
+
+Deep Copy Methods Summary (Notepad Format)
+==========================================
+
+| Method         | Type         | Pros                | Cons                           |
+|----------------|--------------|---------------------|--------------------------------|
+| Manual Copy    | Deep         | Clean, controlled   | Tedious for large objects      |
+| clone()        | Shallow/Deep | Needs extra work    | Error-prone, clone semantics   |
+| Serialization  | Deep         | Automatic           | Slower, Serializable needed    |
+-------------------------------------------------------------------------------------------------------------------
+Bean Life Cycle

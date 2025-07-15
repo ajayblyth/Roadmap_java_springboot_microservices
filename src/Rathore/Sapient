@@ -1,0 +1,1033 @@
+===============================================================================
+                                Preparation Questions
+===============================================================================
+
+=====================
+        Java
+=====================
+
+2. Write a program in Java 8 to find the second largest number of an array.
+int[] arr = {10, 5, 20, 8, 15};
+Optional<Integer> secondLargest = Arrays.stream(arr)
+    .boxed()
+    .sorted(Comparator.reverseOrder())
+    .distinct()
+    .skip(1)
+    .findFirst();
+System.out.println("Second Largest: " + secondLargest.orElse(-1));
+
+3. You have an input array. Write a program to print the multiples of 5. Use Java 8.
+int[] input = {2, 5, 10, 13, 20};
+Arrays.stream(input)
+    .filter(i -> i % 5 == 0)
+    .forEach(System.out::println);
+
+7. What is method overriding and how is it different from method overloading?
+- Overriding: Same method signature in subclass, runtime polymorphism.
+- Overloading: Same method name, different parameters, compile-time.
+- Overriding needs inheritance; overloading can be within same class.
+
+8. Are constructors inherited in Java? You have overloaded constructor in the parent class.
+   Your parent class has 2 constructors — one is the default constructor and one might be the overloaded constructor with some arguments.
+   How do you call the overloaded version of that class – overloaded constructor of your parent class – in your derived class?
+- Constructors are not inherited.
+- Use super(args) in child constructor to call parent’s overloaded constructor.
+
+10. Make the given class immutable.
+- Declare class as final.
+- Make all fields private and final.
+- No setters; only getters.
+- Initialize via constructor.
+- Don't expose mutable objects directly.
+
+11. Have you used serialization in your project?
+- Yes, for session storage and caching.
+- Also used for transmitting Java objects over network.
+
+12. Which interface must a class implement to be serializable?
+- java.io.Serializable (marker interface, no methods)
+
+13. Can a class be serialized if it contains non-serializable fields?
+- Yes, but non-serializable fields must be marked transient.
+
+14. How to serialize a class that has non-serializable fields?
+- Use transient for those fields.
+- Or write custom serialization with writeObject() and readObject().
+
+15. Are constructors called during deserialization?
+- No, JVM creates object without calling constructor during deserialization.
+
+16. What is object cloning in Java? Use case?
+- Creating exact copy of object using clone().
+- Used in prototypes, caching, undo operations.
+
+17. Are you aware of marker interfaces in Java?
+- Yes. Marker = no methods.
+- Example: Serializable, Cloneable.
+
+18. What is the default scope of a Spring bean? Other scopes?
+- Default: Singleton.
+- Others: Prototype, Request, Session, Application, Websocket.
+
+19. Difference between singleton and prototype scopes?
+- Singleton: One instance per container.
+- Prototype: New instance for every injection/request.
+
+20. What is the bean lifecycle in Spring?
+- Creation → Populate properties → setBeanName() →
+  setApplicationContext() → afterPropertiesSet() → init-method → Ready
+- Destroy via destroy-method or DisposableBean.
+
+21. How do you configure a Spring bean?
+- XML config (old), Java @Configuration with @Bean,
+  or component scanning with @Component.
+
+22. What is @Configuration annotation in Spring?
+- Marks class as source of bean definitions.
+- Works with @Bean methods.
+
+23. Difference between @Configuration and @Bean annotations?
+- @Configuration is class-level; @Bean is method-level.
+- @Configuration ensures full proxying of @Bean methods.
+
+24. What other Java libraries have you used? Lombok?
+- Lombok, Jackson, Gson, Apache POI, JUnit, Mockito, MapStruct, etc.
+
+25. Use case of Lombok?
+- Avoid boilerplate code (getters/setters, constructors).
+- Improves readability, reduces clutter.
+
+26. Anything on Jackson library?
+- Used for converting Java objects to/from JSON.
+- Works with @JsonProperty, @JsonIgnore, etc.
+
+27. Why use Jackson if Java has serialization?
+- Java serialization is binary, not suitable for REST APIs.
+- Jackson is JSON-based and human-readable.
+
+28. Why are Avro libraries used?
+- Schema-based binary serialization.
+- Compact, fast, schema evolution support.
+- Common in Kafka data pipelines.
+
+29. Difference between ArrayList and LinkedList?
+- ArrayList: dynamic array, random access = fast.
+- LinkedList: doubly linked, better for frequent insert/delete.
+
+30. Time complexities for insertion in ArrayList vs LinkedList?
+- ArrayList: O(1) append, O(n) insert/delete in middle.
+- LinkedList: O(1) insert/delete at head/tail, O(n) traversal.
+
+31. Difference between HashMap, TreeMap, and LinkedHashMap?
+- HashMap: No order, fast.
+- TreeMap: Sorted by key.
+- LinkedHashMap: Maintains insertion order.
+
+32. Use case for choosing between HashMap vs TreeMap vs LinkedHashMap?
+- HashMap for fast access.
+- TreeMap for sorted key access.
+- LinkedHashMap when order matters.
+
+33. Which one is better for performance: HashMap or LinkedHashMap?
+- HashMap is slightly faster.
+- LinkedHashMap adds overhead of order tracking.
+
+34. What is initial capacity and load factor in HashMap?
+- Initial capacity = starting bucket size.
+- Load factor = when to resize (default 0.75)
+
+35. What is fail-fast behavior in HashMap?
+- Throws ConcurrentModificationException if modified while iterating.
+
+36. When to use ConcurrentHashMap vs normal HashMap?
+- Use ConcurrentHashMap for thread-safe operations.
+- Avoids locking whole map.
+
+37. Which sorting algorithms do you know and used in projects?
+- Merge Sort, Quick Sort, Insertion Sort.
+- Used Java’s Arrays.sort(), Collections.sort() (uses TimSort).
+
+38. Time and space complexity of Bucket Sort?
+- Time: O(n + k) where k = number of buckets.
+- Space: O(n + k).
+- Efficient if input is uniformly distributed.
+
+39. What is Predicate and BiPredicate in Java 8?
+- Predicate<T>: boolean test(T t)
+- BiPredicate<T, U>: boolean test(T t, U u)
+- Used in filter(), conditional logic.
+
+40. What are Lambda expressions? Write one.
+- Java 8 feature for functional-style programming.
+- Example:
+  (a, b) -> a + b
+
+41. Write a function to find the longest common prefix string amongst an array of strings.
+public String longestCommonPrefix(String[] strs) {
+  if (strs == null || strs.length == 0) return "";
+  String prefix = strs[0];
+  for (int i = 1; i < strs.length; i++) {
+    while (!strs[i].startsWith(prefix)) {
+      prefix = prefix.substring(0, prefix.length() - 1);
+      if (prefix.isEmpty()) return "";
+    }
+  }
+  return prefix;
+}
+
+42. How to create an Optional object in Java 8?
+- Optional<String> opt = Optional.of("value");
+
+43. Create an Optional<String> with empty/null value.
+- Optional<String> emptyOpt = Optional.empty();
+- Optional<String> nullOpt = Optional.ofNullable(null);
+
+44. Difference: Optional.of vs Optional.ofNullable?
+- of(): throws NPE if value is null.
+- ofNullable(): safe, allows null.
+
+45. Can we pass non-null value to ofNullable?
+- Yes. It works with both null and non-null values.
+
+46. How to retrieve value from Optional container?
+- optional.get() – if value present
+- optional.orElse("default")
+- optional.ifPresent(System.out::println)
+
+47. Have you used CompletableFuture in Java 8?
+- Yes, for async processing.
+- Used supplyAsync(), thenApply(), thenAccept(), exceptionally().
+
+48. Difference between map and flatMap?
+- map(): transforms data.
+- flatMap(): flattens nested structure.
+- Optional<Optional<T>> to Optional<T>
+
+49. What are parallel streams?
+- Java 8 feature for multi-threaded stream processing.
+- Used for large data sets where operations are independent.
+
+50. What design patterns have you used in your apps? Use cases?
+- Singleton: central config class.
+- Factory: object creation.
+- Builder: complex object construction.
+- Strategy: multiple algorithm choices.
+- Observer: event-driven design (Kafka, listeners).
+
+51. Builder pattern – why and when?
+- Used for building immutable or complex objects step-by-step.
+- Improves readability and maintainability.
+
+52. Write a thread-safe Singleton class that resists reflection, serialization, and cloning.
+public final class Singleton {
+  private static final Singleton INSTANCE = new Singleton();
+  private Singleton() {
+    if (INSTANCE != null) throw new RuntimeException("Reflection not allowed");
+  }
+  public static Singleton getInstance() {
+    return INSTANCE;
+  }
+  protected Object readResolve() { return INSTANCE; }
+  public Object clone() throws CloneNotSupportedException {
+    throw new CloneNotSupportedException();
+  }
+}
+
+53. Eager vs Lazy initialization?
+- Eager: instance created at class load time.
+- Lazy: instance created when needed (on-demand)
+
+54. Any other design patterns and their use cases?
+- Adapter: interface bridging
+- Facade: simplify complex subsystems
+- Command: request as an object
+- Proxy: security or performance proxy
+
+55. How did you implement multithreading in your app?
+- Using ExecutorService, Runnable/Callable tasks.
+- Managed thread pool size and lifecycle.
+
+56. Which thread pools have you used and why?
+- FixedThreadPool: limited, controlled threads.
+- CachedThreadPool: elastic, for short tasks.
+
+57. Difference between fixed and cached thread pool?
+- Fixed: fixed number of threads.
+- Cached: creates new threads as needed, reuses idle ones.
+
+58. When would you use a cached thread pool?
+- Lightweight, short-lived async tasks.
+- Unpredictable burst workloads.
+
+59. Write an ExecutorService example using any executor.
+ExecutorService ex = Executors.newFixedThreadPool(3);
+ex.submit(() -> System.out.println("Task executed"));
+ex.shutdown();
+
+60. What methods are available in ExecutorService?
+- submit(), shutdown(), shutdownNow(), awaitTermination(), invokeAll(), invokeAny()
+
+61. Have you used ReentrantLock? What does "reentrant" mean?
+- Yes. Used for fine-grained thread control.
+- Reentrant = same thread can acquire lock multiple times.
+
+62. Difference between Callable and Runnable?
+- Runnable: no return, no exception.
+- Callable: returns value, can throw exception.
+
+63. What happens when you call future.get() and task is not done?
+- It blocks and waits until task is complete.
+
+64. How to cancel a task submitted to ExecutorService?
+- Use Future object: future.cancel(true)
+
+65. Have you used ThreadLocal? When and why?
+- Yes. For request-scoped variables (e.g., user info).
+- Each thread has its own isolated value.
+
+66. What is BlockingQueue? Examples?
+- Thread-safe queue that blocks on insert/remove.
+- Used in producer-consumer.
+- Example: ArrayBlockingQueue, LinkedBlockingQueue
+
+67. What is CountDownLatch?
+- Synchronization aid that waits for N threads to finish.
+- Useful for waiting for multiple tasks to complete.
+
+68. Difference between CountDownLatch and CyclicBarrier?
+- CountDownLatch: one-time use, awaits N signals.
+- CyclicBarrier: reusable, all threads wait for each other.
+
+69. Anything on Semaphores?
+- Used to limit number of concurrent threads (e.g., connection pool)
+- Semaphore s = new Semaphore(3);
+  s.acquire(); // enter
+  s.release(); // exit
+
+
+---
+
+=====================
+       Spring
+=====================
+==================================================================
+  Spring Boot, Architecture, Bean Scope, Monitoring, DevOps
+==================================================================
+
+4. How did you implement Exception handling in your Spring Boot project?
+-> Used @ControllerAdvice with @ExceptionHandler methods.
+-> Centralized all exception handling for REST APIs.
+-> Custom exceptions like ResourceNotFoundException.
+-> Sent custom error responses with timestamp, path, and error details.
+
+18. What is the default scope of a Spring bean? Other scopes?
+-> Default: Singleton (one instance per Spring container).
+-> Other scopes:
+   - prototype     : New instance every time bean is requested
+   - request       : One bean per HTTP request (Web-aware)
+   - session       : One bean per HTTP session (Web-aware)
+   - application   : Scoped to ServletContext
+   - websocket     : Scoped to WebSocket session
+
+19. Difference between singleton and prototype scopes?
+-> Singleton: Only one instance, shared.
+-> Prototype: New instance created on every request.
+
+20. What is the bean lifecycle in Spring?
+-> Object created ➝ Dependencies injected ➝ Custom init method (if any)
+   ➝ Ready to use ➝ On shutdown: destroy method called (if any).
+-> Use annotations: @PostConstruct (init), @PreDestroy (cleanup).
+-> BeanPostProcessor can be used to hook into lifecycle.
+
+21. How do you configure a Spring bean?
+-> Three ways:
+   - Using @Component + @ComponentScan
+   - Using @Bean inside @Configuration class
+   - Using XML (rare in Spring Boot)
+
+22. What is @Configuration annotation in Spring?
+-> Marks a class as a source of bean definitions.
+-> Replaces XML configuration.
+-> Typically used with @Bean methods.
+
+23. Difference between @Configuration and @Bean annotations?
+-> @Configuration: Marks class to declare beans.
+-> @Bean: Marks method to return a bean.
+-> Together: define beans manually when you don't want auto-scanning.
+
+24. What other Java libraries have you used? Lombok?
+-> Yes, commonly used:
+   - Lombok
+   - Jackson
+   - Apache Commons
+   - Google Guava
+   - MapStruct
+   - Gson
+
+25. Use case of Lombok?
+-> Reduces boilerplate code.
+-> Annotations like @Getter, @Setter, @Builder, @ToString, @EqualsAndHashCode.
+-> Helpful for POJOs and DTOs.
+
+26. Anything on Jackson library?
+-> JSON serialization/deserialization.
+-> Used in Spring Boot for converting request/response.
+-> Annotations like @JsonProperty, @JsonIgnore, @JsonInclude.
+-> ObjectMapper is the main class.
+
+27. Why use Jackson if Java has serialization?
+-> Java serialization is binary and not human-readable.
+-> Jackson gives JSON format, widely used in REST APIs.
+-> Faster and flexible for modern microservices.
+
+90. Can you explain your project architecture (draw.io)?
+-> Followed microservices architecture.
+-> Modules:
+   - Gateway (Spring Cloud Gateway)
+   - Auth service (JWT + DB)
+   - Business services (REST APIs)
+   - DB (PostgreSQL or MySQL)
+   - Kafka for async comms
+   - Redis for caching
+   - Monitoring via ELK or Prometheus-Grafana
+-> All services deployed in Docker containers and orchestrated using Kubernetes.
+
+91. Production support? Server-side troubleshooting?
+-> Yes.
+-> Used logs, alerts, dashboards to monitor.
+-> Read exception traces, used thread dumps, memory usage checks.
+-> Resolved DB timeouts, memory leaks, connection pool issues.
+
+92. Explain any recent root cause you found.
+-> Issue: High CPU usage in one microservice.
+-> Root cause: Infinite loop due to incorrect logic in retry mechanism.
+-> Fix: Added max retry and delay using RetryTemplate.
+-> redis memory full issue-> fixed using eviction policies
+
+93. Have you rolled back any production changes?
+-> Yes, using Git revert + re-deploy via Jenkins.
+-> Also used Blue-Green strategy to switch traffic.
+
+94. What deployment strategies do you use (Blue-Green, Canary)?
+-> Blue-Green for major releases: two environments, switch traffic.
+-> Canary for small changes: release to few users, monitor errors.
+
+95. Your service runs on 3 containers – how do you manage deployment & rollback?
+-> Managed using Kubernetes:
+   - Rolling updates via `kubectl rollout`
+   - Rollback using `kubectl rollout undo`
+   - Health probes to auto-replace bad pods.
+
+96. Do you do unit testing? What annotations used?
+-> Yes.
+-> Used:
+   - @Test (JUnit)
+   - @Mock, @InjectMocks (Mockito)
+   - @WebMvcTest (Controller test)
+   - @DataJpaTest (Repository test)
+   - @SpringBootTest (Full context test)
+
+97. Have you used Postman? Why?
+-> Yes.
+-> To test REST APIs during development.
+-> Can create and run collections with environment variables.
+-> Also used for generating Swagger docs via OpenAPI plugin.
+
+98. How did you do integration testing?
+-> Used @SpringBootTest + @AutoConfigureMockMvc.
+-> Simulated actual HTTP requests using MockMvc.
+-> Also used Testcontainers for real DB testing.
+
+99. Any experience writing Jenkins scripts?
+-> Yes.
+-> Wrote pipeline scripts in Groovy (Jenkinsfile).
+-> Stages: Checkout, Build, Test, Docker Build, Push, Deploy.
+-> Used parameterized builds for prod vs dev.
+
+100. Do you use code quality plugins?
+-> Yes.
+-> SonarQube for code smells, bugs, test coverage.
+-> Eslint
+-> PMD, Checkstyle via Maven.
+
+101. Have you used Docker? Any commands?
+-> Yes.
+-> Commands used:
+   - docker build -t app .
+   - docker run -p 8080:8080 app
+   - docker ps / stop / rm / images
+   - docker-compose up/down
+
+102. Any Kubernetes commands you’ve used?
+-> Yes.
+-> kubectl get pods/deployments/services
+-> kubectl logs <pod>
+-> kubectl rollout undo deployment/<name>
+-> kubectl exec -it <pod> -- /bin/sh
+
+103. Any Terraform experience?
+-> Basic.
+-> Used for infra as code: creating EC2, RDS, S3 on AWS.
+-> Wrote .tf files and used `terraform init/plan/apply`.
+
+104. Log monitoring – which tool? How did you use it?
+-> ELK Stack (Elasticsearch + Logstash + Kibana).
+-> Sent logs via Filebeat to Logstash.
+-> Filtered logs and viewed in Kibana dashboards.
+
+105. Any cloud-based monitoring tools (e.g. AWS CloudWatch)?
+-> Yes.
+-> Used CloudWatch to:
+   - View logs
+   - Set alarms
+   - Monitor CPU/memory usage
+   - Trigger AWS Lambda alerts
+
+122. Which version of Spring Boot have you used?
+-> Spring Boot 2.5, 2.7, and started exploring 3.0.
+
+123. What’s the latest Spring version?
+-> As of 2025, Spring Boot 3.4.5 and Spring Framework 6.x.
+
+124. Improvements in Spring Boot 3.0?
+-> Based on Spring Framework 6.
+-> Requires Java 17+.
+-> Full native image support using GraalVM.
+-> Better observability with Micrometer & tracing.
+-> Jakarta EE namespace changes (javax → jakarta).
+
+
+---
+
+=====================
+      Microservices & APIs
+=====================
+
+114. What REST principles and best practices do you follow?
+- Use HTTP methods semantically (GET, POST, PUT, DELETE)
+- Stateless communication
+- Use proper status codes (200, 201, 400, 404, 500)
+- Resource naming: use nouns (/users, /orders) not verbs
+- Pagination for large datasets
+- Versioning in URL or headers
+- Use of HATEOAS (optional)
+- Validation and error responses in consistent JSON format
+
+115. What is API versioning?
+- Strategy to manage breaking changes in APIs.
+- Methods:
+  - URI versioning: /api/v1/users
+  - Header versioning: Accept: application/vnd.company.v1+json
+  - Query param versioning: /api/users?version=1
+- URI versioning is most common and readable.
+- Helps maintain backward compatibility.
+
+116. How do you implement API Gateway?
+- Used API Gateway to route external traffic to internal services.
+- Central point for:
+  - Routing
+  - Authentication (JWT/OAuth)
+  - Rate limiting
+  - Caching and logging
+- Used Spring Cloud Gateway and AWS API Gateway.
+- Defined routes via config/yaml files.
+- Integrated filters for security and logging.
+
+135. Which API Gateway have you used?
+- Spring Cloud Gateway (in Spring ecosystem)
+- AWS API Gateway (cloud-hosted)
+- Basic exposure to Kong and NGINX as gateway proxies
+
+136. How do you implement rate limiting in API Gateway?
+- Spring Cloud Gateway:
+  - Used RedisRateLimiter
+  - Configured via application.yml:
+    - rate-limiter:
+        replenishRate: 10
+        burstCapacity: 20
+- AWS API Gateway:
+  - Enabled throttling per stage:
+    - Rate = requests/sec
+    - Burst = peak requests
+- Rate limiters protect against abuse and DoS attacks.
+
+117. GET vs PUT – which is idempotent? What is idempotency?
+- GET and PUT are idempotent.
+- Idempotency = same request can be made multiple times → same result/state.
+- GET: read-only, safe
+- PUT: updates/replaces resource; same input → same state
+- POST is NOT idempotent (each call may create a new resource)
+
+118. What is 402 error code?
+- 402 = Payment Required
+- Reserved for future use or paid APIs
+- Not commonly used in public REST APIs
+- Some services repurpose it to indicate quota exceeded or premium feature
+
+119. What are 5xx error codes?
+- Server-side errors:
+  - 500 Internal Server Error
+  - 501 Not Implemented
+  - 502 Bad Gateway
+  - 503 Service Unavailable
+  - 504 Gateway Timeout
+- Indicates issue on server side, not client
+- Retry or circuit breaker logic is often used
+
+120. What microservices design patterns have you used?
+- Service Discovery (Eureka/Consul)
+- API Gateway (Spring Cloud Gateway)
+- Circuit Breaker (Resilience4j/Hystrix)
+- Centralized Config (Spring Cloud Config)
+- SAGA pattern for distributed transactions
+- Event-driven communication (Kafka)
+- Retry/Timeout/Backoff strategies
+
+121. Explain SAGA pattern. Orchestration vs Choreography?
+- SAGA = sequence of local transactions across microservices.
+- Compensating transactions used for rollback.
+- Orchestration:
+  - Central orchestrator controls the flow.
+  - Easy to debug and monitor.
+- Choreography:
+  - Each service reacts to events.
+  - No central control, more scalable.
+- Used in order-payment-inventory workflows.
+
+125. How do services talk to each other (Service A → Service B)?
+- Options:
+  - RESTful HTTP APIs (via Feign, RestTemplate, WebClient)
+  - Message Queues (Kafka, RabbitMQ)
+- Sync (REST) vs Async (Kafka)
+- Used Feign with LoadBalancer (Ribbon/Eureka) for client-side load balancing.
+- Kafka for decoupled, async communication.
+
+126. How do you implement service discovery?
+- Used Netflix Eureka for service registry and discovery.
+- Services register themselves at startup.
+- Other services discover via logical names.
+- Used with Feign client:
+  @FeignClient(name = "inventory-service")
+- Spring Cloud handles discovery and routing automatically.
+
+---
+
+=====================
+       Kafka
+=====================
+
+70. What are core components of Kafka? How did you use them?
+- Producer: sends data to Kafka topic
+- Topic: category to organize messages
+- Broker: Kafka server storing topics
+- Consumer: reads messages from topic
+- Zookeeper: manages brokers (being replaced by KRaft)
+- Used KafkaTemplate to send and KafkaListener to consume
+
+71. What are consumer groups and why?
+- Group of consumers sharing the load of processing messages from a topic.
+- Kafka ensures each partition is consumed by only one consumer in a group.
+- Enables parallel processing and horizontal scalability.
+
+72. 10 consumers in a group: how to prevent same message processing?
+- Kafka assigns each partition to one consumer in a group.
+- To prevent duplicate processing:
+  - Use proper group.id (unique per group)
+  - Ensure idempotent consumers
+  - Enable auto-commit carefully or use manual commit
+
+73. How do you define schema?
+- Used Apache Avro or JSON Schema
+- Used Schema Registry to enforce schema validation
+- Benefits:
+  - Data compatibility across services
+  - Avoids deserialization issues
+- Spring Kafka integration with AvroSchema
+
+74. Error handling in Kafka – how did you handle it?
+- Used error-handling strategies:
+  - Retry template with backoff
+  - Dead Letter Queue (DLQ) for failed messages
+  - Seek to current for non-blocking failure
+- Spring Kafka provides ErrorHandler and RecoveryCallback
+
+75. What is DLQ (Dead Letter Queue)?
+- Special Kafka topic to capture failed messages
+- Used when a message can't be processed after retries
+- Helps avoid data loss
+- Monitored separately for manual resolution or replay
+
+76. Design patterns used around Kafka? Kafka-Spring integration?
+- Patterns:
+  - Event Sourcing
+  - CQRS
+  - Producer-Consumer
+  - DLQ
+- Kafka-Spring:
+  - Used Spring Kafka
+  - @KafkaListener for consumption
+  - KafkaTemplate for producing
+  - Configured custom serializers and error handlers
+
+77. What is replication factor in Kafka? How does it help?
+- Replication factor = number of copies of each partition
+- Provides fault tolerance and high availability
+- Example: RF = 3 → one leader + 2 followers
+- Even if one broker fails, data is still available
+
+78. Have you used Kafka Streams?
+- Yes. Kafka Streams = library for processing data inside Kafka
+- Used for:
+  - Stateful processing
+  - Windowing (tumbling, sliding)
+  - Joins and aggregations
+- Example: real-time analytics on transaction data
+- Integrated with Spring via spring-kafka-streams
+
+
+---
+
+=====================
+       SQL & Database
+=====================
+
+79. SQL: Find second maximum salary from employee table.
+- Query 1 (Nested MAX):
+  SELECT MAX(salary) FROM employee WHERE salary < (SELECT MAX(salary) FROM employee);
+- Query 2 (ROW_NUMBER approach):
+  SELECT salary FROM (
+    SELECT salary, ROW_NUMBER() OVER (ORDER BY salary DESC) as rn FROM employee
+  ) AS temp WHERE rn = 2;
+- ROW_NUMBER works well for handling duplicates. Choose based on DB compatibility.
+
+80. SQL: Find max salary per department (employee + department tables).
+- Assuming employee(dept_id, salary) and department(dept_id, dept_name)
+- Query:
+  SELECT d.dept_name, MAX(e.salary) AS max_salary
+  FROM employee e
+  JOIN department d ON e.dept_id = d.dept_id
+  GROUP BY d.dept_name;
+
+81. How do you integrate any DB in your Spring Boot app?
+- Add dependency: spring-boot-starter-data-jpa + DB driver (e.g., mysql-connector-java).
+- application.properties example:
+  spring.datasource.url=jdbc:mysql://localhost:3306/mydb
+  spring.datasource.username=root
+  spring.datasource.password=pass
+  spring.jpa.hibernate.ddl-auto=update
+- Annotate entities with @Entity, create repository interfaces.
+- Spring Boot auto-configures DataSource and EntityManager.
+
+82. Did you implement relationships in DB? How?
+- Yes, via foreign key constraints and JPA mappings.
+- Example in Java:
+  - @OneToMany(mappedBy = "department")
+  - @ManyToOne @JoinColumn(name = "dept_id")
+- Maintained referential integrity and used proper cascading.
+
+83. Any experience with data modeling?
+- Yes. Designed relational DB schemas.
+- Used ER diagrams to model entities, relationships, and keys.
+- Normalized tables to remove redundancy (1NF to 3NF).
+- Tools used: MySQL Workbench, dbdiagram.io, ERDPlus.
+
+129. Any experience with Elasticsearch?
+- Yes. Used for implementing full-text search and log analysis.
+- Integrated with Spring Boot using Spring Data Elasticsearch.
+- Defined index mappings and custom analyzers.
+- Use cases:
+  - Product search
+  - Error log search
+  - Real-time analytics
+- Also used Kibana for visualization.
+
+---
+
+=====================
+    JVM & Garbage Collection
+=====================
+
+84. Explain different GC algorithms in JVM (Mark & Sweep, G1GC etc).
+- Mark & Sweep:
+  - Basic GC: Mark reachable objects, sweep unreferenced ones.
+  - Causes Stop-The-World pauses.
+- G1GC (Garbage First GC):
+  - Divides heap into regions (young/old).
+  - Parallel and concurrent phases.
+  - Predictable pause times, good for large heaps.
+- CMS (Concurrent Mark-Sweep):
+  - Old gen collected concurrently with app threads.
+  - Deprecated in recent Java versions.
+- ZGC, Shenandoah:
+  - Ultra-low pause GCs introduced in later Java versions.
+
+85. Any idea on Parallel GC and Mark & Sweep?
+- Parallel GC:
+  - Uses multiple threads for both minor and major collections.
+  - Suitable for throughput-oriented apps.
+  - Stop-the-world, but faster due to parallelism.
+- Mark & Sweep:
+  - Simpler algorithm: mark live objects, sweep dead ones.
+  - Used in earlier Java versions.
+
+86. Have you used profilers for debugging?
+- Yes. Used tools like:
+  - VisualVM
+  - JProfiler
+  - YourKit
+- Use cases:
+  - Analyzing memory leaks
+  - Checking CPU bottlenecks
+  - Thread contention detection
+- Helped identify GC overhead and optimize performance.
+
+87. Have you taken heap or thread dumps?
+- Yes.
+  - Heap dumps via `jmap`, VisualVM, or JVM flags.
+  - Thread dumps using `jstack` or from monitoring tools.
+- Used dumps to debug:
+  - Memory leaks (heap dump)
+  - Deadlocks or stuck threads (thread dump)
+
+88. JVM configurations? How do you assign memory?
+- Via JVM options:
+  - -Xms = initial heap size
+  - -Xmx = max heap size
+  - -XX:NewRatio = young:old gen ratio
+  - -XX:+UseG1GC = use G1 GC
+- Example:
+  java -Xms512m -Xmx2g -XX:+UseG1GC -jar app.jar
+
+89. What is young gen and old gen in heap?
+- Young Generation:
+  - Contains newly created objects.
+  - Divided into Eden + Survivor spaces (S0, S1).
+  - Frequent minor GCs.
+- Old Generation:
+  - Stores long-lived objects.
+  - Collected less frequently (major GCs).
+- Understanding generational behavior helps tune performance.
+
+---
+
+=====================
+    Cloud & Security Concepts
+=====================
+130. Which cloud services have you worked with?
+- Worked with AWS (Amazon Web Services) and GCP (Google Cloud Platform).
+- AWS services used:
+  - EC2 (for hosting apps)
+  - S3 (file storage)
+  - RDS (managed relational DB)
+  - Lambda (serverless functions)
+  - CloudWatch (monitoring)
+  - SNS/SQS (messaging)
+- GCP services used:
+  - Compute Engine, Cloud Storage, Pub/Sub
+
+132. Any storage-based cloud services?
+- Yes, used:
+  - AWS S3: for storing files, backups, static content
+  - GCP Cloud Storage: similar to S3, scalable object storage
+  - Azure Blob Storage (basic exposure)
+- Used pre-signed URLs for secure access.
+- Integrated storage with Spring Boot for uploading/downloading.
+
+131. IAM – any experience?
+- IAM (Identity and Access Management) used in AWS.
+- Created roles, users, and policies for access control.
+- Attached IAM roles to EC2, Lambda for permission control.
+- Used principle of least privilege.
+- Example: only allowing S3 read access to a particular Lambda.
+
+133. How do you secure your APIs?
+- Used HTTPS (SSL/TLS) for secure transport.
+- Token-based authentication (JWT).
+- Validated headers, body schema, input data.
+- Applied role-based access control (RBAC).
+- Implemented rate limiting, CORS, and security headers.
+- Used Spring Security for API access control.
+
+134. Anything on JWT or OAuth 2.0?
+- JWT (JSON Web Token):
+  - Used for stateless authentication.
+  - Token contains claims (user info, roles, expiry).
+  - Sent in `Authorization: Bearer <token>` header.
+- OAuth 2.0:
+  - Used for delegated authorization (e.g., Google login).
+  - Flow: Client → Auth Server → Access Token → Resource Server.
+  - Used Spring Security OAuth2 for integrating login with providers.
+
+106. Have you worked on NFRs (scalability, availability, performance)?
+- Yes, implemented:
+  - Horizontal scaling using Kubernetes/Docker.
+  - Load balancing using API Gateway or AWS ALB.
+  - Used caching (Redis) to reduce DB load.
+  - Applied performance profiling, query tuning.
+  - Setup SLAs and alerts for uptime & latency.
+  - Used circuit breakers, retries for resilience.
+
+107. What actions have you taken to ensure high scalability/availability?
+- Used stateless microservices behind load balancer.
+- Autoscaling groups in AWS.
+- Cached responses using Redis.
+- DB connection pooling, async processing (Kafka).
+- Used health checks and monitoring tools (Prometheus + Grafana).
+- Graceful failover and retries.
+
+108. Code reviews? Any certifications?
+- Actively participated in peer code reviews via GitHub or Bitbucket.
+- Focused on readability, design, performance, and security.
+- Reviewed PRs before merges.
+- Certifications:
+  - AWS Certified Developer – Associate (in progress)
+  - Java/Spring Boot hands-on certifications via online platforms.
+
+109. Have you led any epics and delivered end-to-end?
+- Yes, owned multiple end-to-end modules/features.
+- Involved in:
+  - Requirement breakdown
+  - Design, development, testing
+  - Deployment and post-release support
+- Example: Payment Gateway integration module (epic)
+- Coordinated with QA, DevOps, and PO for delivery.
+
+110. Any experience on estimation or planning?
+- Participated in sprint planning and story point estimation.
+- Used Fibonacci series method for estimating.
+- Considered complexity, effort, risk, and dependencies.
+- Created sub-tasks for better tracking in Jira.
+- Regularly gave realistic timelines and tracked progress.
+
+111. What is a sequence diagram?
+- UML diagram showing interaction between components over time.
+- Represents method calls, messages, data flow.
+- Vertical axis: time; horizontal axis: actors/modules.
+- Useful for visualizing request flow between services.
+- Example: User login → Controller → Service → DAO → DB.
+
+112. Anything on LLDs or HLDs? Which comes first?
+- HLD (High Level Design) comes first.
+  - Describes system architecture, components, interactions.
+  - Focus on technologies, modules, data flow.
+- LLD (Low Level Design) follows HLD.
+  - Contains class diagrams, sequence diagrams, DB schema.
+  - Focus on implementation details.
+- HLD gives bird’s eye view; LLD gives coding-level clarity.
+
+113. For one microservice, LLD or HLD? What does LLD include?
+- For one microservice, we focus more on LLD.
+- LLD includes:
+  - Class diagrams
+  - API contracts
+  - Sequence diagrams
+  - DB tables/schema
+  - Configs and exceptions handling
+- Helps developers understand exact implementation plan.
+
+
+---
+
+=====================
+      Miscellaneous
+=====================
+
+1. Intro? Tech stack? Current project architecture? Which cloud?
+
+===============================================================================
+ 9. Suppose in your microservice application you don't want an object
+    to be modified.
+
+    You have A class, and B class.
+    A class has a dependency on B (B is autowired in A).
+    But you don't want the object of B to be modified inside A.
+
+===============================================================================
+🎯 Objective:
+-------------------------------------------------------------------------------
+✔ Prevent modification of B’s internal state from within A.
+✔ Make B immutable or ensure safe read-only access.
+
+===============================================================================
+✅ Approach 1: Make Class B Immutable
+-------------------------------------------------------------------------------
+✔ Use final class, private final fields, no setters.
+✔ Inject via constructor.
+
+Example:
+
+    // Class B - Immutable
+    final class B {
+        private final String x;
+        private final String coc;
+
+        public B(String x, String coc) {
+            this.x = x;
+            this.coc = coc;
+        }
+
+        public String getX() {
+            return x;
+        }
+
+        public String getCoc() {
+            return coc;
+        }
+    }
+
+    // Class A - Using B safely
+    @Component
+    class A {
+        private final B b;
+
+        @Autowired
+        public A(B b) {
+            this.b = b;
+        }
+
+        public void doSomething() {
+            // Safe: only read
+            System.out.println(b.getX());
+        }
+    }
+
+🧠 Why?
+✔ Final class prevents inheritance.
+✔ Final fields make it read-only after construction.
+✔ No setters = cannot mutate.
+
+===============================================================================
+✅ Approach 2: Defensive Copy for Mutable Fields
+-------------------------------------------------------------------------------
+✔ If B has a mutable object like List or Map, return copies:
+
+    public class B {
+        private final List<String> data;
+
+        public B(List<String> data) {
+            this.data = new ArrayList<>(data); // copy at construction
+        }
+
+        public List<String> getData() {
+            return new ArrayList<>(data); // return copy
+        }
+    }
+
+✔ Prevents shared mutable state from being changed externally.
+
+===============================================================================
+❌ Bad Practice: Mutable Shared Singleton Beans
+-------------------------------------------------------------------------------
+✘ Exposing setters in B (like @Setter from Lombok)
+✘ Using public mutable fields
+✘ Using prototype-scoped beans as shared dependencies
+
+===============================================================================
+🔐 Summary
+-------------------------------------------------------------------------------
+✔ Make B immutable (final class, final fields, no setters).
+✔ Prefer constructor injection in A.
+✔ Use defensive copying if B contains mutable collections.
+✔ Ensure thread safety and clean design.
+
+🧠 These practices avoid runtime bugs and make services predictable.

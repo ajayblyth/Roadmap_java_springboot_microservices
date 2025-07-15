@@ -1,0 +1,140 @@
+
+CAP in Distributed System kind of project
+C: Consistency - The system should be always consistant. Meaning all the nodes should see the same data at the same time
+A: Availability - The system should always be available. Every request should return response anytime in high load or network failure.
+P: Partition Tolerence - The system continued to work despised message loss or partial failure. The system that is in partation tolerence can sustain any amount
+of network failure that does not result in the failure of the entire network. It means we have the fault tolerence.
+means we have a backup server to kep the server up in any kind of discrepency.
+
+CAP theorem states that in a distributed syatem we can acheive only 2 out of 3 at a time.
+-------------------------------------------------------------------------------------------------------------------------------------------------------------------
+So this is a pyramid and this is availability, consistency and partition tolerance.
+So if you are using this
+MySQL relational database like:
+ 1. SQL Server
+ 2. MySql
+ 3. Oracle
+ 4. PostgresSQL
+
+you can achieve availability and consistency.
+Your system will be consistent.
+All the data will be consistent across the network and your system will always be responsive.
+You will get your system is always available, but it doesn't have a fault tolerance.
+-------------------------------------------------------------------------------------------------------------------------------------------------------------------
+If you're using the
+1. Cassandra DB
+2. Couchdb
+3. DynamoDB
+It has a availability and partition tolerance,
+but it cannot have a consistency.
+
+-------------------------------------------------------------------------------------------------------------------------------------------------------------------
+Similarly, if you are using the very famous
+1. MongoDB
+2. Redis
+3. Memcache
+4. HBase
+then you have your system must have a consistency and partition tolerance,
+but your system is not having a property of availability.
+-------------------------------------------------------------------------------------------------------------------------------------------------------------------
+Sharding:
+So basically, we can't build any scalable model without understanding the concept of sharding.
+So the sharding is the process of splitting up the database across multiple machines to improve the
+scalability of an applications.
+Sharding is the process of horizontal scaling.
+It means rather than adding one more powerful server, what we do is in case of horizontal scaling,
+we add more number of servers, which stores the information and all the informations are distributed
+across the multiple servers.
+In case of vertical scaling, we take a more expensive beefier server with more Ram, more CPU horsepower
+or more disk space.
+What we do is we divide the work across the multiple servers and in fact this horizontal scaling, what
+we do in case of database sharding is cheaper than the vertical scaling.
+-------------------------------------------------------------------------------------------------------------------------------------------------------------------
+database sharding is cheaper than the vertical scaling.
+-------------------------------------------------------------------------------------------------------------------------------------------------------------------
+Sharding Defination:
+So the sharding is the database partitioning that separates a very large database into the smaller.
+Faster and more easily managed parts.
+We call it database shards.
+So in this case, you can call it shards.
+So these are the shards of the database.
+So we have the one big database and we divide that across the multiple databases.
+This will also improve the manageability performance availability and also the load balancing of the
+applications.
+Okay, so there are many different schemes we could use to decide how to break up the application database
+into the multiple DBS.
+Like in this case, when we have the one big DB and we divide that into the multiple DBS.
+So we have the multiple techniques are there and we call it sharding techniques.
+So one such technique is horizontal partitioning.
+So in this scheme we put different rows into the different tables.
+Like, for example, in this case, as you can see, we have the three DBS here.
+-------------------------------------------------------------------------------------------------------------------------------------------------------------------
+So basically this horizontal partitioning, we also call it range based partitioning.
+So for the time being, just assume I want to store the locations into the location DB table and that
+DB is distributed across these three different databases.
+So what we do in the range based partitioning, or we also call that horizontal partitioning we store
+in this DB all the locations whose zip code is less than 5000.
+Then in this DB, we store all those locations into the location table whose zip code is more than 5000
+and less than 10,000.
+And similarly, we store all the zip code information of all the places into the DB three, which is
+having more than ten k zip code.
+So basically on the basis of some kind of number, when you're trying to divide the data across the
+multiple DB, we call it horizontal partition partitioning or also we call it range based partitioning.
+But there is a key problem with this approach, and that is if the value whose range is used for sharding,
+like in this case we are using zip code for sharding.
+Is not chosen carefully, then the partitioning scheme will lead to unbalanced server.
+Like for example, in this case, let's say maximum number of places lie in this criteria.
+Zip code is more than 10,000.
+Then in that case, what will happen?
+This server in which this DB is present is having a high load as compared to the other servers.
+So the load is not distributed equally among all the servers.
+So that's the problem with the horizontal partitioning.
+-------------------------------------------------------------------------------------------------------------------------------------------------------------------
+Vertical partitioning.
+So basically in this scheme we divide our data to store the tables related to specific feature.
+So what I mean by feature is like in the previous case, we are using the range here.
+We use the term feature like for example, let's say if I'm designing Instagram.
+And I want to store its DB and I did the sharding.
+So after that what we do we divide, divide and store the data according to the features.
+Like if I'm designing the user profile of the Instagram.
+So let's say this DB stores the user profile.
+Then this DB only stores the photos of the particular users.
+And similarly, this DB always stores the friend list of all the people.
+So like that on the basis of features, we are storing that into a different DBS.
+But we also have a problem here.
+Like for example, sometimes the users are uploading a large number of photos, mostly in the case of
+Instagram.
+Rather than adding friend list or adding the user profile.
+So in that case, we have to divide this DB again into the multiple parts.
+So the main problem is in this approach is that if our application experiences the additional growth,
+then it may be necessary to further partitioning the.
+Feature specific across the multiple servers.
+So that's the major problem in case of the vertical partitioning.
+-------------------------------------------------------------------------------------------------------------------------------------------------------------------
+So here we have the third kind of scheme, also present or technique also present and we call it directory based partitioning.
+
+So this is the mostly used technique in case of sharding.
+So in this technique, what we have is.
+We have one directory server.
+We also call it lookup server, which actually doing the lookup service.
+So this directory server has a lookup service which knows your current partitioning scheme.
+And we abstract this directory server from the main DB.
+So basically this directory server is connected with all the DBS and it is actually separated from the
+main DB schema.
+So whenever the data comes and we have to store or we have to choose, we have to we need to store which
+particular DB.
+So this directory server will do the lookup and try to find out where does a particular data entry resides.
+So we query our directory server that holds the mapping between each tuple key to its DB server.
+So each key is actually linked with the particular DB.
+So if first query the directory server and from here we try to find out the.
+Different DBS where we want to store our data.
+So this is the most, most efficient approach in case of the sharding.
+And here, like just by using this particular server, we can easily able to extend this directory based
+partitioning.
+Also, like for example, in the future, if I want to add 3 or 4 more DBS, we can easily able to do
+that because the directory server or the lookup server is completely a separate entity.
+So it's a loosely coupled approach.
+So addition or subtraction of the servers is very easy.
+
+
+
