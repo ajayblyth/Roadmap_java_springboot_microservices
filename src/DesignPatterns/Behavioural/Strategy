@@ -217,7 +217,7 @@ context.executePayment(100);
 context.setStrategy(new PayPalPayment());
 context.executePayment(200);
 
-------------------------------------------------------------
+-----------------------------------------------------------
 
 Q6: Strategy Pattern vs. Conditional Statements?
 ------------------------------------------------
