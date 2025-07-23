@@ -1,0 +1,113 @@
+JAVA GARBAGE COLLECTORS & CONFIGURATION – SUMMARY
+
+1. TOP 3 JAVA GARBAGE COLLECTORS + REAL-WORLD USE CASES
+-------------------------------------------------------
+
+1) G1 GC (Garbage First Garbage Collector)
+-------------------------------------------
+- Default GC since Java 9.
+- Divides heap into regions, does most GC concurrently.
+- Balanced: low pause times + decent throughput.
+
+Best For:
+  • Web apps & APIs (hotel booking, e-commerce)
+  • Enterprise apps with medium to large heaps
+  • Spring Boot REST services, microservices
+
+Real-world Example:
+  • Hotel booking app with thousands of concurrent users.
+  • Keeps response times stable and memory efficient.
+
+Enable:
+  java -XX:+UseG1GC MyApp
+
+
+2) Parallel GC (Throughput Collector)
+--------------------------------------
+- Focuses on maximizing throughput.
+- Uses multiple threads, but may cause longer pause times.
+
+Best For:
+  • Batch jobs (payroll, monthly billing)
+  • Data pipelines (ETL)
+  • Apps where occasional long pauses are acceptable.
+
+Real-world Example:
+  • Backend batch job generating reports/invoices.
+  • Big data app loading millions of records into memory.
+
+Enable:
+  java -XX:+UseParallelGC MyApp
+
+
+3) ZGC (Z Garbage Collector)
+-----------------------------
+- Ultra-low pause times (<10ms).
+- Designed for very large heaps (GB to TB).
+- Most GC work concurrent and non-blocking.
+
+Best For:
+  • Real-time systems (stock trading, IoT dashboards)
+  • High-frequency transaction apps (digital wallets, ride/food delivery)
+  • Cloud-native services with strict latency requirements.
+
+Real-world Example:
+  • Food delivery or ride booking platform with 24/7 uptime.
+  • Fast user interactions with minimal delay.
+
+Enable (Java 11+):
+  java -XX:+UseZGC MyApp
+
+
+2. HOW TO ENABLE GC OPTIONS IN INTELLIJ (SPRING BOOT)
+------------------------------------------------------
+
+Step 1: Open Run/Debug Configuration
+  - In IntelliJ, top-right dropdown → "Edit Configurations..."
+
+Step 2: Set JVM Options
+  - Select your Spring Boot run configuration (e.g., HotelBookingApp)
+  - Find "VM options" field on the right panel
+  - Paste GC flag, e.g.:
+      -XX:+UseG1GC
+      or
+      -XX:+UseParallelGC
+      or
+      -XX:+UseZGC
+
+Step 3: Apply & Run
+  - Click "Apply" and then "OK"
+  - Run your app normally; GC setting applies locally.
+
+Optional:
+  - Add `-XX:+PrintGCDetails` to see GC logs in IntelliJ console.
+
+
+3. PRODUCTION CONSIDERATIONS FOR GC SETTINGS
+---------------------------------------------
+
+- GC flags set in IntelliJ apply **only on your local machine**.
+- For production/live deployments, you must **explicitly set JVM options** where the app runs:
+
+  a) Running `.jar` manually:
+     java -XX:+UseG1GC -jar hotel-booking-app.jar
+
+  b) Docker container:
+     ENTRYPOINT ["java", "-XX:+UseZGC", "-jar", "hotel-booking-app.jar"]
+
+  c) Cloud platforms (AWS, GCP, Azure):
+     Set JVM args via environment variables or startup scripts,
+     e.g., JAVA_OPTS = -XX:+UseG1GC
+
+- Match GC choice to your app’s performance needs & deployment environment.
+
+4. QUICK INTERVIEW SUMMARY
+---------------------------
+✔ G1 GC – Default, balanced for most apps
+✔ Parallel GC – Best for throughput-heavy batch jobs
+✔ ZGC – Ultra-low latency for large, real-time systems
+✔ GC settings done via JVM flags, not inside code
+✔ Local JVM flags (IntelliJ) ≠ Production JVM flags
+
+---
+

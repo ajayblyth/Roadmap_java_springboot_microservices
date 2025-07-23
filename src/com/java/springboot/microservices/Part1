@@ -1,35 +1,202 @@
 ```
 SECTION-1
 
+JAVA ARCHITECTURE – CLEAN & CONCISE
+
+1. JAVA PROGRAM FLOW
+---------------------
+1. Write code:  MyClass.java
+2. Compile:     javac MyClass.java → MyClass.class (bytecode)
+3. Execute:     java MyClass → JVM runs the bytecode
+
+2. JDK – Java Development Kit
+------------------------------
+🔸 Full development environment for Java.
+🔸 Includes:
+   ✔ JRE (to run apps)
+   ✔ Development Tools:
+      - java    → Launches Java apps
+      - javac   → Compiles Java source to bytecode
+      - jdb     → Debugger
+      - jshell  → Interactive shell (Java 9+)
+
+3. JRE – Java Runtime Environment
+----------------------------------
+🔸 Provides environment to run Java apps.
+🔸 Includes:
+   ✔ JVM
+   ✔ Core Libraries:
+      - java.lang   – Core classes (String, Math, Object)
+      - java.util   – Collections, Date, Timer, etc.
+      - java.io     – File input/output
+      - java.net    – Networking
+      - java.sql    – JDBC (Database access)
+      - java.time   – Date/Time API
+      - javax.*     – Extended APIs (GUI, Servlet, etc.)
+
+4. JVM – Java Virtual Machine
+------------------------------
+🔸 Core component that executes compiled bytecode.
+🔸 Key Responsibilities:
+   ✔ Class Loader        – Loads .class files into memory
+   ✔ Bytecode Verifier   – Ensures type/memory safety
+   ✔ Runtime Data Areas:
+      - Heap             → Objects & arrays (shared)
+      - Stack            → Method call frames (per thread)
+      - Method Area      → Class metadata, static vars
+      - PC Register      → Current instruction pointer
+   ✔ Execution Engine:
+      - Interpreter      → Line-by-line execution
+      - JIT Compiler     → Converts bytecode to native code which is binary (faster)
+   ✔ Garbage Collector   – Automatically frees unused memory
+
+ClassLoader:
+It is a JVM component that loads Java .class files into memory at runtime.
+It loads core classes, extensions, and application classes dynamically from disk or network.
+This enables Java’s dynamic loading and runtime linking of classes.
+
+5. PLATFORM INDEPENDENCE (WORA)
+-------------------------------
+✔ Java code compiles to platform-independent bytecode(binary).
+✔ JVMs on different OSes interpret same bytecode.
+✔ Motto: "Write Once, Run Anywhere"
+
+some point:
+
+ Compiler:
+ Translates entire source code into machine code (binary) before execution.
+- Output is an executable file (.class in Java bytecode).
+-Full translation before execution, fast execution.
+- Interpreter: On-the-fly translation during execution, slower.
+- JIT Compiler: Runtime compilation of bytecode to native code for faster execution in JVM.
+
+
+NOTE:
+- javac produces bytecode saved on disk (.class files).
+- JVM loads bytecode and either interprets it or uses JIT to compile hot code to native machine code.
+- Native machine code produced by JIT runs directly on your CPU for speed.
+
+==========================================================================
+IMPORTANT JAVA NOTES TO REMEMBER
+=================================
+
+1. COMPILATION & FILE STRUCTURE
+-------------------------------
+✔ .java → Source code file
+✔ .class → Bytecode file (created after compilation)
+✔ File name must match public class name (case-sensitive)
+✔ Only one public class allowed per file
+
+2. PACKAGE & DIRECTORY RULE
+----------------------------
+✔ Package name must match folder structure
+   e.g., package com.example → File path: /com/example/ClassName.java
+✔ Compile with: javac -d . MyClass.java   (creates folders automatically)
+
+3. CLASSLOADER BEHAVIOR
+------------------------
+✔ Bootstrap ClassLoader – Loads core Java classes (java.lang, etc.)
+✔ Application ClassLoader – Loadscustom classes which we build in code.
+
+4. MAIN METHOD SYNTAX
+----------------------
+✔ Must be:
+   `public static void main(String[] args)`
+✔ `String[] args` can be written as `String args[]`
+You must declare main with String[] args for the JVM to find it.
+
+5. ENTRY POINT RULE
+--------------------
+✔ Without `main()`, app won’t run unless it's a library or framework (e.g., Spring Boot)
+
+Regular Java apps need public static void main(String[] args) to run.
+
+Spring Boot apps have a main method in the framework starter, so you don’t write it yourself every time.
+@SpringBootApplication
+
+6. CASE SENSITIVITY
+--------------------
+✔ Java is **case-sensitive**.
+✔ `Main`, `main`, `String`, `string` are all treated differently.
+
+7. UNICODE SUPPORT
+-------------------
+✔ Java source code and string literals are Unicode compliant (supports all languages)
+
+8. CLASS VS OBJECT
+-------------------
+✔ Class – Blueprint
+✔ Object – Instance of a class created using `new`
+
+9. ACCESS MODIFIERS
+--------------------
+✔ public       – Visible everywhere
+✔ private      – Only within same class
+✔ protected    – Same package + subclasses
+✔ default      – Package-private (no modifier)
+
+10. STATIC VS INSTANCE
+-----------------------
+✔ static – Belongs to class, loaded once
+✔ instance – Belongs to object
+
+11. FINAL KEYWORD
+------------------
+✔ final class     – Cannot be extended
+✔ final method    – Cannot be overridden
+✔ final variable  – Constant, value can't change
+
+12. THIS vs SUPER
+------------------
+✔ this – Refers to current class instance
+✔ super – Refers to parent class
+
+13. DEFAULT VALUES
+-------------------
+✔ int → 0, double → 0.0, boolean → false, object → null
+
+14. MEMORY AREAS (JVM)
+-----------------------
+✔ Heap        – Objects
+✔ Stack       – Method calls & local vars
+✔ Method Area – Class structure info
+✔ GC clears only unused heap objects
+
+15. GARBAGE COLLECTION
+-----------------------
+✔ Automatic memory cleanup (no need to manually free)
+✔ Object eligible for GC when no reference points to it
+
+
+
 -----------------------------------------------------------------------------------------------------------------------------
  No.   Topic             Subtopic / Description
 -----------------------------------------------------------------------------------------------------------------------------
- 1     Data Types in Java
-       1.1 Primitive Types byte (1B, -128 to 127), short (2B, -32,768 to 32,767), int (4B), long (8B), float (4B), double (8B)
-                                 char (2B, single char), boolean (1 bit, true/false)
-
-       ========================= Notes & Additional Tips ==============================
-
-       - Use `L` suffix for long literals: `long x = 12345678900L;`
-       - Use `f` suffix for float literals: `float pi = 3.14f;`
+1. Primitive Data Types (8 total)
+---------------------------------
+Type      Size       Range / Example                Usage
+--------------------------------------------------------------------
+byte      1 byte     -128 to 127                    Saving memory in large arrays
+short     2 bytes    -32,768 to 32,767              For small integer values, memory efficient
+int       4 bytes    -2,147,483,648 to 2,147,483,647 Default choice for integers
+long      8 bytes    Large integers (e.g., 123456789L) For very large integer values
+float     4 bytes    Decimal approx. (e.g., 1.23f)  Saving memory with decimals, less precise
+double    8 bytes    Precise decimal (e.g., 1.23456789) Default for floating-point calculations
+char      2 bytes    Single Unicode character ('a', 'Z') Store characters and text data
        - `char` uses Unicode (can store any character from global scripts)
-       - `boolean` is not numeric, only two values allowed: `true` / `false`
-       - Default values apply to fields, **not** local variables
+
+boolean   1 bit      true / false                   Flags, condition checks, binary states
 
        ================================================================================
-
-       🎯 Interview Focus for Data Types:
-       - Why is it important to know which data type to choose?
-         ➤ You MUST know which data type to choose based on memory and precision.
-         - For example:
-           → Use `int` for counting items, `long` for large numbers (e.g., file size).
-           → Use `float` only when memory is tight; prefer `double` for precision-critical apps.
+        → Use `float` only when memory is tight; prefer `double` for precision-critical apps.
        - What is the default floating point type? ➤ `double`
        - When to use `char` over `String`? ➤ `char` is lighter for single characters.
 
-
-
-       1.2 Non-Primitive Types String, Arrays, Classes, Interfaces – reference types, can be null
+       1.2 Non-Primitive Types
+       - Arrays      : Collection of similar data types (e.g., int[], String[])
+       - String      : Immutable sequence of characters (e.g., "Hello")
+       - Classes     : Blueprint for objects; defines fields & methods
+       - Interfaces  : Abstract type defining methods to be implemented
        - Wrapper classes are also non-primitive.
 
        ====================== Primitive vs Wrapper Types in Java ======================
@@ -62,22 +229,18 @@ SECTION-1
 
        ============================== When to Use What ================================
 
-       - Use **primitive types** when:
-         ✅ Performance is critical
-         ✅ You don't need object methods
-         ✅ You want lower memory usage
-
-       - Use **wrapper classes** when:
-         ✅ You need nulls or default objects
-         ✅ You're working with collections (List, Map, etc.)
-         ✅ You need utility methods (e.g., parsing, conversion)
-
+   | Use Primitive Types When               | Use Wrapper Classes When             |
+   |--------------------------------------|----------------------------------------|
+   | ✅ Performance is critical           | ✅ Need to represent null values       |
+   | ✅ Don’t require object methods      | ✅ Working with Collections (List, Map)|
+   | ✅ Want lower memory usage           | ✅ Need utility methods (parsing, etc.) |
        ================================================================================
 -----------------------------------------------------------------------------------------------------------------------------
  2     Variables & Type Casting
        2.1 Declaration Syntax  data_type var_name = value;
                                Example:
                                int age = 25;
+
        2.2 Type Casting        a. Implicit (Widening): byte -> short -> int → long → float → double
                                Example:
                                int x = 10;
@@ -88,13 +251,9 @@ SECTION-1
                                int i = (int)d;   // i = 10 (fraction lost)
 
        🎯 Interview Focus for Type Casting:
-       - Why do we need explicit casting for narrowing?
-         ➤ Because Java is **strongly typed**. It prevents accidental data loss.
+         ➤ We need explicit casting/ narrowing because Java is **strongly typed**, so It prevents accidental data loss.
        - What happens when you cast double to int?
          ➤ The fractional part is truncated (lost), e.g., 10.99 becomes 10.
-       - Why does Java not allow automatic narrowing?
-         ➤ To prevent data loss that occurs when converting from a larger data type to a smaller one.
-
          ----------------------------------------------------------------------------------------------
 
          TYPECASTING vs BOXING/UNBOXING (Java)
@@ -419,15 +578,6 @@ SECTION-1
        - Constants should be static final and in all caps with `_`
        - Avoid one-letter variable names (except in short loops like `i`)
        - Use packages to avoid class name conflicts and improve structure
-
-       🎯 Interview Focus for Naming Conventions:
-       - Why does naming convention matter?
-         ➤ Improves code readability, consistency across the team, and reduces confusion.
-       - Why are constants in ALL_CAPS?
-         ➤ To clearly distinguish them as values that will not change, improving readability.
-       - What's the naming convention for class and variable names?
-         ➤ Class names: PascalCase (e.g., `MyClassName`).
-         ➤ Variable names: camelCase (e.g., `myVariableName`).
 -----------------------------------------------------------------------------------------------------------------------------
  Extra Notes
  - Java is strongly typed — types must be declared
@@ -437,16 +587,14 @@ SECTION-1
  - Good naming = clean, readable, maintainable code
 -----------------------------------------------------------------------------------------------------------------------------
 ```
-SECTION 2
+====================== SECTION 2 — OBJECT-ORIENTED PROGRAMMING (OOP) ======================
 
- ================================= 2. OBJECT-ORIENTED PROGRAMMING (OOP) =================================
+2.1 Class, Object, Constructor, Constructor Overloading
 
-2.1 ✅ Class, Object, Constructor, Constructor Overloading
+Class    : Blueprint for creating objects. Contains fields and methods.
+Object   : Instance of a class, created using 'new' keyword.
 
-🔹 Class: Blueprint for creating objects. Contains fields and methods.
-🔹 Object: Instance of a class, created using `new` keyword.
-
-📦 Example:
+Example:
   class Car {
       String color;
       void start() { System.out.println("Car started"); }
@@ -454,21 +602,27 @@ SECTION 2
 
   public class Main {
       public static void main(String[] args) {
-          Car c = new Car();   // 'c' is object
+          Car c = new Car();      // 'c' is object
           c.color = "Red";
           c.start();
       }
   }
 
-🔹 Constructor: Special method to initialize object. Same name as class. No return type.
-🔹 Constructor Overloading: Multiple constructors with different parameters.
+-------------------------------------------------------------------------------
+JAVA CONSTRUCTOR NOTES
+-------------------------------------------------------------------------------
 
-🛠️ Example:
+1. What is a Constructor?
+   - Special method to initialize objects.
+   - Same name as class.
+   - No return type (not even void).
+
+Example:
   class Student {
       String name;
       int age;
 
-      Student() {  // default constructor
+      Student() {                   // default constructor
           this.name = "Unknown";
       }
 
@@ -478,180 +632,110 @@ SECTION 2
       }
   }
 
-🎯 Interview Points:
-   - Can constructor be `final` or `static`? ➤ No
-   - What happens if no constructor is defined? ➤ Java provides a default one
+Interview Points:
+- Can constructor be final? No
+- Can constructor be static? No
+- If no constructor defined? Java provides default constructor.
 
---------------------------------------------------------------------------------------------------------
+2. Types of Constructors:
+   a) Default: No parameters, auto-created if none defined.
+   b) No-arg: User-defined no parameters.
+   c) Parameterized: Takes arguments to initialize fields.
 
-=============================
-      JAVA CONSTRUCTOR NOTES
-=============================
+3. Constructor vs Method
 
-1. ✅ What is a Constructor?
-   - Special method used to initialize objects.
-   - Same name as the class.
-   - No return type (not even void).
+  +----------------+-------------------------+--------------------+
+  | Feature        | Constructor             | Method             |
+  +----------------+-------------------------+--------------------+
+  | Name           | Same as class           | Any name           |
+  | Return type    | None (not even void)    | Has return type    |
+  | Invocation     | Called automatically    | Called manually    |
+  | Purpose        | Initialize object       | Define behavior    |
+  +----------------+-------------------------+--------------------+
 
-2. ✅ Types of Constructors
-   a) Default Constructor
-      - No parameters.
-      - Created by compiler if no other constructor is present.
-   b) No-arg Constructor
-      - User-defined, but takes no parameters.
-   c) Parameterized Constructor
-      - Takes arguments to initialize fields during object creation.
+4. Constructor Overloading:
+   Multiple constructors with different parameters.
 
-3. ✅ Constructor vs Method
-   ------------------------------------------------------------------
-   | Feature           | Constructor                | Method         |
-   ------------------------------------------------------------------
-   | Name              | Same as class              | Any name       |
-   | Return type       | None (not even void)       | Return type    |
-   | Invocation        | Called automatically       | Called manually|
-   | Purpose           | Initializes object         | Object behavior|
-   ------------------------------------------------------------------
+Example:
+  class Person {
+      Person() { }
+      Person(String name) { }
+      Person(String name, int age) { }
+  }
 
-4. ✅ Constructor Overloading
-   - Multiple constructors in a class with different signatures.
-   - Enables different ways to initialize an object.
+5. Constructor Chaining (this(), super()):
+   - this(): Calls another constructor in same class.
+   - super(): Calls parent constructor (must be first line).
 
-   🔸 Example:
-     class Person {
-         Person() { ... }
-         Person(String name) { ... }
-         Person(String name, int age) { ... }
-     }
+Example:
+  class A {
+      A() { System.out.println("A"); }
+  }
 
-5. ✅ Constructor Chaining (this(), super())
-   a) this() – Calls another constructor in same class.
-   b) super() – Calls parent class constructor (must be first line).
-
-   🔸 Example:
-     class A {
-         A() { System.out.println("A"); }
-     }
-
-     class B extends A {
-         B() {
-             super(); // calls A's constructor
-             System.out.println("B");
-         }
-     }
-
-6. ✅ Can a constructor be private?
-   - Yes.
-   - Used in Singleton Pattern, Factory Methods, etc.
-
-7. ✅ Can a constructor be abstract/final/static?
-   - ❌ No.
-     - abstract – makes no sense as constructor can't be overridden.
-     - final – constructors can't be inherited.
-     - static – constructor is for object; static belongs to class.
-
-8. ✅ Default Constructor Behavior
-   - If no constructor is defined, Java creates a default one.
-   - If any constructor is defined, the default is NOT added.
-
-9. ✅ Inheritance and Constructor Execution
-   - Parent constructor executes before child.
-   - If no `super()` in child, compiler adds it automatically.
-
-10. ✅ Copy Constructor in Java?
-    - Java doesn’t provide it explicitly like C++.
-    - Can be implemented manually:
-
-      🔸 Example:
-      class Student {
-          String name;
-          Student(Student s) {
-              this.name = s.name;
-          }
+  class B extends A {
+      B() {
+          super();               // calls A()
+          System.out.println("B");
       }
+  }
 
-11. ✅ Use Cases of Constructor
-    - Enforce immutability
-    - Provide required fields at object creation
-    - Singleton pattern (private constructor)
+6. Can constructor be private?
+   Yes, used in Singleton pattern etc.
+
+7. Cannot be abstract/final/static.
+
+8. Default constructor added only if none defined.
+
+9. Inheritance and constructor execution:
+   Parent constructor runs before child constructor.
+
+10. Copy constructor in Java?
+    Not provided by default, can be implemented manually.
+
+Example:
+  class Student {
+      String name;
+      Student(Student s) {
+          this.name = s.name;
+      }
+  }
+
+11. Use cases:
+    - Immutability enforcement
+    - Required field initialization
+    - Singleton pattern
     - Prevent inheritance
 
-12. ✅ Static Block vs Constructor
-   - Static block runs once at class loading.
-   - Constructor runs each time object is created.
+12. Static block vs Constructor:
+    - Static block runs once at class load.
+    - Constructor runs per object creation.
 
-===============================================
- MAPPING OF INTERVIEW QUESTIONS TO CONCEPT NOTES
-===============================================
+-------------------------------------------------------------------------------
+Interview Q&A Mapping
+-------------------------------------------------------------------------------
 
-1. ✅ What is a constructor in Java?
-   → Covered in section **1**
+ Q#  | Question                                | Reference Section
+-----+----------------------------------------+------------------
+ 7   | Call one constructor from another?    | Section 5a (this())
+ 8   | What is constructor chaining?          | Section 5 (this(), super())
+10   | What if parent has no no-arg constructor?| Section 9
+11   | What is copy constructor?               | Section 10
+12   | Can have both default & parameterized? | Sections 2 & 4
+13   | Call superclass parameterized constructor?| Sections 5b & 9
+15   | Can constructor throw exceptions?       | Yes
+16   | How related to object creation?          | Sections 1 & 12
+18   | Why constructors not overridden?         | Section 7
+19   | Use of private constructor in Singleton? | Sections 6 & 11
+20   | How many times constructor runs in inheritance?| Section 9
 
-2. ✅ Difference between constructor and method?
-   → See **Section 3: Constructor vs Method Table**
+-------------------------------------------------------------------------------
+2.2 Inheritance and Method Overriding
+-------------------------------------------------------------------------------
 
-3. ✅ Can a constructor return a value?
-   → See **Section 1** (No return type)
+- Inheritance: acquire parent properties using 'extends'.
+- Method Overriding: child redefines parent method.
 
-4. ✅ Can a constructor be static/final/abstract/private?
-   → See **Section 7** (No for static/final/abstract, Yes for private)
-
-5. ✅ What happens if you define a parameterized constructor but not a default one?
-   → See **Section 8**
-
-6. ✅ What is constructor overloading? Give an example.
-   → See **Section 4**
-
-7. ✅ Can you call one constructor from another? How?
-   → Yes, using `this()` – See **Section 5a**
-
-8. ✅ What is constructor chaining? How is it useful?
-   → See **Section 5 (this(), super())**
-
-9. ✅ Explain the difference between `this()` and `super()` in constructors.
-   → See **Section 5a and 5b**
-
-10. ✅ What happens if parent class has no no-arg constructor?
-    → You must explicitly call a parameterized `super()` – See **Section 9**
-
-11. ✅ What is a copy constructor? How can it be implemented in Java?
-    → See **Section 10**
-
-12. ✅ Can a class have both default and parameterized constructors?
-    → Yes – implied from **Sections 2 & 4**
-
-13. ✅ If a superclass has parameterized constructor, how do you call it?
-    → Use `super(args)` – See **Section 5b and 9**
-
-14. ✅ Is constructor inherited?
-    → No – explained in **Section 7**
-
-15. ✅ Can a constructor throw exceptions?
-    → Yes – though not covered in detail, want me to expand?
-
-16. ✅ How is object creation related to constructor?
-    → Constructor runs during object creation – See **Section 1 and 12**
-
-17. ✅ What happens if constructor has a logic error (like divide by zero)?
-    → Runtime exception occurs – I can expand if needed
-
-18. ✅ Why can’t constructors be overridden?
-    → See **Section 7** – because they are not inherited
-
-19. ✅ What’s the use of private constructor in Singleton class?
-    → See **Section 6 and 11 (Use Cases)**
-
-20. ✅ How many times does a constructor run in inheritance hierarchy?
-    → See **Section 9** – each superclass constructor runs once in chain
-
-
------------------------------------SECTION 2 continues -----------------------------------
-
-2.2 ✅ Inheritance and Method Overriding
-
-🔹 Inheritance: Acquiring properties of a parent class using `extends` keyword.
-🔹 Method Overriding: Child class provides its own version of parent method.
-
-🧬 Example:
+Example:
   class Animal {
       void sound() { System.out.println("Animal makes sound"); }
   }
@@ -664,27 +748,27 @@ SECTION 2
   public class Test {
       public static void main(String[] args) {
           Dog d = new Dog();
-          d.sound();  // Dog barks
+          d.sound();       // Dog barks
       }
   }
 
-🎯 Interview Points:
-   - What is `super` keyword? ➤ Refers to parent class.
-   - Can private methods be overridden? ➤ No
+Notes:
+- super keyword: refers to parent class.
+- Private methods cannot be overridden.
 
---------------------------------------------------------------------------------------------------------
+-------------------------------------------------------------------------------
+2.3 Polymorphism (Compile-time & Runtime)
+-------------------------------------------------------------------------------
 
-2.3 ✅ Polymorphism (Compile-time & Runtime)
+- Polymorphism: same method name, different behavior.
 
-🔹 Polymorphism: Many forms. Same method behaves differently based on context.
-
-📌 Compile-time Polymorphism (Method Overloading)
+Compile-time Polymorphism (Method Overloading):
   class MathUtil {
       int add(int a, int b) { return a + b; }
       double add(double a, double b) { return a + b; }
   }
 
-📌 Runtime Polymorphism (Method Overriding)
+Runtime Polymorphism (Method Overriding):
   class Shape {
       void draw() { System.out.println("Drawing shape"); }
   }
@@ -695,32 +779,44 @@ SECTION 2
 
   public class Test {
       public static void main(String[] args) {
-          Shape s = new Circle();  // parent ref → child object
-          s.draw();                // Runtime decides method ➤ Drawing circle
+          Shape s = new Circle();
+          s.draw();      // Drawing circle (runtime decided)
       }
   }
 
-🎯 Interview Points:
-   - Overloading vs Overriding?
-   - Can we override static methods? ➤ No, they are hidden not overridden.
++---------------------+---------------------------+---------------------------+
+| Feature             | Overloading               | Overriding                |
++---------------------+---------------------------+---------------------------+
+| Definition          | Same name, different params| Same name & params (child)|
+| Class Relation      | Same class                | Inheritance required      |
+| Parameters          | Must differ               | Must be same              |
+| Return Type         | Can differ               | Must be same or covariant |
+| Access Modifier     | No restriction            | Can't reduce visibility   |
+| Exception Handling  | No restriction            | Same or subclass exceptions|
+| Polymorphism Type   | Compile-time             | Runtime                   |
+| Static Methods      | Can overload             | Cannot override (hidden)  |
+| Use Case            | Different inputs          | Change parent behavior    |
++---------------------+---------------------------+---------------------------+
 
---------------------------------------------------------------------------------------------------------
+Notes:
+- Static methods cannot be overridden, only hidden.
 
-2.4 ✅ Abstraction (Abstract Classes and Interfaces)
+-------------------------------------------------------------------------------
+2.4 Abstraction (Abstract Classes and Interfaces)
+-------------------------------------------------------------------------------
 
-🔹 Abstraction: Hiding implementation, showing only essential behavior.
+- Abstraction: hide implementation, show essentials.
 
-📘 Abstract Class:
-  - Can have abstract + concrete methods
-  - Supports constructor, fields
-  - Use `abstract` keyword
+Abstract Class:
+- Can have abstract and concrete methods.
+- Has constructor and fields.
 
-📘 Interface:
-  - All methods are abstract by default (until Java 7)
-  - From Java 8+: can have `default`, `static` methods
-  - Java 9+: can have `private` methods too
+Interface:
+- Before Java 8: only abstract methods.
+- Java 8+: default and static methods allowed.
+- Java 9+: private methods allowed.
 
-🧪 Example (Abstract Class):
+Example Abstract Class:
   abstract class Vehicle {
       abstract void start();
       void fuel() { System.out.println("Diesel"); }
@@ -730,7 +826,7 @@ SECTION 2
       void start() { System.out.println("Bus started"); }
   }
 
-🧪 Example (Interface):
+Example Interface:
   interface Engine {
       void start();
   }
@@ -739,279 +835,408 @@ SECTION 2
       public void start() { System.out.println("Engine started"); }
   }
 
-🎯 Interview Points:
-   - Difference between abstract class and interface?
-   - Can interface have constructor? ➤ No
++-----------------------------+-----------------------+-----------------------+
+| Feature                     | Normal Interface Method| Default Method         |
++-----------------------------+-----------------------+-----------------------+
+| Method body allowed?         | No                    | Yes                   |
+| Must be implemented?         | Yes                   | No                    |
+| Inherited by implementing class?| No (signature only)| Yes                   |
+| Helps reusability?           | Indirect              | Direct                |
++-----------------------------+-----------------------+-----------------------+
 
---------------------------------------------------------------------------------------------------------
+-------------------------------------------------------------------------------
+2.5 Encapsulation & Access Modifiers
+-------------------------------------------------------------------------------
 
-2.5 ✅ Encapsulation & Access Modifiers
+- Encapsulation: Wrap data + methods, hide internals.
+- Use private fields + public getters/setters.
 
-🔹 Encapsulation: Wrapping data + code into a single unit (class).
-   - Make fields `private` and use public `getters/setters`.
+Benefits:
+- Protect data
+- Control access
+- Maintainability
 
-💼 Example:
-  class Account {
-      private double balance;
+Example:
+  public class Person {
+      private int age;
 
-      public double getBalance() {
-          return balance;
+      public void setAge(int age) {
+          this.age = age;    // can add validation here
       }
 
-      public void setBalance(double amt) {
-          if (amt > 0) balance = amt;
+      public int getAge() {
+          return age;
       }
   }
 
-🔐 Access Modifiers:
-   - `private`: accessible only within class
-   - `default`: package-level
-   - `protected`: package + subclass (even outside pkg)
-   - `public`: accessible from everywhere
+Access Modifiers:
 
-🎯 Interview Points:
-   - Why encapsulation? ➤ Improves control, security
-   - Can we access private variable without getter? ➤ Only via reflection (not recommended)
++------------+----------------------------------------------+
+| Modifier   | Accessible From                               |
++------------+----------------------------------------------+
+| private    | Only within class                            |
+| default    | Within package                               |
+| protected  | Package + subclasses outside package        |
+| public     | Everywhere                                  |
++------------+----------------------------------------------+
 
-========================================================================================================
-
-====================== OOP INTERVIEW QUESTIONS & EXPLANATIONS ======================
+-------------------------------------------------------------------------------
+OOP Interview Quick Q&A
+-------------------------------------------------------------------------------
 
 1. Can constructor be final or static?
-   No. final means no override; constructors are not inherited, so no final.
-   static means class-level; constructors create instances, so cannot be static.
+   No. Constructors not inherited (no final). Static belongs to class.
 
-2. What if no constructor defined?
-   Java provides default no-arg constructor initializing fields with defaults.
-   If you define any constructor, default is not provided.
+2. If no constructor defined?
+   Java provides default no-arg constructor.
 
 3. Purpose of super keyword?
-   Refers to immediate parent class; used to call parent methods or constructors.
+   Call parent methods or constructors.
 
 4. Can private methods be overridden?
-   No. Private methods are not visible to subclasses; belong only to declaring class.
+   No.
 
-5. Overloading vs Overriding:
-   | Aspect          | Overloading               | Overriding                  |
-   |-----------------|--------------------------|----------------------------|
-   | Location        | Same class               | Parent and child classes    |
-   | Name            | Same                    | Same                       |
-   | Params          | Different (type/number)  | Same                       |
-   | Return Type     | Can differ              | Same or covariant          |
-   | Access Modifier | Any                     | Cannot be more restrictive |
-   | Resolution Time | Compile-time            | Runtime                    |
+5. Can static methods be overridden?
+   No, hidden instead.
 
-6. Can static methods be overridden?
-   No. They are hidden, not overridden. Called based on reference type.
+6. Abstract class vs Interface:
 
-7. Abstract class vs Interface:
-   | Aspect           | Abstract Class           | Interface                  |
-   |------------------|-------------------------|----------------------------|
-   | Methods          | Abstract + concrete     | Abstract (Java7), default/static/private (Java8+) |
-   | Fields           | Instance variables      | Only static final constants |
-   | Multiple Inheritance | No                  | Yes (multiple interfaces)   |
-   | Constructor      | Allowed                 | Not allowed                 |
-   | Access Modifier  | Any                     | Methods public by default   |
++----------------------+---------------------------+------------------------------+
+| Aspect               | Abstract Class            | Interface                    |
++----------------------+---------------------------+------------------------------+
+| Methods              | Abstract + concrete       | Abstract + default/static/private (Java 8+) |
+| Fields               | Instance variables        | Static final constants       |
+| Multiple inheritance | No                        | Yes (multiple interfaces)    |
+| Constructor          | Allowed                   | Not allowed                  |
+| Access modifiers     | Any                       | Public by default            |
++----------------------+---------------------------+------------------------------+
 
-8. Can interface have constructor?
-   No. Interfaces can't be instantiated, so no constructors.
+7. Can interface have constructor?
+   No.
 
-9. Why use encapsulation?
-   To hide data and protect from unauthorized access; use private fields with getters/setters.
+8. Why use encapsulation?
+   Data hiding and protection.
 
-10. Can private variables be accessed without getter?
-    No direct access; reflection can, but discouraged.
+9. Can private variables be accessed without getter?
+   Only via reflection (not recommended).
 
-===============================================================================
-
+=====================================================================================
 
 SECTION 3
 
-================== 3. CORE JAVA CONCEPTS ===========================
+=========================== SECTION 3 — CORE JAVA CONCEPTS ===========================
 
 3.1 Static vs Non-static
-------------------------
-Static: belongs to class, shared by all instances.
-Non-static: belongs to instance, unique per object.
+
+Static:
+- Belongs to class, shared by all instances.
+- Access via ClassName or object.
+- Static methods can't use 'this' or non-static vars directly.
 
 Example:
-class T{static int c; int id; T(int i){id=i;c++;} static void sm(){System.out.println("Static");}
-void nm(){System.out.println("Non-static id="+id);}}
-
-Notes:
-- static members accessed via ClassName or object.
-- static methods can't use 'this' or non-static vars directly.
-- non-static can access both static and non-static.
-
--------------------------------------------------------------------
-
-3.2 this and super keywords
----------------------------
-this: refers to current object instance. Used to differentiate vars, call other constructors (this()).
-super: refers to parent class instance. Used to access overridden methods/vars or parent constructor (super()).
-
-Example:
-class P{int x=10; void show(){System.out.println("Parent");}}
-class C extends P{
- int x=20;
- void show(){System.out.println("Child");}
- void display(){
-  System.out.println("x="+x+", super.x="+super.x);
-  super.show(); this.show();
- }}
-
-Notes:
-- this()/super() must be first line in constructor.
-- Can't use both in same constructor.
-
--------------------------------------------------------------------
-
-3.3 final, static, transient, volatile
---------------------------------------
-final: var can't change after init; method can't override; class can't subclass.
-static: belongs to class (see above).
-transient: skip field in serialization.
-volatile: ensures visibility of var changes across threads.
-
-Example:
-class D implements Serializable{
- final int MAX=100; static int count; transient int temp;
- volatile boolean flag;
-}
-
-Notes:
-- final vars must init at declaration or constructor.
-- volatile guarantees visibility, no atomicity.
-- transient fields not saved when serializing.
-
--------------------------------------------------------------------
-
-3.4 Enums
----------
-Special class for fixed set of constants; type-safe; constants are static final implicitly.
-
-Example:
-enum Day{MON,TUE,WED,THU,FRI,SAT,SUN;}
-enum Status{
- NEW(1), IN_PROGRESS(2), DONE(3);
- private int code;
- Status(int c){code=c;}
- int getCode(){return code;}
-}
+    class Hotel {
+        static int totalHotels = 0;  // shared among all Hotel objects
+        Hotel() {
+            totalHotels++;          // incremented for each new Hotel
+        }
+    }
 
 Usage:
-Day d=Day.MON;
-if(d==Day.MON){...}
+    Hotel h1 = new Hotel();
+    Hotel h2 = new Hotel();
+    System.out.println(Hotel.totalHotels); // Output: 2
+
+Explanation:
+- `totalHotels` is declared static, so only one copy exists.
+- All Hotel objects share and update the same `totalHotels` value.
+
+Another Example: Utility Method
+-------------------------------
+    int max = Math.max(10, 20);
+
+- `max()` is a static method from the `Math` utility class.
+- You don’t need to create a `Math` object to use it.
+- Static methods can be accessed via ClassName.methodName()
+
+Use Cases:
+----------
+1. Shared counters (e.g., number of objects created)
+2. Utility/helper methods (e.g., Math.max, Integer.parseInt)
+3. Constants (e.g., static final int MAX_SIZE = 100)
+
+Key Points:
+-----------
+- static variable: one copy per class (not per object)
+- static method: can be called without creating object
+- static block: used for static initialization (runs once when class loads)
+
+
+Non-static:
+- Belongs to instance, unique per object.
+- Can access static and non-static members.
+
+-------------------------------------------------------------------------------
+3.2 this and super keywords
+
+this:
+- Refers to current object instance.
+- Used to differentiate variables, call other constructors (this()).
+
+super:
+- Refers to parent class instance.
+- Access overridden methods/variables or parent constructor (super()).
+
+Example:
+  class P {
+      int x = 10;
+      void show() {
+          System.out.println("Parent");
+      }
+  }
+Class Inheritance - this / super Rules & Output
+-----------------------------------------------
+
+Code:
+------
+
+class P {
+    int x = 10;
+
+    void show() {
+        System.out.println("Parent");
+    }
+}
+
+class C extends P {
+    int x = 20;
+
+    void show() {
+        System.out.println("Child");
+    }
+
+    void display() {
+        System.out.println("x = " + x + ", super.x = " + super.x);
+        super.show();
+        this.show();
+    }
+}
+
+public class Test {
+    public static void main(String[] args) {
+        C obj = new C();
+        obj.display();
+    }
+}
+
+Output:
+--------
+x = 20, super.x = 10
+Parent
+Child
+
+Explanation:
+------------
+- `x = 20`          => refers to C's x (this.x)
+- `super.x = 10`    => refers to P's x
+- `super.show()`    => calls P's version
+- `this.show()`     => calls C's version
+
+Note on `this()` and `super()`:
+-------------------------------
+- `this()` → calls another constructor in same class.
+- `super()` → calls parent class constructor.
+- Both must be the FIRST statement in a constructor if used.
+- You can't use `this()` and `super()` together in same constructor.
+
+Clarification:
+--------------
+✅ In your example, we are using `super` and `this` as **keywords**, not as constructor calls.
+So, using `super.x`, `super.show()`, `this.show()` is perfectly valid **anywhere** inside a method.
+
+❌ Only `this()` and `super()` constructor calls have the restriction of being first.
+
+
+
+-------------------------------------------------------------------------------
+3.3 final, static, transient, volatile
+
+final:
+- Variable cannot be changed after initialization.
+- Method cannot be overridden.
+- Class cannot be subclassed.
+
+static:
+- Belongs to class.
+
+transient:
+- Fields not serialized during serialization.
+
+volatile:
+- Guarantees visibility of variable changes across threads (no atomicity).
+threads will get updated value only.
+
+Example:
+  class D implements Serializable {
+      final int MAX = 100;
+      static int count;
+      transient int temp;
+      volatile boolean flag;
+  }
+
+Notes:
+- final variables must be initialized at declaration or in constructor.
+- volatile ensures visibility, not atomicity.
+- transient fields skipped during serialization.
+
+-------------------------------------------------------------------------------
+3.4 Enums
+
+- Special class for fixed set of constants.
+- Type-safe.
+- Constants are static final implicitly.
+
+Example:
+  enum Day { MON, TUE, WED, THU, FRI, SAT, SUN }
+
+  enum Status {
+      NEW(1), IN_PROGRESS(2), DONE(3);
+
+      private int code;
+
+      Status(int c) { code = c; }
+      int getCode() { return code; }
+  }
+
+Usage:
+  Day d = Day.MON;
+  if (d == Day.MON) { ... }
 
 Notes:
 - Enums extend java.lang.Enum internally.
-- Have methods: values(), ordinal(), name().
+- Provide methods: values(), ordinal(), name().
 
--------------------------------------------------------------------
-
+-------------------------------------------------------------------------------
 3.5 Nested and Inner Classes
-----------------------------
+
 Nested classes inside another class.
 
-a) Static Nested Class
- - static, like normal class inside outer class.
- - can access only static outer members.
- - instantiated w/o outer instance.
+a) Static Nested Class:
+- Static class inside outer class.
+- Can access only static members of outer class.
+- Instantiated without outer instance.
 
 Example:
-class Outer{
- static int data=30;
- static class SNested{
-  void msg(){System.out.println("Data="+data);}
- }
-}
-Use: Outer.SNested obj=new Outer.SNested(); obj.msg();
-
-b) Non-static Inner Class
- - tied to outer instance.
- - can access all outer members.
- - instantiate with outerInstance.new Inner();
-
-Example:
-class Outer{
- int data=10;
- class Inner{
-  void msg(){System.out.println("Data="+data);}
- }
-}
-Use: Outer o=new Outer(); Outer.Inner i=o.new Inner(); i.msg();
-
-c) Local Inner Class
- - inside method.
- - scope limited to method.
- - can access final/effectively final locals.
-
-Example:
-class Outer{
- void m(){
-  int n=20;
-  class LInner{
-   void print(){System.out.println("n="+n);}
+  class Outer {
+      static int data = 30;
+      static class SNested {
+          void msg() {
+              System.out.println("Data = " + data);
+          }
+      }
   }
-  LInner li=new LInner(); li.print();
- }
-}
 
-d) Anonymous Inner Class
- - no name.
- - used to override/implement interface/class inline.
- - instantiated on spot.
+Usage:
+  Outer.SNested obj = new Outer.SNested();
+  obj.msg();
+
+b) Non-static Inner Class:
+- Tied to outer instance.
+- Can access all outer members.
+- Instantiate using outerInstance.new Inner();
 
 Example:
-Runnable r=new Runnable(){
- public void run(){System.out.println("Running");}
-};
-new Thread(r).start();
+  class Outer {
+      int data = 10;
+      class Inner {
+          void msg() {
+              System.out.println("Data = " + data);
+          }
+      }
+  }
 
--------------------------------------------------------------------
+Usage:
+  Outer o = new Outer();
+  Outer.Inner i = o.new Inner();
+  i.msg();
 
-================ INTERVIEW PREP QUESTIONS & ANSWERS ===============
+c) Local Inner Class:
+- Defined inside method.
+- Scope limited to method.
+- Can access final or effectively final variables.
+
+Example:
+  class Outer {
+      void m() {
+          int n = 20;
+          class LInner {
+              void print() {
+                  System.out.println("n = " + n);
+              }
+          }
+          LInner li = new LInner();
+          li.print();
+      }
+  }
+
+d) Anonymous Inner Class:
+- No name.
+- Used to override or implement interface/class inline.
+- Instantiated on spot.
+
+Example:
+  Runnable r = new Runnable() {
+      public void run() {
+          System.out.println("Running");
+      }
+  };
+  new Thread(r).start();
+
+-------------------------------------------------------------------------------
+INTERVIEW PREP Q&A
 
 Q1: Can static method use 'this' or 'super'?
-A: No. static belongs to class, no object context.
+A: No. Static methods belong to class, no object context.
 
-Q2: Difference final, finally, finalize?
-A: final=constant/non-overridable; finally=try-catch cleanup block; finalize()=GC cleanup method (deprecated).
+Q2: Difference between final, finally, finalize?
+A: final = constant/non-overridable,
+   finally = try-catch cleanup block,
+   finalize() = GC cleanup method (deprecated).
 
 Q3: How to access outer class members from inner class?
-A: Directly via member; or OuterClass.this.member to avoid ambiguity.
+A: Directly, or using OuterClass.this.member to avoid ambiguity.
 
 Q4: Can static nested class access non-static outer members?
 A: No, only static members.
 
 Q5: Why use transient?
-A: Prevent fields from being serialized (e.g. sensitive data).
+A: To prevent field serialization (e.g., sensitive data).
 
 Q6: What if final variable not initialized?
 A: Compile-time error.
 
 Q7: volatile vs synchronized?
-A: volatile = visibility guarantee, no atomicity; synchronized = mutual exclusion + atomicity.
+A: volatile = visibility guarantee (no atomicity),
+   synchronized = mutual exclusion + atomicity.
 
 Q8: Can enum extend or be extended?
-A: No, extends java.lang.Enum implicitly, cannot subclass.
+A: No, enums extend java.lang.Enum implicitly and cannot be subclassed.
 
 Q9: Use cases for anonymous inner class?
-A: Quick inline implementation for interfaces/abstract classes, e.g. event handlers.
+A: Quick inline implementation for interfaces/abstract classes (event handlers etc.).
 
-Q10: Difference local vs anonymous inner class?
-A: Local has a name, can instantiate multiple times; anonymous no name, instantiated once inline.
+Q10: Difference between local and anonymous inner class?
+A: Local has a name and can be instantiated multiple times,
+    Anonymous has no name, instantiated once inline.
 
 Q11: Can inner class have static methods?
-A: Only static nested class can; non-static inner class cannot have static members.
+A: Only static nested class can have static members.
 
-Q12: How instantiate non-static inner class?
-A: Outer o=new Outer(); Outer.Inner i=o.new Inner();
+Q12: How to instantiate non-static inner class?
+A: Outer o = new Outer();
+    Outer.Inner i = o.new Inner();
 
 Q13: Can constructor have both this() and super() calls?
-A: No, only one, and must be first statement.
+A: No, only one call allowed and must be first statement.
 
--------------------------------------------------------------------
-
-END OF 3. CORE JAVA CONCEPTS
+=====================================================================================
 

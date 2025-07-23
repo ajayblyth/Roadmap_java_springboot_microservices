@@ -1,0 +1,47 @@
+1. Singleton Pattern with `static`
+----------------------------------
+
+Goal:
+- Ensure only one instance of a class exists in the whole application.
+
+Why use `static`?
+- `static` means shared at class level (not per object).
+- Needed to store and access the one-and-only instance.
+
+-------------------------------------------
+| Element                | Purpose         |
+|------------------------|-----------------|
+| static instance        | Hold the object |
+| static getInstance()   | Return it       |
+-------------------------------------------
+
+Code:
+------
+
+class Singleton {
+    private static Singleton instance; // static: only one copy for class
+
+    private Singleton() {
+        // private constructor: can't create from outside
+    }
+
+    public static Singleton getInstance() {
+        if (instance == null) {
+            instance = new Singleton(); // create only once
+        }
+        return instance;
+    }
+}
+
+Usage:
+-------
+Singleton obj1 = Singleton.getInstance();
+Singleton obj2 = Singleton.getInstance();
+
+System.out.println(obj1 == obj2); // true (same object)
+
+Conclusion:
+-----------
+- `static` helps share the same object globally.
+- No new instance created every time.
+- Common in logging, DB connection, config, etc.

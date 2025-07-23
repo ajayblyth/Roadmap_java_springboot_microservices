@@ -1,0 +1,73 @@
+incomplete ,research more
+
+------------------------------------------------------------
+✅ HOW TO CREATE AN IMMUTABLE CLASS IN JAVA
+------------------------------------------------------------
+
+To make a class immutable:
+1. Make class `final` → prevents subclassing
+2. Make all fields `private` and `final`
+3. Don’t provide setters
+4. Initialize all fields via constructor only
+5. Return deep copies of mutable objects (if any)
+6. For collections, return unmodifiable views or copies
+
+------------------------------------------------------------
+📌 EXAMPLE 1: SIMPLE IMMUTABLE CLASS
+------------------------------------------------------------
+final class Guest {
+    private final String name;
+    private final int age;
+
+    public Guest(String name, int age) {
+        this.name = name;
+        this.age = age;
+    }
+
+    public String getName() { return name; }
+    public int getAge() { return age; }
+}
+
+Usage:
+    Guest g = new Guest("Ajay", 30);
+    System.out.println(g.getName()); // Ajay
+    // g.name = "Rahul"; ❌ Compilation error (no setter, final field)
+
+------------------------------------------------------------
+📌 EXAMPLE 2: HOTEL BOOKING (IMMUTABLE)
+------------------------------------------------------------
+import java.util.Date;
+
+final class Booking {
+    private final int bookingId;
+    private final String guestName;
+    private final Date bookingDate;
+
+    public Booking(int bookingId, String guestName, Date bookingDate) {
+        this.bookingId = bookingId;
+        this.guestName = guestName;
+        // Return defensive copy of mutable object
+        this.bookingDate = new Date(bookingDate.getTime());
+    }
+
+    public int getBookingId() { return bookingId; }
+    public String getGuestName() { return guestName; }
+
+    public Date getBookingDate() {
+        return new Date(bookingDate.getTime()); // Defensive copy
+    }
+}
+
+Usage:
+    Date d = new Date();
+    Booking b = new Booking(101, "Ajay", d);
+    d.setTime(0); // won't affect Booking's date (immutable)
+
+------------------------------------------------------------
+✅ WHY USE IMMUTABLE CLASSES?
+------------------------------------------------------------
+- Thread-safe by default
+- Safe to share between objects
+- Simpler to understand and debug
+- Used in key Java classes: String, Integer, LocalDate, etc.
+
