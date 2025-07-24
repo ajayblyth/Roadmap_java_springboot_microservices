@@ -1,4 +1,4 @@
-package DesignPatterns.Creational.Singleton;
+package com.java.DesignPatterns.Creational.Singleton;
 
 public class SingletonDemo1 {
 

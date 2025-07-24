@@ -1,0 +1,67 @@
+===========================================================================
+                    IMPORTANT HTTP STATUS CODES AND MEANINGS
+===========================================================================
+
+CATEGORY    CODE     NAME                        MEANING
+---------------------------------------------------------------------------
+1xx         100      Continue                    Request received, continue
+            101      Switching Protocols         Server switching protocols
+
+2xx         200      OK                          Successful request
+            201      Created                     Resource created
+            202      Accepted                    Request accepted for processing
+            204      No Content                  Success, but no content to return
+
+3xx         301      Moved Permanently           URL moved permanently
+            302      Found (Previously "Moved")  Temporarily redirected
+            304      Not Modified                Cached version is still valid
+
+4xx         400      Bad Request                 Client-side input error
+            401      Unauthorized                Auth required or failed
+            403      Forbidden                   Auth valid but access denied
+            404      Not Found                   Resource not found
+            405      Method Not Allowed          HTTP method not supported
+            409      Conflict                    Conflict in current state (e.g., duplicate)
+            429      Too Many Requests           Rate limit exceeded
+
+5xx         500      Internal Server Error       Generic server error
+            501      Not Implemented             Method not implemented by server
+            502      Bad Gateway                 Invalid response from upstream server
+            503      Service Unavailable         Server overloaded or down
+            504      Gateway Timeout             Timeout from upstream server
+
+===========================================================================
+
+===========================================================================
+                                HTTP STATUS TIPS
+===========================================================================
+
+✔ 2xx  → Success
+   → Request was received, understood, and processed successfully.
+
+✔ 4xx  → Client-side Error
+   → Something is wrong with the request (bad input, missing data, etc.)
+
+✔ 5xx  → Server-side Error
+   → Something went wrong on the server while processing the request.
+
+---------------------------------------------------------------------------
+Difference between 401 and 403:
+---------------------------------------------------------------------------
+
+401 Unauthorized
+→ Login required or token is missing/invalid.
+→ Example: No token or wrong credentials provided.
+
+403 Forbidden
+→ You are logged in, but do not have permission to access the resource.
+→ Example: You are a "user" trying to access "admin" page.
+
+---------------------------------------------------------------------------
+Common Errors to Remember:
+---------------------------------------------------------------------------
+
+404 Not Found         → Resource doesn't exist (wrong URL)
+500 Internal Error    → Server failed during processing
+
+===========================================================================

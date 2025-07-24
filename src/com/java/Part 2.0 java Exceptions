@@ -1,0 +1,615 @@
+Java Notes by RoadMap part 2
+
+1. Java Exceptions and handling
+
+2. Spring Boot Exceptions with Handling
+
+
+===============================================================================
+                      JAVA EXCEPTIONS - COMPLETE CONCEPT GUIDE
+===============================================================================
+
+1. WHAT IS AN EXCEPTION IN JAVA?
+--------------------------------
+- An exception is an abnormal event that disrupts the normal flow of a program.
+- It occurs at runtime and can be caused by invalid input, null references,
+  division by zero, file not found, etc.
+  Example:
+    int a = 10 / 0;        // ArithmeticException
+
+Java uses an object-oriented approach to handle exceptions via:
+  - try, catch, finally
+  - throw, throws
+  - custom exceptions
+
+-------------------------------------------------------------------------------
+2. TYPES OF EXCEPTIONS
+-------------------------------------------------------------------------------
+
+Checked vs Unchecked Exceptions in Java
+---------------------------------------
+
+1. Definition
+-------------
+Checked Exception:
+- Checked at **compile-time**
+- Must be either **handled** (try-catch) or **declared** in method signature.
+
+Unchecked Exception:
+- Checked at **runtime**
+- No requirement to handle or declare explicitly.
+
+ Errors
+   - Subclass of Error
+   - JVM errors, not handled by application
+   - Examples: StackOverflowError, OutOfMemoryError
+
+2. Class Hierarchy
+------------------
+- All Exceptions are subclasses of `Throwable`.
+
+            Throwable
+               |
+        ------------------
+        |                |
+   Exception         Error (JVM-level)
+        |
+    ----------------------
+    |                    |
+Checked            Unchecked (RuntimeException)
+
+3. Common Examples
+------------------
+Checked:
+- IOException
+- SQLException
+- ClassNotFoundException
+- InterruptedException
+
+Unchecked:
+- NullPointerException
+- ArrayIndexOutOfBoundsException
+- ArithmeticException
+- IllegalArgumentException
+
+5. Key Differences
+------------------
+| Aspect                 | Checked Exception          | Unchecked Exception              |
+|------------------------|----------------------------|----------------------------------|
+| Compile-time checking  | Yes                        | No                               |
+| Must handle explicitly | Yes (try-catch or throws)  | No                               |
+| Inherits from          | Exception (not RuntimeEx)  | RuntimeException                 |
+| Cause                  | External (I/O, DB, etc)    | Programming bugs (logic errors) |
+
+6. Best Practices
+------------------
+- Use checked exceptions for recoverable conditions (e.g., file not found).
+- Use unchecked for programming bugs that shouldn’t be caught (e.g., null access).
+
+-------------------------------------------------------------------------------
+3. JAVA EXCEPTION HIERARCHY
+-------------------------------------------------------------------------------
+java.lang.Object
+    └── java.lang.Throwable
+          ├── java.lang.Error         → System-level errors (OutOfMemoryError)
+          └── java.lang.Exception     → Problems in code logic
+                ├── Checked Exceptions    → Must handle or declare (e.g., IOException)
+                └── Unchecked Exceptions  → Runtime exceptions (e.g., NullPointerException)
+
+ASCII Chart:
+  Object
+    └── Throwable
+          ├── Error (unchecked)
+          └── Exception
+                ├── RuntimeException (unchecked)
+                └── Other Exceptions (checked)
+
+-------------------------------------------------------------------------------
+4. KEY TERMS: throw vs throws
+-------------------------------------------------------------------------------
+- throw:
+  * Used inside a method to actually throw an exception object.
+  * Syntax: throw new ExceptionType("message");
+    Example: throw new IOException("File missing");
+  * Stops method execution immediately when thrown.
+
+- throws:
+  * Used in method signature to declare that the method may throw specified exceptions.
+  * Forces caller to handle or declare those exceptions.
+  * Syntax: returnType methodName() throws ExceptionType1, ExceptionType2
+
+
+   Example: throw, throws, try-catch
+   ============================ */
+
+/public class ExceptionExample {
+
+     // STEP 1: Method declares it might throw exception using 'throws'
+     public static void validateAge(int age) throws IllegalArgumentException {
+
+         // STEP 2: Actually throwing the exception if condition fails
+         if (age < 18) {
+             throw new IllegalArgumentException("Age must be 18 or above");
+         }
+
+         System.out.println("✅ Access granted: Age is valid");
+     }
+
+     public static void main(String[] args) {
+
+         try {
+             // STEP 3: Call the risky method inside try
+             validateAge(15);  // Change value to test different cases
+
+         } catch (IllegalArgumentException e) {
+             // STEP 4: Catch and handle the thrown exception
+             System.out.println("❌ Exception caught: " + e.getMessage());
+         }
+
+         System.out.println("✅ Program continues after exception handling");
+     }
+ }
+
+-------------------------------------------------------------------------------
+5. TRY - CATCH - FINALLY BLOCK
+-------------------------------------------------------------------------------
+Syntax:
+try {
+    // risky code
+} catch (ExceptionType e) {
+    // handle exception
+} finally {
+    // always executes
+}
+
+Example:
+try {
+    int result = 10 / 0;
+} catch (ArithmeticException ex) {
+    System.out.println("Cannot divide by zero");
+} finally {
+    System.out.println("Cleanup done");
+}
+
+-------------------------------------------------------------------------------
+6. MULTIPLE CATCH BLOCKS
+-------------------------------------------------------------------------------
+Syntax:
+In a try-catch block Java always checks from top to bottom.
+So:
+
+try {
+    // risky code
+} catch (NullPointerException e) {
+    // 1️⃣ Java checks this first
+} catch (Exception e) {
+    // 2️⃣ This runs ONLY if NPE is not caught above
+}
+
+Example:
+try {
+    String s = null;
+    s.length();
+} catch (NullPointerException e) {
+    System.out.println("Null Pointer");
+} catch (Exception e) {
+    System.out.println("Generic catch");
+}
+
+-------------------------------------------------------------------------------
+7. MULTI-CATCH BLOCK (Java 7+)
+-------------------------------------------------------------------------------
+try {
+    // code
+} catch (IOException | SQLException ex) {
+    System.out.println("IO or SQL error");
+}
+
+-------------------------------------------------------------------------------
+8. FINALLY BLOCK
+-------------------------------------------------------------------------------
+- Always executes whether exception occurs or not.
+- Used to close resources.
+
+try {
+    return 10;
+} finally {
+    System.out.println("This will still print");
+}
+
+-------------------------------------------------------------------------------
+9. TRY-WITH-RESOURCES (Java 7+)
+-------------------------------------------------------------------------------
+Syntax:
+try (ResourceType resource = new ResourceType()) {
+    // code using the resource
+} catch (ExceptionType e) {
+    // handle exception
+}
+
+Example:
+try (FileInputStream fis = new FileInputStream("file.txt")) {
+    // read
+} catch (IOException e) {
+    e.printStackTrace();
+}
+// fis is aut
+-------------------------------------------------------------------------------
+10. CUSTOM EXCEPTION EXAMPLES
+-------------------------------------------------------------------------------
+// Custom Checked Exception - must extend Exception
+public class MyException extends Exception {
+    // Constructor calls the parent Exception class constructor using 'super'
+    public MyException(String msg) {
+        super(msg); // Sends the message to parent Exception (so getMessage() works)
+    }
+}
+
+// Custom Unchecked Exception - must extend RuntimeException
+public class MyRuntimeException extends RuntimeException {
+    public MyRuntimeException(String msg) {
+        super(msg); // Same: passes message to RuntimeException constructor
+    }
+}
+
+}
+
+Example 2:
+class InvalidBookingException extends Exception {
+    public InvalidBookingException(String msg) {
+        super(msg);
+    }
+}
+
+class HotelBooking {
+    public void bookRoom(int guests) throws InvalidBookingException {
+        if (guests > 5) {
+            throw new InvalidBookingException("Too many guests!");
+        }
+        System.out.println("Room booked.");
+    }
+}
+
+public class Main {
+    public static void main(String[] args) {
+        try {
+            new HotelBooking().bookRoom(6);
+        } catch (InvalidBookingException e) {
+            System.out.println(e.getMessage());
+        }
+    }
+}
+
+-------------------------------------------------------------------------------
+11. COMMON EXCEPTIONS (INTERVIEW TABLE)
+-------------------------------------------------------------------------------
+| Exception Type            | Description                                 |
+|---------------------------|---------------------------------------------|
+| NullPointerException      | Object ref not initialized                  |
+| ArrayIndexOutOfBounds     | Index out of array range                    |
+| ArithmeticException       | / by zero                                   |
+| ClassNotFoundException    | Class not found in runtime                  |
+| SQLException              | DB error                                    |
+| FileNotFoundException     | File path not found                         |
+| IOException               | Input/Output failure                        |
+| NumberFormatException     | "abc" to int                                |
+| IllegalArgumentException  | Invalid method argument                     |
+| StackOverflowError        | Infinite recursion                          |
+
+-------------------------------------------------------------------------------
+12. BEST PRACTICES
+-------------------------------------------------------------------------------
+- Catch specific exceptions, not generic Exception
+- Use finally or try-with-resources for resource cleanup
+- Don’t suppress exceptions silently
+- Use custom exceptions for domain-specific errors
+- Log exceptions with stack trace
+- Don’t use exceptions for normal flow control
+
+-------------------------------------------------------------------------------
+13. INTERVIEW TRICKY QUESTIONS
+-------------------------------------------------------------------------------
+Q1. Can try block be used without catch? → Yes, if finally is used
+Q2. Can catch block be used without try? → No
+Q3. What happens if exception is not caught? → JVM terminates the program
+Q4. throw vs throws? → throw = generate; throws = declare
+Q5. Will finally execute if return in try? → Yes
+Q6. Can multiple exceptions be caught in one catch? → Yes (multi-catch)
+Q7. Checked vs unchecked? → Checked = must handle; Unchecked = runtime
+Q8. How to create custom exceptions? → Extend Exception / RuntimeException
+Q9. Catch block order? → Specific to general
+Q10. Rethrow exception in catch? → Yes
+Q11. Suppressed exception? → In try-with-resources, during close()
+Q12. Error vs Exception? → Error = system issue; Exception = logical error
+Q13. Stack trace? → Sequence of method calls, print via e.printStackTrace()
+Q14. Throwable superclass? → Root for Exception and Error
+
+Q15. Can finally block override return? → Yes, if it modifies returned value
+Q16. Is finally always called? → Yes, unless System.exit() or fatal error
+Q17. Exception in finally? → May suppress original exception
+Q18. Try without catch? → Yes, if finally used
+Q19. Checked inside RuntimeException? → Yes, can wrap
+Q20. Constructor throws exception? → Yes, using throws
+Q21. Exception chaining? → Wrap one exception in another
+Q22. Final vs Finally vs Finalize? → final = keyword, finally = block, finalize() = GC hint
+Q23. Custom exception real use? → Business logic (booking, validation)
+Q24. What happens if an exception is thrown in both try and finally blocks?
+     → Exception in finally suppresses the one in try (original lost unless caught).
+
+Q25. Can you have nested try-catch blocks? Explain.
+     → Yes, try-catch inside another try or catch block is allowed.
+
+Q26. What is the difference between throw and new Exception()?
+     → throw actually throws the exception object created by new Exception().
+
+Q27. What happens if a checked exception is not handled or declared?
+     → Compile-time error.
+
+Q28. Can you catch an Error? Should you?
+     → Yes, you can catch Errors but generally shouldn't; Errors are serious JVM issues.
+
+Q29. What is an unchecked exception? Give examples.
+     → Runtime exceptions, not checked at compile-time. Ex: NullPointerException.
+
+Q30. Difference between try-finally and try-catch-finally?
+     → try-finally executes finally always; no exception handling without catch.
+
+Q31. Is it mandatory to have catch or finally with try?
+     → Yes, try must have either catch or finally.
+
+Q32. How does multi-catch improve code?
+     → Reduces code duplication when handling multiple exceptions similarly.
+
+Q33. What if you catch Exception instead of specific exceptions?
+     → Catches all exceptions but may hide bugs and is bad practice.
+
+Q34. Can you catch Throwable? Should you?
+     → Yes, but catching Throwable is discouraged; it includes Errors.
+
+Q35. What is the difference between Exception and RuntimeException?
+     → RuntimeException is unchecked; Exception (excluding RuntimeException) is checked.
+
+Q36. Can multiple exceptions be thrown from a single try block?
+     → Yes, different exceptions can be thrown, but only one at a time.
+
+Q37. What is exception propagation?
+     → When an exception is not caught in a method, it propagates up the call stack.
+
+Q38. How to create a custom checked exception?
+     → Extend Exception class.
+
+Q39. How to create a custom unchecked exception?
+     → Extend RuntimeException class.
+
+Q40. Explain try-with-resources and AutoCloseable interface.
+     → Automatically closes resources implementing AutoCloseable after try block.
+
+Q41. What exceptions can be thrown in try-with-resources block?
+     → Exceptions from try block or exceptions from resource close() method.
+
+Q42. How to handle exceptions thrown in resource closing during try-with-resources?
+     → They are suppressed but can be accessed via getSuppressed().
+
+Q43. Can you throw multiple exceptions in a method signature?
+     → Yes, separated by commas (throws IOException, SQLException).
+
+Q44. What is exception wrapping or exception chaining?
+     → Catching an exception and throwing a new one with the original as cause.
+
+Q45. What is the difference between finally and finalize() method?
+     → finally is block in try-catch; finalize() is called by GC before object destruction.
+
+Q46. Can the finally block prevent program termination after System.exit()?
+     → No, finally does NOT execute after System.exit().
+
+Q47. What is the use of Throwable’s printStackTrace() method?
+     → Prints exception call stack for debugging.
+
+Q48. What is the purpose of the getMessage() method in Exception?
+     → Returns detailed error message.
+
+Q49. Can a try block be empty?
+     → Yes, but pointless unless finally or catch present.
+
+Q50. How to rethrow a checked exception in a method?
+     → Declare throws in method signature and use throw inside method.
+
+Q51. What happens if multiple catch blocks handle the same exception type?
+
+Example:
+try {
+    int[] arr = new int[2];
+    System.out.println(arr[5]);  // throws ArrayIndexOutOfBoundsException
+} catch (ArrayIndexOutOfBoundsException e) {
+    System.out.println("Array index error");
+} catch (Exception e) {
+    System.out.println("Generic exception");
+}
+
+Explanation:
+- The first catch block that matches the thrown exception runs.
+- Since ArrayIndexOutOfBoundsException is more specific and comes first, it handles the exception.
+- Order matters: specific exceptions must come before general ones (like Exception).
+- If order reversed, compiler error occurs.
+
+-------------------------------------------------------------------------------
+
+Q52. What if catch blocks are reversed (parent before child)?
+
+Example:
+try {
+    String s = null;
+    s.length();  // throws NullPointerException
+} catch (Exception e) {
+    System.out.println("Generic Exception");
+} catch (NullPointerException e) {
+    System.out.println("Null Pointer Exception");
+}
+
+Explanation:
+- Compilation error: the second catch block (child) is unreachable.
+- Java requires catch blocks ordered from specific to general.
+- Parent exception catch must come last.
+
+-------------------------------------------------------------------------------
+
+Q53. Can you catch multiple exceptions in one catch block? Show syntax.
+
+Example:
+try {
+    // code that may throw IOException or SQLException
+} catch (IOException | SQLException e) {
+    System.out.println("IO or SQL Exception");
+}
+
+Explanation:
+- Multi-catch syntax introduced in Java 7.
+- Avoids code duplication when handling exceptions similarly.
+- Variable `e` is effectively final.
+- Can't catch exceptions with inheritance relationship in multi-catch.
+
+-------------------------------------------------------------------------------
+
+Q54. If multiple exceptions are thrown from try block, which catch runs?
+
+Example:
+try {
+    if(true) throw new IOException("IO");
+    if(true) throw new SQLException("SQL");
+} catch (IOException e) {
+    System.out.println("Caught IO");
+} catch (SQLException e) {
+    System.out.println("Caught SQL");
+}
+
+Explanation:
+- Only the first thrown exception is caught.
+- Execution of try block stops immediately at first thrown exception.
+- Subsequent code, including further exceptions, is not executed.
+- Catch block matching first exception executes.
+
+-------------------------------------------------------------------------------
+
+Q55. What if exception thrown in try is not caught in any catch block?
+
+Example:
+try {
+    int a = 5/0;  // ArithmeticException
+} catch (IOException e) {
+    System.out.println("IO Exception");
+}
+
+Explanation:
+- ArithmeticException is unchecked and not caught here.
+- Program terminates with uncaught exception error.
+- JVM prints exception stack trace and stops.
+
+-------------------------------------------------------------------------------
+
+Q56. How to rethrow an exception from catch block?
+
+Example:
+try {
+    int a = 5/0;
+} catch (ArithmeticException e) {
+    System.out.println("Exception caught");
+    throw e;  // rethrow exception
+}
+
+Explanation:
+- Catch block handles exception, then rethrows it.
+- Useful for logging or partial handling before passing up.
+- Caller higher in call stack must handle or declare.
+
+-------------------------------------------------------------------------------
+
+Q57. How does finally behave if there is return in try?
+
+Example:
+public static int test() {
+    try {
+        return 10;
+    } finally {
+        System.out.println("Finally runs");
+    }
+}
+
+Explanation:
+- finally block runs **even after return** statement in try.
+- finally executes before method actually returns.
+- This ensures cleanup code always runs.
+
+-------------------------------------------------------------------------------
+
+Q58. Can try block be empty?
+
+Example:
+try {
+} catch (Exception e) {
+    System.out.println("Caught");
+}
+
+Explanation:
+- Technically valid but pointless.
+- try block must contain code that can throw exceptions for meaningful use.
+
+-------------------------------------------------------------------------------
+
+Q59. Can you have try without catch but with finally?
+
+Example:
+try {
+    System.out.println("Try block");
+} finally {
+    System.out.println("Finally block");
+}
+
+Explanation:
+- Allowed syntax in Java.
+- finally always executes.
+- Useful for cleanup when no exception handling needed.
+
+-------------------------------------------------------------------------------
+
+Q60. What if exception is thrown in both try and finally blocks?
+
+Example:
+try {
+    throw new IOException("try");
+} finally {
+    throw new SQLException("finally");
+}
+
+Explanation:
+- Exception in finally **overrides** exception in try.
+- The original exception is suppressed and lost unless caught.
+- Use try-catch inside finally to avoid losing exceptions.
+
+-------------------------------------------------------------------------------
+
+-------------------------------------------------------------------------------
+14. FINAL REVISION POINTS (ONE LINERS)
+-------------------------------------------------------------------------------
+- Exception ≠ Error
+- Checked = compiler forced handling
+- Unchecked = programmer mistake
+- throw = generate exception
+- throws = declare possible exception
+- finally = always executes
+- try-with-resources = auto close
+- catch block order: specific → general
+- Custom exception = domain rule violation
+- Best practice = log + resource close + custom exceptions
+
+-------------------------------------------------------------------------------
+15. INTERVIEW TIPS
+-------------------------------------------------------------------------------
+- Always know difference checked vs unchecked
+- Explain try-catch-finally flow clearly
+- Use finally or try-with-resources to close resources
+- Log exceptions properly
+- Know multi-catch and try-with-resources
+- Use real-life examples
+- Practice writing custom exceptions
+
+===============================================================================

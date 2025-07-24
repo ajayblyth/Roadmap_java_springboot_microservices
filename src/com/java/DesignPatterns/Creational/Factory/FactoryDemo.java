@@ -1,4 +1,4 @@
-package DesignPatterns.Creational.Factory;
+package com.java.DesignPatterns.Creational.Factory;
 
 
 // Step 1: Define a common interface for all types of notifications
